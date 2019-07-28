@@ -1,0 +1,3 @@
+# ignore Composer downloads and locked packages versions
+vendor
+composer.lock

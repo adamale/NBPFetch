@@ -1,23 +1,22 @@
 {
     "name": "adamale/nbp-fetch",
     "description": "PHP library that helps to fetch data from NBP API.",
+    "type": "library",
+    "keywords": ["nbp", "exchange", "gold"],
     "homepage": "https://github.com/adamale/NBPFetch",
+    "license": "MIT",
     "authors": [
         {
             "name": "Adam Aleksak",
             "email": "kontakt@adamaleksak.pl",
+            "homepage": "https://adamaleksak.pl",
             "role": "Developer"
         }
     ],
-    "license": "MIT",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/adamale/NBPFetch"
-        }
-    ],
     "autoload": {
-        "psr-4": {"NBPFetch\\": "src/"}
+        "psr-4": {
+            "NBPFetch\\": "src/"
+        }
     },
     "require": {
         "php": ">=7.2.0"

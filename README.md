@@ -1,12 +1,12 @@
 # NBPFetch [![Build Status](https://travis-ci.org/adamale/NBPFetch.svg?branch=master)](https://travis-ci.org/adamale/NBPFetch)
 
-PHP library that allows to fetch data from NBP API - http://api.nbp.pl/. 
+PHP library that helps to fetch data from NBP API - http://api.nbp.pl/. 
 
 ## About
 
 ### Requirements
 
-- PHP 7.1 or above
+PHP 7.2 or above.
 
 ### Author
 

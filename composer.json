@@ -1,5 +1,15 @@
 {
     "name": "adamale/nbp-fetch",
+    "description": "PHP library that helps to fetch data from NBP API.",
+    "homepage": "https://github.com/adamale/NBPFetch",
+    "authors": [
+        {
+            "name": "Adam Aleksak",
+            "email": "kontakt@adamaleksak.pl",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
     "repositories": [
         {
             "type": "vcs",
@@ -8,6 +18,9 @@
     ],
     "autoload": {
         "psr-4": {"NBPFetch\\": "src/"}
+    },
+    "require": {
+        "php": ">=7.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.2"

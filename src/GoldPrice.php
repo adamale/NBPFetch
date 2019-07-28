@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace NBPFetch;
 
-
 /**
- * Class GoldRate
+ * Class GoldPrice
  * @package NBPFetch
  */
-class GoldRate implements ItemInterface
+class GoldPrice implements ItemInterface
 {
     /**
      * @var string
@@ -18,12 +17,12 @@ class GoldRate implements ItemInterface
     /**
      * @var string
      */
-    private $rate;
+    private $price;
 
-    public function __construct(string $date, string $rate)
+    public function __construct(string $date, string $price)
     {
         $this->date = $date;
-        $this->rate = $rate;
+        $this->price = $price;
     }
 
     /**
@@ -37,8 +36,8 @@ class GoldRate implements ItemInterface
     /**
      * @return string|null
      */
-    public function getRate(): ?string
+    public function getPrice(): ?string
     {
-        return $this->rate;
+        return $this->price;
     }
 }

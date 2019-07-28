@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\GoldRate;
+use NBPFetch\GoldPrice;
 use PHPUnit\Framework\TestCase;
 
-
 /**
- * Class GoldRateTest
- * @covers NBPFetch\GoldRate
+ * Class GoldPriceTest
+ * @covers NBPFetch\GoldPrice
  */
-final class GoldRateTest extends TestCase
+final class GoldPriceTest extends TestCase
 {
     /**
      * @test
@@ -17,11 +16,11 @@ final class GoldRateTest extends TestCase
     public function canBeCreatedWithValidArgs()
     {
         $date = "2019-07-28";
-        $rate = "9.8765";
+        $price = "9.8765";
 
         $this->assertInstanceOf(
-            "NBPFetch\GoldRate",
-            new GoldRate($date, $rate)
+            "NBPFetch\GoldPrice",
+            new GoldPrice($date, $price)
         );
     }
 
@@ -33,11 +32,11 @@ final class GoldRateTest extends TestCase
         $error = null;
 
         $date = true;
-        $rate = "9.8765";
+        $price = "9.8765";
 
         try {
             /** @noinspection PhpStrictTypeCheckingInspection */
-            new GoldRate($date, $rate);
+            new GoldPrice($date, $price);
         } catch (Error $e) {
             $error = $e;
         }
@@ -51,16 +50,16 @@ final class GoldRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotBeCreatedWithInvalidRate()
+    public function cannotBeCreatedWithInvalidPrice()
     {
         $error = null;
 
         $date = "2019-07-28";
-        $rate = 9.8765;
+        $price = 9.8765;
 
         try {
             /** @noinspection PhpStrictTypeCheckingInspection */
-            new GoldRate($date, $rate);
+            new GoldPrice($date, $price);
         } catch (Error $e) {
             $error = $e;
         }
@@ -71,29 +70,35 @@ final class GoldRateTest extends TestCase
         );
     }
 
-    public function testDateCanBeReadFrom()
+    /**
+     * @test
+     */
+    public function dateCanBeReadFrom()
     {
         $date = "2019-07-28";
-        $rate = "9.8765";
+        $price = "9.8765";
 
-        $goldRate = new GoldRate($date, $rate);
+        $goldPrice = new GoldPrice($date, $price);
 
         $this->assertEquals(
             $date,
-            $goldRate->getDate()
+            $goldPrice->getDate()
         );
     }
 
-    public function testRateCanBeReadFrom()
+    /**
+     * @test
+     */
+    public function priceCanBeReadFrom()
     {
         $date = "2019-07-28";
-        $rate = "9.8765";
+        $price = "9.8765";
 
-        $goldRate = new GoldRate($date, $rate);
+        $goldPrice = new GoldPrice($date, $price);
 
         $this->assertEquals(
-            $rate,
-            $goldRate->getRate()
+            $price,
+            $goldPrice->getPrice()
         );
     }
 }

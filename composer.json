@@ -1,5 +1,5 @@
 {
-    "name": "adamale/nbp-fetch",
+    "name": "adamale/nbpfetch",
     "description": "PHP library that helps to fetch data from NBP API.",
     "type": "library",
     "keywords": ["nbp", "exchange", "gold"],

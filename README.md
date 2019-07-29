@@ -2,6 +2,11 @@
 
 PHP library that helps to fetch data from NBP API - http://api.nbp.pl/. 
 
+## Installation
+``` bash
+$ composer require adamale/nbpfetch
+```
+
 ## About
 
 ### Requirements

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\GoldPrice;
-use NBPFetch\GoldPriceCollection;
+use NBPFetch\Structure\GoldPrice\GoldPrice;
+use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class GoldPriceCollectionTest
  * @covers NBPFetch\GoldPriceCollection
  */
-class GoldPriceCollectionTest extends TestCase
+final class GoldPriceCollectionTest extends TestCase
 {
     /**
      * @test
@@ -17,7 +17,7 @@ class GoldPriceCollectionTest extends TestCase
     public function canBeCreated()
     {
         $this->assertInstanceOf(
-            "NBPFetch\GoldPriceCollection",
+            GoldPriceCollection::class,
             new GoldPriceCollection()
         );
     }

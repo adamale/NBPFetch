@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\GoldPrice;
+use NBPFetch\Structure\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,7 +19,7 @@ final class GoldPriceTest extends TestCase
         $price = "9.8765";
 
         $this->assertInstanceOf(
-            "NBPFetch\GoldPrice",
+            GoldPrice::class,
             new GoldPrice($date, $price)
         );
     }

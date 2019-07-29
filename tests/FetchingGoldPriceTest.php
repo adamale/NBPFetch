@@ -16,7 +16,7 @@ final class FetchingGoldPriceTest extends TestCase
     public function canFetchCurrentPrice()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
-        $currentPrice = $NBPFetch->goldRate()->current();
+        $currentPrice = $NBPFetch->goldPrice()->current();
 
         $this->assertInstanceOf(
             GoldPrice::class,
@@ -30,9 +30,9 @@ final class FetchingGoldPriceTest extends TestCase
     public function canFetchTodayPrice()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
-        $todayPrice = $NBPFetch->goldRate()->today();
+        $todayPrice = $NBPFetch->goldPrice()->today();
 
-        if ($NBPFetch->goldRate()->current()->getDate() === date("Y-m-d")) {
+        if ($NBPFetch->goldPrice()->current()->getDate() === date("Y-m-d")) {
             $this->assertInstanceOf(
                 GoldPrice::class,
                 $todayPrice
@@ -51,7 +51,7 @@ final class FetchingGoldPriceTest extends TestCase
     public function canFetchLast10Prices()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
-        $last10Prices = $NBPFetch->goldRate()->last(10);
+        $last10Prices = $NBPFetch->goldPrice()->last(10);
 
         $this->assertEquals(
             10,
@@ -67,7 +67,7 @@ final class FetchingGoldPriceTest extends TestCase
         $testDate = "2019-07-29";
 
         $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDatePrice = $NBPFetch->goldRate()->byDate($testDate);
+        $givenDatePrice = $NBPFetch->goldPrice()->byDate($testDate);
 
         $this->assertEquals(
             $testDate,
@@ -81,7 +81,7 @@ final class FetchingGoldPriceTest extends TestCase
     public function canFetchByDateRange()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDateRangePrice = $NBPFetch->goldRate()->byDateRange(
+        $givenDateRangePrice = $NBPFetch->goldPrice()->byDateRange(
             "2019-06-01",
             "2019-06-30"
         );

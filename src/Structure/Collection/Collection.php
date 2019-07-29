@@ -5,7 +5,6 @@ namespace NBPFetch\Structure\Collection;
 
 use Countable;
 use Iterator;
-use NBPFetch\Structure\Item\ItemInterface;
 
 /**
  * Class Collection
@@ -28,9 +27,9 @@ abstract class Collection implements
 
     /**
      * Inserts an item into the array.
-     * @param ItemInterface $item
+     * @param $item
      */
-    protected function insert(ItemInterface $item): void
+    protected function insert($item): void
     {
         $this->items[] = $item;
     }
@@ -52,9 +51,9 @@ abstract class Collection implements
     }
 
     /**
-     * @return ItemInterface|null
+     * @return mixed
      */
-    public function current(): ?ItemInterface
+    public function current()
     {
         return $this->items[$this->current];
     }

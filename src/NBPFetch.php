@@ -14,10 +14,10 @@ use NBPFetch\NBPApi\NBPApi;
 class NBPFetch
 {
     /**
-     * Returns gold rate fetcher that defines different fetching methods.
+     * Returns gold price fetcher that defines different fetching methods.
      * @return Fetcher
      */
-    public function goldRate()
+    public function goldPrice(): Fetcher
     {
         $NBPApi = new NBPApi();
         $ApiCaller = new ApiCaller($NBPApi);

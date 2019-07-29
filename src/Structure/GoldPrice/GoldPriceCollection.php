@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace NBPFetch\Structure\GoldPrice;
 
 use NBPFetch\Structure\Collection\Collection;
-use NBPFetch\Structure\Item\ItemInterface;
 
 /**
  * Class GoldPriceCollection
@@ -13,14 +12,14 @@ use NBPFetch\Structure\Item\ItemInterface;
 class GoldPriceCollection extends Collection
 {
     /**
-     * Adds an GoldPrice object to the collection.
-     * @param ItemInterface $goldPrice
+     * Adds an GoldPrice item to the collection.
+     * @param GoldPrice $item
      * @return void
      */
-    public function add(ItemInterface $goldPrice): void
+    public function add($item): void
     {
-        if ($goldPrice instanceof GoldPrice) {
-            $this->insert($goldPrice);
+        if ($item instanceof GoldPrice) {
+            $this->insert($item);
         }
     }
 }

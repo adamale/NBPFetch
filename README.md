@@ -7,6 +7,40 @@ PHP library that helps to fetch data from NBP API - http://api.nbp.pl/.
 $ composer require adamale/nbpfetch
 ```
 
+## Usage
+```php
+<?php
+
+use NBPFetch\NBPFetch;
+
+require_once "vendor/autoload.php";
+
+$NBPFetch = new NBPFetch();
+$NBPFetchGoldPrice = $NBPFetch->goldPrice();
+
+/**
+ * Single gold price result.
+ * Available methods are: current(), today() and byDate(string $date)
+ */
+$currentGoldPrice = $NBPFetchGoldPrice->current();
+echo "Current gold price is " . $currentGoldPrice->getPrice() . ", published on " . $currentGoldPrice->getDate() . ".\n";
+
+/**
+ * Collection of gold price results.
+ * Available methods are: byDateRange(string $from, string $to) and last(int count)
+ */
+$byDateRangeGoldPrices = $NBPFetchGoldPrice->byDateRange("2019-07-01", "2019-07-12");
+foreach ($byDateRangeGoldPrices as $byDateRangeGoldPrice) {
+    echo "The gold price on " . $byDateRangeGoldPrice->getDate() . " was " . $byDateRangeGoldPrice->getPrice() . ".\n";
+}
+
+/** 
+ * Error message is available in case the proper response was not created
+ * (method returned null instead of object).
+ */
+$errorMessage = $NBPFetchGoldPrice->getApiCaller()->getError();
+```
+
 ## About
 
 ### Requirements

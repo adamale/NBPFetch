@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace NBPFetch\Structure\GoldPrice;
 
-use NBPFetch\Structure\Item\ItemInterface;
-
 /**
  * Class GoldPrice
  * @package NBPFetch\Structure\GoldPrice
  */
-class GoldPrice implements ItemInterface
+class GoldPrice
 {
     /**
      * @var string

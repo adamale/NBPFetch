@@ -15,10 +15,14 @@ use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
 class ApiCaller extends AbstractApiCaller
 {
     /**
-     * API subset that returns gold price data.
-     * @var string
+     * @var string API_SUBSET API subset that returns gold price data.
      */
     private const API_SUBSET = "cenyzlota/";
+
+    /**
+     * @var string DATE_FORMAT Supported date format.
+     */
+    private const DATE_FORMAT = "Y-m-d";
 
     /**
      * Returns a single gold price from given URL.
@@ -27,35 +31,29 @@ class ApiCaller extends AbstractApiCaller
      */
     public function getSingle(string $url): ?GoldPrice
     {
-        $result = null;
-
-        try {
-            $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
-            $result = $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
-        } catch (InvalidResponseException $e) {
-            $this->setError($e->getMessage());
-        }
-
-        return $result;
+        $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
+        return $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
     }
 
     /**
      * Returns a set of gold prices from given URL.
      * @param string $url
-     * @return GoldPriceCollection|null
+     * @return GoldPriceCollection
+     * @throws InvalidResponseException
      */
     public function getCollection(string $url): ?GoldPriceCollection
     {
-        $result = null;
+        $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
+        return $this->createGoldPriceCollection($fetchedGoldPrices);
+    }
 
-        try {
-            $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
-            $result = $this->createGoldPriceCollection($fetchedGoldPrices);
-        } catch (InvalidResponseException $e) {
-            $this->setError($e->getMessage());
-        }
-
-        return $result;
+    /**
+     * Returns an API error.
+     * @return string
+     */
+    public function getDateFormat(): string
+    {
+        return self::DATE_FORMAT;
     }
 
     /**

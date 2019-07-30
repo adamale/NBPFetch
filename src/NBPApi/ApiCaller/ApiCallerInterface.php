@@ -22,7 +22,7 @@ interface ApiCallerInterface
     public function getCollection(string $url);
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getError(): ?string;
+    public function getDateFormat(): string;
 }

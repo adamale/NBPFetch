@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi;
 
-use InvalidArgumentException;
+use NBPFetch\NBPApi\Exception\InvalidResponseException;
 
 /**
  * Class NBPApi
  * @package NBPFetch\NBPApi
  */
-class NBPApi
+class NBPApi implements NBPApiInterface
 {
     /**
      * @var string
@@ -17,9 +17,10 @@ class NBPApi
     private const BASE_URL = "http://api.nbp.pl/api/";
 
     /**
+     * Gets a response from NBP API and parses it for further action.
      * @param string $url
      * @return array
-     * @throws InvalidArgumentException
+     * @throws InvalidResponseException
      */
     public function fetch(string $url): array
     {
@@ -30,14 +31,28 @@ class NBPApi
             ]
         ]);
 
+        // get the API output
         $response = file_get_contents(self::BASE_URL . $url, false, $context);
 
-        $decoded = json_decode($response, true);
+        // try to make an array from the response
+        $parseResponse = $this->parseResponse($response);
 
-        if (is_array($decoded)) {
-            return $decoded;
-        } else {
-            throw new InvalidArgumentException($response);
+        // throw an exception if array was not created
+        // (the API output was not a JSON, but an error string probably)
+        if (!is_array($parseResponse)) {
+            throw new InvalidResponseException($response);
         }
+
+        return $parseResponse;
+    }
+
+    /**
+     * Tries to turn fetched response JSON into an array.
+     * @param string $response
+     * @return array|null
+     */
+    protected function parseResponse(string $response): ?array
+    {
+        return json_decode($response, true);
     }
 }

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi\GoldPrice;
 
-use InvalidArgumentException;
 use NBPFetch\NBPApi\ApiCaller\AbstractApiCaller;
+use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\Structure\GoldPrice\GoldPrice;
 use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
 
@@ -27,13 +27,16 @@ class ApiCaller extends AbstractApiCaller
      */
     public function getSingle(string $url): ?GoldPrice
     {
+        $result = null;
+
         try {
             $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
-            return $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
-        } catch (InvalidArgumentException $e) {
+            $result = $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
+        } catch (InvalidResponseException $e) {
             $this->setError($e->getMessage());
-            return null;
         }
+
+        return $result;
     }
 
     /**
@@ -43,13 +46,16 @@ class ApiCaller extends AbstractApiCaller
      */
     public function getCollection(string $url): ?GoldPriceCollection
     {
+        $result = null;
+
         try {
             $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
-            return $this->createGoldPriceCollection($fetchedGoldPrices);
-        } catch (InvalidArgumentException $e) {
+            $result = $this->createGoldPriceCollection($fetchedGoldPrices);
+        } catch (InvalidResponseException $e) {
             $this->setError($e->getMessage());
-            return null;
         }
+
+        return $result;
     }
 
     /**

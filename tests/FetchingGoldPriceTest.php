@@ -30,18 +30,27 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchTodayPrice()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $todayPrice = $NBPFetch->goldPrice()->today();
+        $currentDate = DateTimeImmutable::createFromFormat(
+            "Y-m-d",
+            date("Y-m-d"),
+            new DateTimeZone("Europe/Warsaw")
+        );
 
-        if ($NBPFetch->goldPrice()->current()->getDate() === date("Y-m-d")) {
-            $this->assertInstanceOf(
-                GoldPrice::class,
-                $todayPrice
-            );
-        } else {
+        try {
+            $NBPFetch = new NBPFetch\NBPFetch();
+            $todayPrice = $NBPFetch->goldPrice()->today();
+            $currentPrice = $NBPFetch->goldPrice()->current();
+
+            if ($currentPrice->getDate() === $currentDate->format("Y-m-d")) {
+                $this->assertInstanceOf(
+                    GoldPrice::class,
+                    $todayPrice
+                );
+            }
+        } catch(InvalidResponseException $e) {
             $this->assertEquals(
-                null,
-                $todayPrice
+                "404 NotFound - Not Found - Brak danych",
+                $e->getMessage()
             );
         }
     }

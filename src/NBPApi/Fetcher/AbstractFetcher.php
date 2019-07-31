@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace NBPFetch\NBPApi\Fetcher;
 
 use NBPFetch\NBPApi\ApiCaller\ApiCallerInterface;
+use NBPFetch\NBPApi\Validator\CountValidatorInterface;
+use NBPFetch\NBPApi\Validator\DateValidatorInterface;
 
 /**
  * Class AbstractFetcher
@@ -17,12 +19,28 @@ class AbstractFetcher implements FetcherInterface
     protected $apiCaller;
 
     /**
-     * AbstractFetcher constructor.
-     * @param ApiCallerInterface $apiCaller
+     * @var DateValidatorInterface
      */
-    public function __construct(ApiCallerInterface $apiCaller)
-    {
+    protected $dateValidator;
+
+    /**
+     * @var CountValidatorInterface
+     */
+    protected $countValidator;
+
+    /**
+     * @param ApiCallerInterface $apiCaller
+     * @param DateValidatorInterface $dateValidator
+     * @param CountValidatorInterface $countValidator
+     */
+    public function __construct(
+        ApiCallerInterface $apiCaller,
+        DateValidatorInterface $dateValidator,
+        CountValidatorInterface $countValidator
+    ) {
         $this->apiCaller = $apiCaller;
+        $this->dateValidator = $dateValidator;
+        $this->countValidator = $countValidator;
     }
 
     /**
@@ -31,5 +49,21 @@ class AbstractFetcher implements FetcherInterface
     public function getApiCaller()
     {
         return $this->apiCaller;
+    }
+
+    /**
+     * @return DateValidatorInterface
+     */
+    public function getDateValidator(): DateValidatorInterface
+    {
+        return $this->dateValidator;
+    }
+
+    /**
+     * @return CountValidatorInterface
+     */
+    public function getCountValidator(): CountValidatorInterface
+    {
+        return $this->countValidator;
     }
 }

@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi\GoldPrice;
 
-use DateTimeImmutable;
-use DateTimeZone;
 use InvalidArgumentException;
+use NBPFetch\NBPApi\Exception\InvalidCountException;
 use NBPFetch\NBPApi\Exception\InvalidDateException;
 use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\NBPApi\Fetcher\AbstractFetcher;
@@ -19,23 +18,13 @@ use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
 class Fetcher extends AbstractFetcher
 {
     /**
-     * @var string TIMEZONE Poland's timezone.
-     */
-    private const TIMEZONE = "Europe/Warsaw";
-
-    /**
-     * @var string TIMEZONE Poland's timezone.
-     */
-    private const MINIMAL_ACCEPTED_DATE = "2013-01-02";
-
-    /**
      * Returns current gold price.
      * @return GoldPrice|null
      * @throws InvalidResponseException
      */
     public function current(): ?GoldPrice
     {
-        return $this->apiCaller->getSingle("");
+        return $this->getApiCaller()->getSingle("");
     }
 
     /**
@@ -46,14 +35,15 @@ class Fetcher extends AbstractFetcher
      */
     public function last(int $count): ?GoldPriceCollection
     {
-        $minimalCount = 1;
-        if ($count < $minimalCount) {
-            throw new InvalidArgumentException(
-                sprintf("Count must not be lower than %s", $minimalCount)
-            );
+        try {
+            $this->getCountValidator()->validateCount($count);
+        } catch (InvalidCountException $e) {
+            throw new InvalidArgumentException($e->getMessage());
         }
 
-        return $this->apiCaller->getCollection("last/" . ((string) $count) . "/");
+        $path = sprintf("last/%s", $count);
+
+        return $this->getApiCaller()->getCollection($path);
     }
 
     /**
@@ -63,7 +53,7 @@ class Fetcher extends AbstractFetcher
      */
     public function today(): ?GoldPrice
     {
-        return $this->apiCaller->getSingle("today/");
+        return $this->getApiCaller()->getSingle("today/");
     }
 
     /**
@@ -75,12 +65,15 @@ class Fetcher extends AbstractFetcher
     public function byDate(string $date): ?GoldPrice
     {
         try {
-            $this->validateDate($date);
+            $this->getDateValidator()->validateDateFormat($date);
+            $this->getDateValidator()->validateDate($date);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        return $this->apiCaller->getSingle($date . "/");
+        $path = sprintf("%s/", $date);
+
+        return $this->getApiCaller()->getSingle($path);
     }
 
     /**
@@ -93,86 +86,14 @@ class Fetcher extends AbstractFetcher
     public function byDateRange(string $from, string $to): ?GoldPriceCollection
     {
         try {
-            $this->validateDate($from);
-            $this->validateDate($to);
+            $this->getDateValidator()->validateDateFormat([$from, $to]);
+            $this->getDateValidator()->validateDate([$from, $to]);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        return $this->apiCaller->getCollection($from . "/" . $to);
-    }
+        $path = sprintf("%s/%s", $from, $to);
 
-    /**
-     * @param string $date
-     * @return bool
-     * @throws InvalidDateException
-     */
-    protected function validateDate(string $date): bool
-    {
-        $dateFormat = $this->getApiCaller()->getDateFormat();
-
-        $this->validateDateFormat($date, $dateFormat);
-        $this->validateDateIsInCorrectRange($date, $dateFormat);
-
-        return true;
-    }
-
-    /**
-     * @param $date
-     * @param $dateFormat
-     * @return void
-     * @throws InvalidDateException
-     */
-    private function validateDateFormat($date, $dateFormat): void
-    {
-        $dti = DateTimeImmutable::createFromFormat($dateFormat, $date);
-        if (!$dti || $dti->format($dateFormat) !== $date) {
-            throw new InvalidDateException(
-                sprintf("Date must be in %s format", $dateFormat)
-            );
-        }
-    }
-
-    /**
-     * @param $date
-     * @param $dateFormat
-     * @return void
-     * @throws InvalidDateException
-     */
-    private function validateDateIsInCorrectRange($date, $dateFormat): void
-    {
-        $timeZone = new DateTimeZone(self::TIMEZONE);
-        $today = date("Y-m-d");
-
-        // date passed to method
-        $providedDate = DateTimeImmutable::createFromFormat(
-            $dateFormat,
-            $date,
-            $timeZone
-        );
-
-        // today's date
-        $currentDate = DateTimeImmutable::createFromFormat(
-            $dateFormat,
-            $today,
-            $timeZone
-        );
-
-        // minimal date accepted by NBP API
-        $minimalAcceptedDate = DateTimeImmutable::createFromFormat(
-            $dateFormat,
-            self::MINIMAL_ACCEPTED_DATE,
-            $timeZone
-        );
-
-        if ($providedDate > $currentDate) {
-            throw new InvalidArgumentException(
-                sprintf("Date must not be in the future (after %s)", $today)
-            );
-        } elseif ($providedDate < $minimalAcceptedDate) {
-            throw new InvalidArgumentException(
-                sprintf("Date must not be before %s", self::MINIMAL_ACCEPTED_DATE)
-            );
-        }
+        return $this->getApiCaller()->getCollection($path);
     }
 }

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace NBPFetch;
 
+use NBPFetch\NBPApi\Validator\CountValidator;
+use NBPFetch\NBPApi\Validator\DateValidator;
 use NBPFetch\NBPApi\GoldPrice\ApiCaller;
 use NBPFetch\NBPApi\GoldPrice\Fetcher;
 use NBPFetch\NBPApi\NBPApi;
@@ -20,8 +22,8 @@ class NBPFetch
     public function goldPrice(): Fetcher
     {
         $NBPApi = new NBPApi();
-        $ApiCaller = new ApiCaller($NBPApi);
+        $apiCaller = new ApiCaller($NBPApi);
 
-        return new Fetcher($ApiCaller);
+        return new Fetcher($apiCaller, new DateValidator(), new CountValidator());
     }
 }

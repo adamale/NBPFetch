@@ -10,19 +10,16 @@ namespace NBPFetch\NBPApi\ApiCaller;
 interface ApiCallerInterface
 {
     /**
-     * @param string $url
+     * Returns single item from API response array.
+     * @param string $path
      * @return mixed
      */
-    public function getSingle(string $url);
+    public function getSingle(string $path);
 
     /**
-     * @param string $url
+     * Returns full API response array as collection.
+     * @param string $path
      * @return mixed
      */
-    public function getCollection(string $url);
-
-    /**
-     * @return string
-     */
-    public function getDateFormat(): string;
+    public function getCollection(string $path);
 }

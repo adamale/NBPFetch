@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi\ApiCaller;
 
-use InvalidArgumentException;
 use NBPFetch\NBPApi\NBPApi;
 
 /**
@@ -15,10 +14,9 @@ abstract class AbstractApiCaller implements ApiCallerInterface
     /**
      * @var NBPApi
      */
-    protected $NBPApi;
+    private $NBPApi;
 
     /**
-     * AbstractApiCaller constructor.
      * @param NBPApi $NBPApi
      */
     public function __construct(NBPApi $NBPApi)
@@ -27,18 +25,10 @@ abstract class AbstractApiCaller implements ApiCallerInterface
     }
 
     /**
-     * Clears the last error and fetches data with full URL.
-     * @param string $url
-     * @return array
-     * @throws InvalidArgumentException
+     * @return NBPApi
      */
-    protected function fetch(string $url):array
+    protected function getNBPApi(): NBPApi
     {
-        return $this->NBPApi->fetch($url);
+        return $this->NBPApi;
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getDateFormat(): string;
 }

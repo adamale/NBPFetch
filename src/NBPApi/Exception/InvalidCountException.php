@@ -6,9 +6,9 @@ namespace NBPFetch\NBPApi\Exception;
 use RuntimeException;
 
 /**
- * Class InvalidDateException
+ * Class InvalidCountException
  * @package NBPFetch\NBPApi\Exception
  */
-class InvalidDateException extends RuntimeException
+class InvalidCountException extends RuntimeException
 {
 }

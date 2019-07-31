@@ -20,7 +20,6 @@ class GoldPrice
     private $price;
 
     /**
-     * GoldPrice constructor.
      * @param string $date
      * @param string $price
      */

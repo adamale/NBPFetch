@@ -15,45 +15,31 @@ use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
 class ApiCaller extends AbstractApiCaller
 {
     /**
-     * @var string API_SUBSET API subset that returns gold price data.
+     * @var string API_SUBSET API Subset that returns gold price data.
      */
     private const API_SUBSET = "cenyzlota/";
 
     /**
-     * @var string DATE_FORMAT Supported date format.
-     */
-    private const DATE_FORMAT = "Y-m-d";
-
-    /**
      * Returns a single gold price from given URL.
-     * @param string $url
+     * @param string $path
      * @return GoldPrice|null
      */
-    public function getSingle(string $url): ?GoldPrice
+    public function getSingle(string $path): ?GoldPrice
     {
-        $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
+        $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
     }
 
     /**
      * Returns a set of gold prices from given URL.
-     * @param string $url
+     * @param string $path
      * @return GoldPriceCollection
      * @throws InvalidResponseException
      */
-    public function getCollection(string $url): ?GoldPriceCollection
+    public function getCollection(string $path): ?GoldPriceCollection
     {
-        $fetchedGoldPrices = $this->fetch(self::API_SUBSET . $url);
+        $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createGoldPriceCollection($fetchedGoldPrices);
-    }
-
-    /**
-     * Returns an API error.
-     * @return string
-     */
-    public function getDateFormat(): string
-    {
-        return self::DATE_FORMAT;
     }
 
     /**

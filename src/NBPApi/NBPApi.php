@@ -18,11 +18,11 @@ class NBPApi implements NBPApiInterface
 
     /**
      * Gets a response from NBP API and parses it for further action.
-     * @param string $url
+     * @param string $path
      * @return array
      * @throws InvalidResponseException
      */
-    public function fetch(string $url): array
+    public function fetch(string $path): array
     {
         $context = stream_context_create([
             "http" => [
@@ -32,18 +32,18 @@ class NBPApi implements NBPApiInterface
         ]);
 
         // get the API output
-        $response = file_get_contents(self::BASE_URL . $url, false, $context);
+        $response = file_get_contents(self::BASE_URL . $path, false, $context);
 
         // try to make an array from the response
-        $parseResponse = $this->parseResponse($response);
+        $parsedResponse = $this->parseResponse($response);
 
         // throw an exception if array was not created
         // (the API output was not a JSON, but an error string probably)
-        if (!is_array($parseResponse)) {
+        if (!is_array($parsedResponse)) {
             throw new InvalidResponseException($response);
         }
 
-        return $parseResponse;
+        return $parsedResponse;
     }
 
     /**

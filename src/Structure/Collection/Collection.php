@@ -27,7 +27,8 @@ abstract class Collection implements
 
     /**
      * Inserts an item into the array.
-     * @param $item
+     * @param mixed $item
+     * @return void
      */
     protected function insert($item): void
     {

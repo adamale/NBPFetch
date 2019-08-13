@@ -5,7 +5,6 @@ namespace NBPFetch\NBPApi\Validator;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use InvalidArgumentException;
 use NBPFetch\NBPApi\Exception\InvalidDateException;
 
 class DateValidator implements DateValidatorInterface
@@ -80,11 +79,11 @@ class DateValidator implements DateValidatorInterface
             );
 
             if ($providedDate > $todayDate) {
-                throw new InvalidArgumentException(
+                throw new InvalidDateException(
                     sprintf("Date must not be in the future (after %s)", $today)
                 );
             } elseif ($providedDate < $minimalSupportedDate) {
-                throw new InvalidArgumentException(
+                throw new InvalidDateException(
                     sprintf("Date must not be before %s", self::MINIMAL_SUPPORTED_DATE)
                 );
             }

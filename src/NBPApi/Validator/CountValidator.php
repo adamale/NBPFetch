@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi\Validator;
 
-use InvalidArgumentException;
+use NBPFetch\NBPApi\Exception\InvalidCountException;
 
 /**
  * Class CountValidator
@@ -20,11 +20,12 @@ class CountValidator implements CountValidatorInterface
      * Validates that provided count is equal or greater than minimal count.
      * @param int $count
      * @return bool
+     * @throws InvalidCountException
      */
     public function validateCount(int $count): bool
     {
         if ($count < self::MINIMAL_COUNT) {
-            throw new InvalidArgumentException(
+            throw new InvalidCountException(
                 sprintf("Count must not be lower than %s", self::MINIMAL_COUNT)
             );
         }

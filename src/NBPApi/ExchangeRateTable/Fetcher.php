@@ -53,7 +53,7 @@ class Fetcher extends AbstractFetcher
         }
 
         try {
-            $this->getCountValidator()->validateCount($count);
+            $this->getCountValidator()->validate($count);
         } catch (InvalidCountException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -98,8 +98,8 @@ class Fetcher extends AbstractFetcher
         }
 
         try {
-            $this->getDateValidator()->validateDateFormat($date);
-            $this->getDateValidator()->validateDate($date);
+            $this->getDateValidator()->validateFormat($date);
+            $this->getDateValidator()->validate($date);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -126,8 +126,8 @@ class Fetcher extends AbstractFetcher
         }
 
         try {
-            $this->getDateValidator()->validateDateFormat([$from, $to]);
-            $this->getDateValidator()->validateDate([$from, $to]);
+            $this->getDateValidator()->validateFormat([$from, $to]);
+            $this->getDateValidator()->validate([$from, $to]);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }

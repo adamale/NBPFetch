@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use NBPFetch\NBPApi\Exception\InvalidTableException;
 

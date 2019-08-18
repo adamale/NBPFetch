@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use NBPFetch\NBPApi\Exception\InvalidTableException;
 
 /**
  * Class TableValidator
- * @package NBPFetch\NBPApi\Validator
+ * @package NBPFetch\NBPApi\Validation
  */
 class TableValidator implements TableValidatorInterface
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use NBPFetch\NBPApi\Exception\invalidCountException;
 
@@ -12,5 +12,5 @@ interface CountValidatorInterface
      * @return bool
      * @throws invalidCountException
      */
-    public function validateCount(int $count): bool;
+    public function validate(int $count): bool;
 }

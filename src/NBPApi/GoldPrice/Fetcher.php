@@ -36,7 +36,7 @@ class Fetcher extends AbstractFetcher
     public function last(int $count): ?GoldPriceCollection
     {
         try {
-            $this->getCountValidator()->validateCount($count);
+            $this->getCountValidator()->validate($count);
         } catch (InvalidCountException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -65,8 +65,8 @@ class Fetcher extends AbstractFetcher
     public function byDate(string $date): ?GoldPrice
     {
         try {
-            $this->getDateValidator()->validateDateFormat($date);
-            $this->getDateValidator()->validateDate($date);
+            $this->getDateValidator()->validateFormat($date);
+            $this->getDateValidator()->validate($date);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -86,8 +86,8 @@ class Fetcher extends AbstractFetcher
     public function byDateRange(string $from, string $to): ?GoldPriceCollection
     {
         try {
-            $this->getDateValidator()->validateDateFormat([$from, $to]);
-            $this->getDateValidator()->validateDate([$from, $to]);
+            $this->getDateValidator()->validateFormat([$from, $to]);
+            $this->getDateValidator()->validate([$from, $to]);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use NBPFetch\NBPApi\Exception\InvalidCountException;
 
 /**
  * Class CountValidator
- * @package NBPFetch\NBPApi\Validator
+ * @package NBPFetch\NBPApi\Validation
  */
 class CountValidator implements CountValidatorInterface
 {
@@ -22,7 +22,7 @@ class CountValidator implements CountValidatorInterface
      * @return bool
      * @throws InvalidCountException
      */
-    public function validateCount(int $count): bool
+    public function validate(int $count): bool
     {
         if ($count < self::MINIMAL_COUNT) {
             throw new InvalidCountException(

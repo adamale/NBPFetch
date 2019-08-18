@@ -8,9 +8,9 @@ use NBPFetch\NBPApi\ExchangeRateTable\Fetcher as ExchangeRateFetcher;
 use NBPFetch\NBPApi\GoldPrice\ApiCaller as GoldPriceApiCaller;
 use NBPFetch\NBPApi\GoldPrice\Fetcher as GoldPriceFetcher;
 use NBPFetch\NBPApi\NBPApi;
-use NBPFetch\NBPApi\Validator\CountValidator;
-use NBPFetch\NBPApi\Validator\DateValidator;
-use NBPFetch\NBPApi\Validator\TableValidator;
+use NBPFetch\NBPApi\Validation\CountValidator;
+use NBPFetch\NBPApi\Validation\DateValidator;
+use NBPFetch\NBPApi\Validation\TableValidator;
 
 /**
  * Class NBPFetch

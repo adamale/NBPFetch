@@ -1,12 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use DateTimeImmutable;
 use DateTimeZone;
 use NBPFetch\NBPApi\Exception\InvalidDateException;
 
+/**
+ * Class DateValidator
+ * @package NBPFetch\NBPApi\Validation
+ */
 class DateValidator implements DateValidatorInterface
 {
     /**
@@ -30,7 +34,7 @@ class DateValidator implements DateValidatorInterface
      * @return bool
      * @throws InvalidDateException
      */
-    public function validateDateFormat($date): bool
+    public function validateFormat($date): bool
     {
         $dates = (array) $date;
 
@@ -52,7 +56,7 @@ class DateValidator implements DateValidatorInterface
      * @return bool
      * @throws InvalidDateException
      */
-    public function validateDate($date): bool
+    public function validate($date): bool
     {
         $dates = (array) $date;
 

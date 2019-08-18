@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validator;
+namespace NBPFetch\NBPApi\Validation;
 
 use NBPFetch\NBPApi\Exception\InvalidDateException;
 
@@ -12,12 +12,12 @@ interface DateValidatorInterface
      * @return bool
      * @throws InvalidDateException
      */
-    public function validateDateFormat($date): bool;
+    public function validateFormat($date): bool;
 
     /**
      * @param string|array $date
      * @return bool
      * @throws InvalidDateException
      */
-    public function validateDate($date): bool;
+    public function validate($date): bool;
 }

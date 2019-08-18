@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace NBPFetch\NBPApi\Fetcher;
 
 use NBPFetch\NBPApi\ApiCaller\ApiCallerInterface;
-use NBPFetch\NBPApi\Validator\CountValidatorInterface;
-use NBPFetch\NBPApi\Validator\DateValidatorInterface;
-use NBPFetch\NBPApi\Validator\TableValidatorInterface;
+use NBPFetch\NBPApi\Validation\CountValidatorInterface;
+use NBPFetch\NBPApi\Validation\DateValidatorInterface;
+use NBPFetch\NBPApi\Validation\TableValidatorInterface;
 
 /**
  * Class AbstractFetcher

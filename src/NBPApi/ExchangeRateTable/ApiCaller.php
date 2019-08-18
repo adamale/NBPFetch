@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace NBPFetch\NBPApi\ExchangeRateTable;
 
 use NBPFetch\NBPApi\ApiCaller\AbstractApiCaller;
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\Structure\ExchangeRate\ExchangeRate;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateCollection;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateTable;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateTableCollection;
+use UnexpectedValueException;
 
 /**
  * Class ApiCaller
@@ -25,7 +25,7 @@ class ApiCaller extends AbstractApiCaller
      * Returns a single exchange rate table from given URL.
      * @param string $path
      * @return ExchangeRateTable|null
-     * @throws InvalidResponseException
+     * @throws UnexpectedValueException
      */
     public function getSingle(string $path): ?ExchangeRateTable
     {
@@ -37,7 +37,7 @@ class ApiCaller extends AbstractApiCaller
      * Returns a set of exchange rate tables from given URL.
      * @param string $path
      * @return ExchangeRateTableCollection
-     * @throws InvalidResponseException
+     * @throws UnexpectedValueException
      */
     public function getCollection(string $path): ?ExchangeRateTableCollection
     {

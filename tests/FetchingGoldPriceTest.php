@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\Structure\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +46,7 @@ final class FetchingGoldPriceTest extends TestCase
                     $todayPrice
                 );
             }
-        } catch(InvalidResponseException $e) {
+        } catch(UnexpectedValueException $e) {
             $this->assertEquals(
                 "404 NotFound - Not Found - Brak danych",
                 $e->getMessage()
@@ -119,7 +118,7 @@ final class FetchingGoldPriceTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->goldPrice()->byDate($futureDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -146,7 +145,7 @@ final class FetchingGoldPriceTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->goldPrice()->byDate($tooOldDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -169,7 +168,7 @@ final class FetchingGoldPriceTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->goldPrice()->byDate($invalidDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -192,7 +191,7 @@ final class FetchingGoldPriceTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->goldPrice()->last($invalidCount);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -214,7 +213,7 @@ final class FetchingGoldPriceTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->goldPrice()->byDate($dateThatLacksGoldPrice);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 

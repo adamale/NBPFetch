@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace NBPFetch\NBPApi\GoldPrice;
 
 use NBPFetch\NBPApi\ApiCaller\AbstractApiCaller;
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\Structure\GoldPrice\GoldPrice;
 use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
+use UnexpectedValueException;
 
 /**
  * Class ApiCaller
@@ -34,7 +34,7 @@ class ApiCaller extends AbstractApiCaller
      * Returns a set of gold prices from given URL.
      * @param string $path
      * @return GoldPriceCollection
-     * @throws InvalidResponseException
+     * @throws UnexpectedValueException
      */
     public function getCollection(string $path): ?GoldPriceCollection
     {

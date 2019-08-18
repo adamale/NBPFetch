@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateTable;
 use PHPUnit\Framework\TestCase;
 
@@ -47,7 +46,7 @@ final class FetchingExchangeRateTableTest extends TestCase
                     $todayExchangeRateTable
                 );
             }
-        } catch(InvalidResponseException $e) {
+        } catch(UnexpectedValueException $e) {
             $this->assertEquals(
                 "404 NotFound - Not Found - Brak danych",
                 $e->getMessage()
@@ -120,7 +119,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->byDate("A", $futureDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -147,7 +146,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->byDate("A", $tooOldDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -170,7 +169,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->byDate("A", $invalidDate);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -193,7 +192,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->last("A", $invalidCount);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -215,7 +214,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->byDate("A", $dateThatLacksGoldPrice);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 
@@ -237,7 +236,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         try {
             $NBPFetch = new NBPFetch\NBPFetch();
             $NBPFetch->exchangeRateTable()->current($incorrectTable);
-        } catch (InvalidArgumentException|InvalidResponseException $e) {
+        } catch (InvalidArgumentException|UnexpectedValueException $e) {
             $message = $e->getMessage();
         }
 

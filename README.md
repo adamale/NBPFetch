@@ -17,7 +17,6 @@ include [Composer File Loader](https://github.com/Wilkins/composer-file-loader) 
 ```php
 <?php
 
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\NBPFetch;
 use NBPFetch\Structure\ExchangeRate\ExchangeRate;
 
@@ -40,7 +39,7 @@ try {
         $currentGoldPrice->getPrice(),
         $currentGoldPrice->getDate()
     );
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 
@@ -59,7 +58,7 @@ try {
             $byDateRangeGoldPrice->getPrice()
         );
     }
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 
@@ -91,7 +90,7 @@ try {
         $firstFoundCurrency->getCode(),
         $firstFoundCurrency->getRate()
     );
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 
@@ -111,7 +110,7 @@ try {
             $byDateRangeExchangeRateTable->getNumber()
         );
     }
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 
@@ -122,17 +121,17 @@ print("\nExample of thrown InvalidArgumentException:\n");
 try {
     $date = date("Y-m-d", strtotime("+1 month"));
     $NBPFetchGoldPrice->byDate($date);
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 
 /**
- * Example of thrown InvalidResponseException - message straight from NBP API.
+ * Example of thrown UnexpectedValueException - message straight from NBP API.
  */
-print("\nExample of thrown InvalidResponseException:\n");
+print("\nExample of thrown UnexpectedValueException:\n");
 try {
     $NBPFetchGoldPrice->byDate("2019-07-06");
-} catch (InvalidArgumentException|InvalidResponseException $e) {
+} catch (InvalidArgumentException|UnexpectedValueException $e) {
     printf("%s.\n", $e->getMessage());
 }
 ```

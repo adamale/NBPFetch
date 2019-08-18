@@ -6,11 +6,11 @@ namespace NBPFetch\NBPApi\ExchangeRateTable;
 use InvalidArgumentException;
 use NBPFetch\NBPApi\Exception\InvalidCountException;
 use NBPFetch\NBPApi\Exception\InvalidDateException;
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
 use NBPFetch\NBPApi\Exception\InvalidTableException;
 use NBPFetch\NBPApi\Fetcher\AbstractFetcher;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateTable;
 use NBPFetch\Structure\ExchangeRate\ExchangeRateTableCollection;
+use UnexpectedValueException;
 
 /**
  * Class Fetcher
@@ -22,7 +22,7 @@ class Fetcher extends AbstractFetcher
      * Returns current exchange rate table.
      * @param string $table Table type.
      * @return ExchangeRateTable|null
-     * @throws InvalidArgumentException|InvalidResponseException
+     * @throws InvalidArgumentException|UnexpectedValueException
      */
     public function current(string $table): ?ExchangeRateTable
     {
@@ -42,7 +42,7 @@ class Fetcher extends AbstractFetcher
      * @param string $table Table type.
      * @param int $count Must be an positive integer.
      * @return ExchangeRateTableCollection|null
-     * @throws InvalidArgumentException|InvalidResponseException
+     * @throws InvalidArgumentException|UnexpectedValueException
      */
     public function last(string $table, int $count): ?ExchangeRateTableCollection
     {
@@ -67,7 +67,7 @@ class Fetcher extends AbstractFetcher
      * Returns today exchange rate table.
      * @param string $table Table type.
      * @return ExchangeRateTable|null
-     * @throws InvalidArgumentException|InvalidResponseException
+     * @throws InvalidArgumentException|UnexpectedValueException
      */
     public function today(string $table): ?ExchangeRateTable
     {
@@ -87,7 +87,7 @@ class Fetcher extends AbstractFetcher
      * @param string $table Table type.
      * @param string $date Date in Y-m-d format.
      * @return ExchangeRateTable|null
-     * @throws InvalidArgumentException|InvalidResponseException
+     * @throws InvalidArgumentException|UnexpectedValueException
      */
     public function byDate(string $table, string $date): ?ExchangeRateTable
     {
@@ -115,7 +115,7 @@ class Fetcher extends AbstractFetcher
      * @param string $from Date in Y-m-d format.
      * @param string $to Date in Y-m-d format.
      * @return ExchangeRateTableCollection|null
-     * @throws InvalidArgumentException|InvalidResponseException
+     * @throws InvalidArgumentException|UnexpectedValueException
      */
     public function byDateRange(string $table, string $from, string $to): ?ExchangeRateTableCollection
     {

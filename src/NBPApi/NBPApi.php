@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi;
 
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
+use UnexpectedValueException;
 
 /**
  * Class NBPApi
@@ -20,7 +20,7 @@ class NBPApi implements NBPApiInterface
      * Gets a response from NBP API and parses it for further action.
      * @param string $path
      * @return array
-     * @throws InvalidResponseException
+     * @throws UnexpectedValueException
      */
     public function fetch(string $path): array
     {
@@ -40,7 +40,7 @@ class NBPApi implements NBPApiInterface
         // throw an exception if array was not created
         // (the API output was not a JSON, but an error string probably)
         if (!is_array($parsedResponse)) {
-            throw new InvalidResponseException($response);
+            throw new UnexpectedValueException($response);
         }
 
         return $parsedResponse;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\NBPApi;
 
-use NBPFetch\NBPApi\Exception\InvalidResponseException;
+use UnexpectedValueException;
 
 /**
  * Interface NBPApiInterface
@@ -14,7 +14,7 @@ interface NBPApiInterface
     /**
      * @param string $url
      * @return array
-     * @throws InvalidResponseException
+     * @throws UnexpectedValueException
      */
     public function fetch(string $url): array;
 }

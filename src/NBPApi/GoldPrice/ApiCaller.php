@@ -27,7 +27,7 @@ class ApiCaller extends AbstractApiCaller
     public function getSingle(string $path): ?GoldPrice
     {
         $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
-        return $this->createGoldPriceFromFetchedArray($fetchedGoldPrices[0]);
+        return $this->createGoldPrice($fetchedGoldPrices[0]);
     }
 
     /**
@@ -47,7 +47,7 @@ class ApiCaller extends AbstractApiCaller
      * @param array $fetchedGoldPrice
      * @return GoldPrice
      */
-    private function createGoldPriceFromFetchedArray(array $fetchedGoldPrice): GoldPrice
+    private function createGoldPrice(array $fetchedGoldPrice): GoldPrice
     {
         return new GoldPrice(
             (string) $fetchedGoldPrice["data"],
@@ -64,9 +64,7 @@ class ApiCaller extends AbstractApiCaller
     {
         $goldPriceCollection = new GoldPriceCollection();
         foreach ($fetchedGoldPrices as $fetchedGoldPrice) {
-            $goldPriceCollection->add(
-                $this->createGoldPriceFromFetchedArray($fetchedGoldPrice)
-            );
+            $goldPriceCollection[] = $this->createGoldPrice($fetchedGoldPrice);
         }
 
         return $goldPriceCollection;

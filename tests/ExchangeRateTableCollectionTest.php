@@ -29,21 +29,17 @@ final class ExchangeRateTableCollectionTest extends TestCase
     public function canContainMultipleItems()
     {
         $collection = new ExchangeRateTableCollection();
-        $collection->add(
-            new ExchangeRateTable(
-                "A",
-                "156/A/NBP/2019",
-                "2019-08-13",
-                new ExchangeRateCollection()
-            )
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "156/A/NBP/2019",
+            "2019-08-13",
+            new ExchangeRateCollection()
         );
-        $collection->add(
-            new ExchangeRateTable(
-                "A",
-                "155/A/NBP/2019",
-                "2019-08-12",
-                new ExchangeRateCollection()
-            )
+        $collection[] =  new ExchangeRateTable(
+            "A",
+            "155/A/NBP/2019",
+            "2019-08-12",
+            new ExchangeRateCollection()
         );
 
         $this->assertEquals(
@@ -60,29 +56,23 @@ final class ExchangeRateTableCollectionTest extends TestCase
         $iterations = 0;
 
         $collection = new ExchangeRateTableCollection();
-        $collection->add(
-            new ExchangeRateTable(
-                "A",
-                "156/A/NBP/2019",
-                "2019-08-13",
-                new ExchangeRateCollection()
-            )
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "156/A/NBP/2019",
+            "2019-08-13",
+            new ExchangeRateCollection()
         );
-        $collection->add(
-            new ExchangeRateTable(
-                "A",
-                "155/A/NBP/2019",
-                "2019-08-12",
-                new ExchangeRateCollection()
-            )
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "155/A/NBP/2019",
+            "2019-08-12",
+            new ExchangeRateCollection()
         );
-        $collection->add(
-            new ExchangeRateTable(
-                "A",
-                "154/A/NBP/2019",
-                "2019-08-09",
-                new ExchangeRateCollection()
-            )
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "154/A/NBP/2019",
+            "2019-08-09",
+            new ExchangeRateCollection()
         );
 
         /** @noinspection PhpUnusedLocalVariableInspection */
@@ -93,6 +83,62 @@ final class ExchangeRateTableCollectionTest extends TestCase
         $this->assertEquals(
             3,
             $iterations
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function canReturnElementByKey()
+    {
+        $collection = new ExchangeRateTableCollection();
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "156/A/NBP/2019",
+            "2019-08-13",
+            new ExchangeRateCollection()
+        );
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "155/A/NBP/2019",
+            "2019-08-12",
+            new ExchangeRateCollection()
+        );
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "154/A/NBP/2019",
+            "2019-08-09",
+            new ExchangeRateCollection()
+        );
+
+        $this->assertEquals(
+            "154/A/NBP/2019",
+            $collection[2]->getNumber()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function cannotInsertNotSupportedElement()
+    {
+        $collection = new ExchangeRateTableCollection();
+        $collection[] = null;
+        $collection[] = "foo";
+        $collection[] = 7;
+        $collection[] = new ExchangeRateTable(
+            "A",
+            "154/A/NBP/2019",
+            "2019-08-09",
+            new ExchangeRateCollection()
+        );
+        $collection[] = true;
+        $collection[] = 100.01;
+        $collection[] = new StdClass();
+
+        $this->assertEquals(
+            1,
+            count($collection)
         );
     }
 }

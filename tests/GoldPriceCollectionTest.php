@@ -28,9 +28,9 @@ final class GoldPriceCollectionTest extends TestCase
     public function canContainMultipleItems()
     {
         $collection = new GoldPriceCollection();
-        $collection->add(new GoldPrice("2019-07-28", "9.8765"));
-        $collection->add(new GoldPrice("2019-07-29", "1.23"));
-        $collection->add(new GoldPrice("2019-07-30", "42"));
+        $collection[] = new GoldPrice("2019-07-28", "9.8765");
+        $collection[] = new GoldPrice("2019-07-29", "1.23");
+        $collection[] = new GoldPrice("2019-07-30", "42");
 
         $this->assertEquals(
             3,
@@ -46,9 +46,9 @@ final class GoldPriceCollectionTest extends TestCase
         $iterations = 0;
 
         $collection = new GoldPriceCollection();
-        $collection->add(new GoldPrice("2019-07-28", "9.8765"));
-        $collection->add(new GoldPrice("2019-07-29", "1.23"));
-        $collection->add(new GoldPrice("2019-07-30", "42"));
+        $collection[] = new GoldPrice("2019-07-28", "9.8765");
+        $collection[] = new GoldPrice("2019-07-29", "1.23");
+        $collection[] = new GoldPrice("2019-07-30", "42");
 
         /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($collection as $item) {
@@ -58,6 +58,42 @@ final class GoldPriceCollectionTest extends TestCase
         $this->assertEquals(
             3,
             $iterations
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function canReturnElementByKey()
+    {
+        $collection = new GoldPriceCollection();
+        $collection[] = new GoldPrice("2019-07-28", "9.8765");
+        $collection[] = new GoldPrice("2019-07-29", "1.23");
+        $collection[] = new GoldPrice("2019-07-30", "42");
+
+        $this->assertEquals(
+            "2019-07-30",
+            $collection[2]->getDate()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function cannotInsertNotSupportedElement()
+    {
+        $collection = new GoldPriceCollection();
+        $collection[] = null;
+        $collection[] = "foo";
+        $collection[] = 7;
+        $collection[] = new GoldPrice("2019-07-30", "42");
+        $collection[] = true;
+        $collection[] = 100.01;
+        $collection[] = new StdClass();
+
+        $this->assertEquals(
+            1,
+            count($collection)
         );
     }
 }

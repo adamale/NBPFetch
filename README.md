@@ -74,7 +74,7 @@ try {
     /**
      * @var ExchangeRate $firstFoundCurrency
      */
-    $firstFoundCurrency = $exchangeRateCollection->getItems()[0];
+    $firstFoundCurrency = $exchangeRateCollection[0];
 
     printf(
         "Current exchange rate table number is %s, published on %s.\n",

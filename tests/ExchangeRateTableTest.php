@@ -21,9 +21,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         $this->assertInstanceOf(
             ExchangeRateTable::class,
@@ -42,9 +42,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         try {
             /** @noinspection PhpStrictTypeCheckingInspection */
@@ -70,9 +70,9 @@ class ExchangeRateTableTest extends TestCase
         $number = true;
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         try {
             /** @noinspection PhpStrictTypeCheckingInspection */
@@ -98,9 +98,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = true;
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         try {
             /** @noinspection PhpStrictTypeCheckingInspection */
@@ -148,9 +148,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         $exchangeRateTable = new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
 
@@ -169,9 +169,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         $exchangeRateTable = new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
 
@@ -190,9 +190,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         $exchangeRateTable = new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
 
@@ -211,9 +211,9 @@ class ExchangeRateTableTest extends TestCase
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = new ExchangeRateCollection();
-        $exchangeRateCollection->add(new ExchangeRate("USD", "3.9876"));
-        $exchangeRateCollection->add(new ExchangeRate("EUR", "4.1234"));
-        $exchangeRateCollection->add(new ExchangeRate("GBP", "4.7"));
+        $exchangeRateCollection[] = new ExchangeRate("USD", "3.9876");
+        $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
+        $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
         $exchangeRateTable = new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
 

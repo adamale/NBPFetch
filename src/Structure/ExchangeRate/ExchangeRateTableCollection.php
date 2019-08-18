@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\Structure\ExchangeRate;
 
-use NBPFetch\Structure\Collection\Collection;
+use ObjectCollection\Collection;
 
 /**
  * Class ExchangeRateTableCollection
@@ -11,15 +11,8 @@ use NBPFetch\Structure\Collection\Collection;
  */
 class ExchangeRateTableCollection extends Collection
 {
-    /**
-     * Adds an ExchangeRateTable item to the collection.
-     * @param ExchangeRateTable $item
-     * @return void
-     */
-    public function add($item): void
+    public function __construct()
     {
-        if ($item instanceof ExchangeRateTable) {
-            $this->insert($item);
-        }
+        $this->allowed_item = ExchangeRateTable::class;
     }
 }

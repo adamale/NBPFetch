@@ -28,8 +28,8 @@ final class ExchangeRateCollectionTest extends TestCase
     public function canContainMultipleItems()
     {
         $collection = new ExchangeRateCollection();
-        $collection->add(new ExchangeRate("USD", "3.9876"));
-        $collection->add(new ExchangeRate("EUR", "4.1234"));
+        $collection[] = new ExchangeRate("USD", "3.9876");
+        $collection[] = new ExchangeRate("EUR", "4.1234");
 
         $this->assertEquals(
             2,
@@ -45,9 +45,9 @@ final class ExchangeRateCollectionTest extends TestCase
         $iterations = 0;
 
         $collection = new ExchangeRateCollection();
-        $collection->add(new ExchangeRate("USD", "3.9876"));
-        $collection->add(new ExchangeRate("EUR", "4.1234"));
-        $collection->add(new ExchangeRate("GBP", "4.7"));
+        $collection[] = new ExchangeRate("USD", "3.9876");
+        $collection[] = new ExchangeRate("EUR", "4.1234");
+        $collection[] = new ExchangeRate("GBP", "4.7");
 
         /** @noinspection PhpUnusedLocalVariableInspection */
         foreach ($collection as $item) {
@@ -57,6 +57,42 @@ final class ExchangeRateCollectionTest extends TestCase
         $this->assertEquals(
             3,
             $iterations
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function canReturnElementByKey()
+    {
+        $collection = new ExchangeRateCollection();
+        $collection[] = new ExchangeRate("USD", "3.9876");
+        $collection[] = new ExchangeRate("EUR", "4.1234");
+        $collection[] = new ExchangeRate("GBP", "4.7");
+
+        $this->assertEquals(
+            "4.7",
+            $collection[2]->getRate()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function cannotInsertNotSupportedElement()
+    {
+        $collection = new ExchangeRateCollection();
+        $collection[] = null;
+        $collection[] = "foo";
+        $collection[] = 7;
+        $collection[] = new ExchangeRate("GBP", "4.7");
+        $collection[] = true;
+        $collection[] = 100.01;
+        $collection[] = new StdClass();
+
+        $this->assertEquals(
+            1,
+            count($collection)
         );
     }
 }

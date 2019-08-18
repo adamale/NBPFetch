@@ -30,7 +30,7 @@ class ApiCaller extends AbstractApiCaller
     public function getSingle(string $path): ?ExchangeRateTable
     {
         $fetchedExchangeRateTables = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
-        return $this->createExchangeRateTableFromFetchedArray($fetchedExchangeRateTables[0]);
+        return $this->createExchangeRateTable($fetchedExchangeRateTables[0]);
     }
 
     /**
@@ -50,13 +50,11 @@ class ApiCaller extends AbstractApiCaller
      * @param array $fetchedExchangeRateTable
      * @return ExchangeRateTable
      */
-    private function createExchangeRateTableFromFetchedArray(array $fetchedExchangeRateTable): ExchangeRateTable
+    private function createExchangeRateTable(array $fetchedExchangeRateTable): ExchangeRateTable
     {
         $exchangeRateCollection = new ExchangeRateCollection();
         foreach ($fetchedExchangeRateTable["rates"] as $exchangeRate) {
-            $exchangeRateCollection->add(
-                new ExchangeRate($exchangeRate["code"], (string) $exchangeRate["mid"])
-            );
+            $exchangeRateCollection[] = new ExchangeRate($exchangeRate["code"], (string) $exchangeRate["mid"]);
         }
 
         return new ExchangeRateTable(
@@ -76,9 +74,7 @@ class ApiCaller extends AbstractApiCaller
     {
         $exchangeRateTableCollection = new ExchangeRateTableCollection();
         foreach ($fetchedExchangeRateTables as $fetchedExchangeRateTable) {
-            $exchangeRateTableCollection->add(
-                $this->createExchangeRateTableFromFetchedArray($fetchedExchangeRateTable)
-            );
+            $exchangeRateTableCollection[] = $this->createExchangeRateTable($fetchedExchangeRateTable);
         }
 
         return $exchangeRateTableCollection;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\Structure\GoldPrice;
 
-use NBPFetch\Structure\Collection\Collection;
+use ObjectCollection\Collection;
 
 /**
  * Class GoldPriceCollection
@@ -11,15 +11,8 @@ use NBPFetch\Structure\Collection\Collection;
  */
 class GoldPriceCollection extends Collection
 {
-    /**
-     * Adds an GoldPrice item to the collection.
-     * @param GoldPrice $item
-     * @return void
-     */
-    public function add($item): void
+    public function __construct()
     {
-        if ($item instanceof GoldPrice) {
-            $this->insert($item);
-        }
+        $this->allowed_item = GoldPrice::class;
     }
 }

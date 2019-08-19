@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\ApiCaller;
+namespace NBPFetch\ApiCaller;
 
 /**
  * Interface ApiCallerInterface
- * @package NBPFetch\NBPApi\ApiCaller
+ * @package NBPFetch\ApiCaller
  */
 interface ApiCallerInterface
 {

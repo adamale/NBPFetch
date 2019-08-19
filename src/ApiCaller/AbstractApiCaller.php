@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\ApiCaller;
+namespace NBPFetch\ApiCaller;
 
 use NBPFetch\NBPApi\NBPApi;
 
 /**
  * Class AbstractApiCaller
- * @package NBPFetch\NBPApi\ApiCaller
+ * @package NBPFetch\ApiCaller
  */
 abstract class AbstractApiCaller implements ApiCallerInterface
 {

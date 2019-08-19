@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\Structure\GoldPrice\GoldPrice;
+use NBPFetch\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingGoldPriceTest
- * @covers NBPFetch\NBPApi\GoldPrice\Fetcher
+ * @covers NBPFetch\GoldPrice\Fetcher
  */
 final class FetchingGoldPriceTest extends TestCase
 {

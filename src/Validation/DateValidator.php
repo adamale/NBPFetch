@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validation;
+namespace NBPFetch\Validation;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use NBPFetch\NBPApi\Exception\InvalidDateException;
+use NBPFetch\Exception\InvalidDateException;
 
 /**
  * Class DateValidator

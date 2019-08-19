@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Fetcher;
+namespace NBPFetch\Fetcher;
 
-use NBPFetch\NBPApi\ApiCaller\ApiCallerInterface;
-use NBPFetch\NBPApi\Validation\CountValidatorInterface;
-use NBPFetch\NBPApi\Validation\DateValidatorInterface;
-use NBPFetch\NBPApi\Validation\TableValidatorInterface;
+use NBPFetch\ApiCaller\ApiCallerInterface;
+use NBPFetch\Validation\CountValidatorInterface;
+use NBPFetch\Validation\DateValidatorInterface;
+use NBPFetch\Validation\TableValidatorInterface;
 
 /**
  * Class AbstractFetcher
- * @package NBPFetch\NBPApi\Fetcher
+ * @package NBPFetch\Fetcher
  */
 class AbstractFetcher implements FetcherInterface
 {

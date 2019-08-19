@@ -1,16 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\GoldPrice;
+namespace NBPFetch\GoldPrice;
 
-use NBPFetch\NBPApi\ApiCaller\AbstractApiCaller;
-use NBPFetch\Structure\GoldPrice\GoldPrice;
-use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
+use NBPFetch\ApiCaller\AbstractApiCaller;
 use UnexpectedValueException;
 
 /**
  * Class ApiCaller
- * @package NBPFetch\NBPApi\GoldPrice
+ * @package NBPFetch\GoldPrice
  */
 class ApiCaller extends AbstractApiCaller
 {

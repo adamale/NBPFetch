@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\Structure\ExchangeRate\ExchangeRate;
+use NBPFetch\ExchangeRateTable\ExchangeRate;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class ExchangeRateTest
- * @covers \NBPFetch\Structure\ExchangeRate\ExchangeRate
+ * @covers \NBPFetch\ExchangeRateTable\ExchangeRate
  */
 class ExchangeRateTest extends TestCase
 {

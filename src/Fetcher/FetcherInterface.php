@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Fetcher;
+namespace NBPFetch\Fetcher;
 
 /**
  * Interface FetcherInterface
- * @package NBPFetch\NBPApi\Fetcher
+ * @package NBPFetch\Fetcher
  */
 interface FetcherInterface
 {

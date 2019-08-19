@@ -1,15 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\ExchangeRateTable;
+namespace NBPFetch\ExchangeRateTable;
 
 use InvalidArgumentException;
-use NBPFetch\NBPApi\Exception\InvalidCountException;
-use NBPFetch\NBPApi\Exception\InvalidDateException;
-use NBPFetch\NBPApi\Exception\InvalidTableException;
-use NBPFetch\NBPApi\Fetcher\AbstractFetcher;
-use NBPFetch\Structure\ExchangeRate\ExchangeRateTable;
-use NBPFetch\Structure\ExchangeRate\ExchangeRateTableCollection;
+use NBPFetch\Exception\InvalidCountException;
+use NBPFetch\Exception\InvalidDateException;
+use NBPFetch\Exception\InvalidTableException;
+use NBPFetch\Fetcher\AbstractFetcher;
 use UnexpectedValueException;
 
 /**

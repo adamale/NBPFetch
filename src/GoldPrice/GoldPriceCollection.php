@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\Structure\GoldPrice;
+namespace NBPFetch\GoldPrice;
 
 use ObjectCollection\Collection;
 

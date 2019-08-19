@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use NBPFetch\Structure\GoldPrice\GoldPrice;
+use NBPFetch\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
 
 /**

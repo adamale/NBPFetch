@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Validation;
+namespace NBPFetch\Validation;
 
-use NBPFetch\NBPApi\Exception\InvalidCountException;
+use NBPFetch\Exception\InvalidCountException;
 
 /**
  * Class CountValidator
- * @package NBPFetch\NBPApi\Validation
+ * @package NBPFetch\Validation
  */
 class CountValidator implements CountValidatorInterface
 {

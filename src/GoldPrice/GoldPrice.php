@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\Structure\GoldPrice;
+namespace NBPFetch\GoldPrice;
 
 /**
  * Class GoldPrice
- * @package NBPFetch\Structure\GoldPrice
+ * @package NBPFetch\GoldPrice
  */
 class GoldPrice
 {

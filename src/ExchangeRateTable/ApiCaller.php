@@ -1,13 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\ExchangeRateTable;
+namespace NBPFetch\ExchangeRateTable;
 
-use NBPFetch\NBPApi\ApiCaller\AbstractApiCaller;
-use NBPFetch\Structure\ExchangeRate\ExchangeRate;
-use NBPFetch\Structure\ExchangeRate\ExchangeRateCollection;
-use NBPFetch\Structure\ExchangeRate\ExchangeRateTable;
-use NBPFetch\Structure\ExchangeRate\ExchangeRateTableCollection;
+use NBPFetch\ApiCaller\AbstractApiCaller;
 use UnexpectedValueException;
 
 /**

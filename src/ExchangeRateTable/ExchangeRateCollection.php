@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\Structure\ExchangeRate;
+namespace NBPFetch\ExchangeRateTable;
 
 use ObjectCollection\Collection;
 
 /**
  * Class ExchangeRateCollection
- * @package NBPFetch\Structure\ExchangeRate
+ * @package NBPFetch\ExchangeRateTable
  */
 class ExchangeRateCollection extends Collection
 {

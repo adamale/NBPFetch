@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\Exception;
+namespace NBPFetch\Exception;
 
 use RuntimeException;
 
 /**
  * Class InvalidTableException
- * @package NBPFetch\NBPApi\Exception
+ * @package NBPFetch\Exception
  */
 class InvalidTableException extends RuntimeException
 {

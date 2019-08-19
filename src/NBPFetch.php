@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace NBPFetch;
 
-use NBPFetch\NBPApi\ExchangeRateTable\ApiCaller as ExchangeRateApiCaller;
-use NBPFetch\NBPApi\ExchangeRateTable\Fetcher as ExchangeRateFetcher;
-use NBPFetch\NBPApi\GoldPrice\ApiCaller as GoldPriceApiCaller;
-use NBPFetch\NBPApi\GoldPrice\Fetcher as GoldPriceFetcher;
+use NBPFetch\ExchangeRateTable\ApiCaller as ExchangeRateApiCaller;
+use NBPFetch\ExchangeRateTable\Fetcher as ExchangeRateFetcher;
+use NBPFetch\GoldPrice\ApiCaller as GoldPriceApiCaller;
+use NBPFetch\GoldPrice\Fetcher as GoldPriceFetcher;
 use NBPFetch\NBPApi\NBPApi;
-use NBPFetch\NBPApi\Validation\CountValidator;
-use NBPFetch\NBPApi\Validation\DateValidator;
-use NBPFetch\NBPApi\Validation\TableValidator;
+use NBPFetch\Validation\CountValidator;
+use NBPFetch\Validation\DateValidator;
+use NBPFetch\Validation\TableValidator;
 
 /**
  * Class NBPFetch

@@ -1,19 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi\GoldPrice;
+namespace NBPFetch\GoldPrice;
 
 use InvalidArgumentException;
-use NBPFetch\NBPApi\Exception\InvalidCountException;
-use NBPFetch\NBPApi\Exception\InvalidDateException;
-use NBPFetch\NBPApi\Fetcher\AbstractFetcher;
-use NBPFetch\Structure\GoldPrice\GoldPrice;
-use NBPFetch\Structure\GoldPrice\GoldPriceCollection;
+use NBPFetch\Exception\InvalidCountException;
+use NBPFetch\Exception\InvalidDateException;
+use NBPFetch\Fetcher\AbstractFetcher;
 use UnexpectedValueException;
 
 /**
  * Class Fetcher
- * @package NBPFetch\NBPApi\GoldPrice
+ * @package NBPFetch\GoldPrice
  */
 class Fetcher extends AbstractFetcher
 {

@@ -6,5 +6,9 @@ php:
   - '7.4snapshot'
 
 before_script:
-- composer install
-- composer dump-autoload
+  - composer install
+  - composer dump-autoload
+
+script:
+  - vendor/bin/phpstan analyse -l max src --no-interaction --no-progress
+  - vendor/bin/phpunit

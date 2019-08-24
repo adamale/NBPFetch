@@ -5,8 +5,10 @@ namespace NBPFetch;
 
 use NBPFetch\ExchangeRateTable\ApiCaller as ExchangeRateApiCaller;
 use NBPFetch\ExchangeRateTable\Fetcher as ExchangeRateFetcher;
+use NBPFetch\ExchangeRateTable\Validator as ExchangeRateValidator;
 use NBPFetch\GoldPrice\ApiCaller as GoldPriceApiCaller;
 use NBPFetch\GoldPrice\Fetcher as GoldPriceFetcher;
+use NBPFetch\GoldPrice\Validator as GoldPriceValidator;
 use NBPFetch\NBPApi\NBPApi;
 use NBPFetch\Validation\CountValidator;
 use NBPFetch\Validation\DateValidator;
@@ -26,12 +28,12 @@ class NBPFetch
     {
         $NBPApi = new NBPApi();
         $apiCaller = new GoldPriceApiCaller($NBPApi);
-
-        return new GoldPriceFetcher(
-            $apiCaller,
-            new DateValidator(),
-            new CountValidator()
+        $validator = new GoldPriceValidator(
+            new CountValidator(),
+            new DateValidator()
         );
+
+        return new GoldPriceFetcher($apiCaller, $validator);
     }
 
     /**
@@ -42,12 +44,12 @@ class NBPFetch
     {
         $NBPApi = new NBPApi();
         $apiCaller = new ExchangeRateApiCaller($NBPApi);
-
-        return new ExchangeRateFetcher(
-            $apiCaller,
-            new DateValidator(),
+        $validator = new ExchangeRateValidator(
             new CountValidator(),
+            new DateValidator(),
             new TableValidator()
         );
+
+        return new ExchangeRateFetcher($apiCaller, $validator);
     }
 }

@@ -19,7 +19,7 @@ class DateValidator implements DateValidatorInterface
     private const TIMEZONE = "Europe/Warsaw";
 
     /**
-     * @var string TIMEZONE Minimal supported date by NBP API.
+     * @var string MINIMAL_SUPPORTED_DATE Minimal supported date by NBP API.
      */
     private const MINIMAL_SUPPORTED_DATE = "2013-01-02";
 
@@ -29,70 +29,96 @@ class DateValidator implements DateValidatorInterface
     private const DATE_FORMAT = "Y-m-d";
 
     /**
-     * Validates that provided date is properly formatted.
-     * @param string|array $date
+     * @var DateTimeZone
+     */
+    private $timezone;
+
+    /**
+     * DateValidator constructor.
+     */
+    public function __construct()
+    {
+        $this->timezone = new DateTimeZone(self::TIMEZONE);
+    }
+
+    /**
+     * Validates provided date.
+     * @param string $date
      * @return bool
      * @throws InvalidDateException
      */
-    public function validateFormat($date): bool
+    public function validate(string $date): bool
     {
-        $dates = (array) $date;
+        if (!$this->validateFormat($date)) {
+            throw new InvalidDateException(
+                sprintf("Date must be in %s format", self::DATE_FORMAT)
+            );
+        }
 
-        foreach ($dates as $date) {
-            $dti = DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date);
-            if (!$dti || $dti->format(self::DATE_FORMAT) !== $date) {
-                throw new InvalidDateException(
-                    sprintf("Date must be in %s format", self::DATE_FORMAT)
-                );
-            }
+        $providedDate = DateTimeImmutable::createFromFormat(
+            self::DATE_FORMAT,
+            $date,
+            $this->timezone
+        );
+        if ($providedDate === false) {
+            throw new InvalidDateException(
+                sprintf("Date could not be created")
+            );
+        }
+
+        if (!$this->validateDateIsNotFromFuture($providedDate)) {
+            throw new InvalidDateException(
+                sprintf("Date must not be in the future")
+            );
+        } elseif (!$this->validateDateIsNotTooOld($providedDate)) {
+            throw new InvalidDateException(
+                sprintf("Date must not be before %s", self::MINIMAL_SUPPORTED_DATE)
+            );
         }
 
         return true;
     }
 
     /**
-     * Validates that provided date is in proper range.
-     * @param string|array $date
+     * Validates that provided date is properly formatted.
+     * @param string $date
      * @return bool
-     * @throws InvalidDateException
      */
-    public function validate($date): bool
+    protected function validateFormat(string $date): bool
     {
-        $dates = (array) $date;
+        $dti = DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date);
+        return $dti && $dti->format(self::DATE_FORMAT) === $date;
+    }
 
-        $timeZone = new DateTimeZone(self::TIMEZONE);
-        $today = date("Y-m-d");
+    /**
+     * Validates that provided date is not from future.
+     * @param DateTimeImmutable $date
+     * @return bool
+     */
+    protected function validateDateIsNotFromFuture(DateTimeImmutable $date): bool
+    {
+        $todayDate = DateTimeImmutable::createFromFormat(
+            self::DATE_FORMAT,
+            date("Y-m-d"),
+            $this->timezone
+        );
 
+        return $date <= $todayDate;
+    }
+
+    /**
+     * Validates that provided date is not too old.
+     * @param DateTimeImmutable $date
+     * @return bool
+     */
+    protected function validateDateIsNotTooOld(DateTimeImmutable $date): bool
+    {
         $minimalSupportedDate = DateTimeImmutable::createFromFormat(
             self::DATE_FORMAT,
             self::MINIMAL_SUPPORTED_DATE,
-            $timeZone
+            $this->timezone
         );
 
-        $todayDate = DateTimeImmutable::createFromFormat(
-            self::DATE_FORMAT,
-            $today,
-            $timeZone
-        );
-
-        foreach ($dates as $date) {
-            $providedDate = DateTimeImmutable::createFromFormat(
-                self::DATE_FORMAT,
-                $date,
-                $timeZone
-            );
-
-            if ($providedDate > $todayDate) {
-                throw new InvalidDateException(
-                    sprintf("Date must not be in the future (after %s)", $today)
-                );
-            } elseif ($providedDate < $minimalSupportedDate) {
-                throw new InvalidDateException(
-                    sprintf("Date must not be before %s", self::MINIMAL_SUPPORTED_DATE)
-                );
-            }
-        }
-
-        return true;
+        return $date >= $minimalSupportedDate;
     }
 }

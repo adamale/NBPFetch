@@ -48,7 +48,7 @@ final class FetchingGoldPriceTest extends TestCase
             }
         } catch(UnexpectedValueException $e) {
             $this->assertEquals(
-                "404 NotFound - Not Found - Brak danych",
+                "Error while fetching data from NBP API",
                 $e->getMessage()
             );
         }
@@ -108,11 +108,6 @@ final class FetchingGoldPriceTest extends TestCase
     {
         $message = "";
 
-        $currentDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            date("Y-m-d"),
-            new DateTimeZone("Europe/Warsaw")
-        );
         $futureDate = date("Y-m-d", strtotime("+1 month"));
 
         try {
@@ -123,7 +118,7 @@ final class FetchingGoldPriceTest extends TestCase
         }
 
         $this->assertEquals(
-            sprintf("Date must not be in the future (after %s)", $currentDate->format("Y-m-d")),
+            sprintf("Date must not be in the future"),
             $message
         );
     }
@@ -218,7 +213,7 @@ final class FetchingGoldPriceTest extends TestCase
         }
 
         $this->assertEquals(
-            "404 NotFound - Not Found - Brak danych",
+            "Error while fetching data from NBP API",
             $message
         );
     }

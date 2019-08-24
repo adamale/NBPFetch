@@ -17,7 +17,7 @@ class NBPApi implements NBPApiInterface
     private const BASE_URL = "http://api.nbp.pl/api/";
 
     /**
-     * Gets a response from NBP API and parses it for further action.
+     * Gets a response from NBP API and parses it for further processing.
      * @param string $path
      * @return array
      * @throws UnexpectedValueException
@@ -32,7 +32,7 @@ class NBPApi implements NBPApiInterface
         ]);
 
         // get the API output
-        $response = file_get_contents(self::BASE_URL . $path, false, $context);
+        $response = (string) file_get_contents(self::BASE_URL . $path, false, $context);
 
         // try to make an array from the response
         $parsedResponse = $this->parseResponse($response);
@@ -40,14 +40,14 @@ class NBPApi implements NBPApiInterface
         // throw an exception if array was not created
         // (the API output was not a JSON, but an error string probably)
         if (!is_array($parsedResponse)) {
-            throw new UnexpectedValueException($response);
+            throw new UnexpectedValueException("Error while fetching data from NBP API");
         }
 
         return $parsedResponse;
     }
 
     /**
-     * Tries to turn fetched response JSON into an array.
+     * Tries to turn fetched response into an array.
      * @param string $response
      * @return array|null
      */

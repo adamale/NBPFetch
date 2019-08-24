@@ -4,18 +4,40 @@ declare(strict_types=1);
 namespace NBPFetch\ExchangeRateTable;
 
 use InvalidArgumentException;
+use NBPFetch\ApiCaller\ApiCallerInterface;
 use NBPFetch\Exception\InvalidCountException;
 use NBPFetch\Exception\InvalidDateException;
 use NBPFetch\Exception\InvalidTableException;
-use NBPFetch\Fetcher\AbstractFetcher;
 use UnexpectedValueException;
 
 /**
  * Class Fetcher
  * @package NBPFetch\NBPApi\ExchangeRateTable
  */
-class Fetcher extends AbstractFetcher
+class Fetcher
 {
+    /**
+     * @var ApiCallerInterface
+     */
+    private $apiCaller;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    /**
+     * @param ApiCallerInterface $apiCaller
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(
+        ApiCallerInterface $apiCaller,
+        ValidatorInterface $validator
+    ) {
+        $this->apiCaller = $apiCaller;
+        $this->validator = $validator;
+    }
+
     /**
      * Returns current exchange rate table.
      * @param string $table Table type.
@@ -25,14 +47,14 @@ class Fetcher extends AbstractFetcher
     public function current(string $table): ?ExchangeRateTable
     {
         try {
-            $this->getTableValidator()->validate($table);
+            $this->validator->getTableValidator()->validate($table);
         } catch (InvalidTableException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         $path = sprintf("%s/", $table);
 
-        return $this->getApiCaller()->getSingle($path);
+        return $this->apiCaller->getSingle($path);
     }
 
     /**
@@ -45,20 +67,20 @@ class Fetcher extends AbstractFetcher
     public function last(string $table, int $count): ?ExchangeRateTableCollection
     {
         try {
-            $this->getTableValidator()->validate($table);
+            $this->validator->getTableValidator()->validate($table);
         } catch (InvalidTableException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         try {
-            $this->getCountValidator()->validate($count);
+            $this->validator->getCountValidator()->validate($count);
         } catch (InvalidCountException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         $path = sprintf("%s/last/%s", $table, $count);
 
-        return $this->getApiCaller()->getCollection($path);
+        return $this->apiCaller->getCollection($path);
     }
 
     /**
@@ -70,14 +92,14 @@ class Fetcher extends AbstractFetcher
     public function today(string $table): ?ExchangeRateTable
     {
         try {
-            $this->getTableValidator()->validate($table);
+            $this->validator->getTableValidator()->validate($table);
         } catch (InvalidTableException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         $path = sprintf("%s/today/", $table);
 
-        return $this->getApiCaller()->getSingle($path);
+        return $this->apiCaller->getSingle($path);
     }
 
     /**
@@ -90,21 +112,20 @@ class Fetcher extends AbstractFetcher
     public function byDate(string $table, string $date): ?ExchangeRateTable
     {
         try {
-            $this->getTableValidator()->validate($table);
+            $this->validator->getTableValidator()->validate($table);
         } catch (InvalidTableException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         try {
-            $this->getDateValidator()->validateFormat($date);
-            $this->getDateValidator()->validate($date);
+            $this->validator->getDateValidator()->validate($date);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         $path = sprintf("%s/%s/", $table, $date);
 
-        return $this->getApiCaller()->getSingle($path);
+        return $this->apiCaller->getSingle($path);
     }
 
     /**
@@ -118,20 +139,20 @@ class Fetcher extends AbstractFetcher
     public function byDateRange(string $table, string $from, string $to): ?ExchangeRateTableCollection
     {
         try {
-            $this->getTableValidator()->validate($table);
+            $this->validator->getTableValidator()->validate($table);
         } catch (InvalidTableException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         try {
-            $this->getDateValidator()->validateFormat([$from, $to]);
-            $this->getDateValidator()->validate([$from, $to]);
+            $this->validator->getDateValidator()->validate($from);
+            $this->validator->getDateValidator()->validate($to);
         } catch (InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
         $path = sprintf("%s/%s/%s", $table, $from, $to);
 
-        return $this->getApiCaller()->getCollection($path);
+        return $this->apiCaller->getCollection($path);
     }
 }

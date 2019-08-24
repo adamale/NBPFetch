@@ -41,10 +41,10 @@ class Fetcher
     /**
      * Returns current exchange rate table.
      * @param string $table Table type.
-     * @return ExchangeRateTable|null
+     * @return ExchangeRateTable
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function current(string $table): ?ExchangeRateTable
+    public function current(string $table): ExchangeRateTable
     {
         try {
             $this->validator->getTableValidator()->validate($table);
@@ -61,10 +61,10 @@ class Fetcher
      * Returns a set of n last exchange rate tables.
      * @param string $table Table type.
      * @param int $count Must be an positive integer.
-     * @return ExchangeRateTableCollection|null
+     * @return ExchangeRateTableCollection
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function last(string $table, int $count): ?ExchangeRateTableCollection
+    public function last(string $table, int $count): ExchangeRateTableCollection
     {
         try {
             $this->validator->getTableValidator()->validate($table);
@@ -86,10 +86,10 @@ class Fetcher
     /**
      * Returns today exchange rate table.
      * @param string $table Table type.
-     * @return ExchangeRateTable|null
+     * @return ExchangeRateTable
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function today(string $table): ?ExchangeRateTable
+    public function today(string $table): ExchangeRateTable
     {
         try {
             $this->validator->getTableValidator()->validate($table);
@@ -106,10 +106,10 @@ class Fetcher
      * Returns a given date exchange rate table.
      * @param string $table Table type.
      * @param string $date Date in Y-m-d format.
-     * @return ExchangeRateTable|null
+     * @return ExchangeRateTable
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function byDate(string $table, string $date): ?ExchangeRateTable
+    public function byDate(string $table, string $date): ExchangeRateTable
     {
         try {
             $this->validator->getTableValidator()->validate($table);
@@ -133,10 +133,10 @@ class Fetcher
      * @param string $table Table type.
      * @param string $from Date in Y-m-d format.
      * @param string $to Date in Y-m-d format.
-     * @return ExchangeRateTableCollection|null
+     * @return ExchangeRateTableCollection
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function byDateRange(string $table, string $from, string $to): ?ExchangeRateTableCollection
+    public function byDateRange(string $table, string $from, string $to): ExchangeRateTableCollection
     {
         try {
             $this->validator->getTableValidator()->validate($table);

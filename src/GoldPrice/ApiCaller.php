@@ -20,9 +20,10 @@ class ApiCaller extends AbstractApiCaller
     /**
      * Returns a single gold price from given URL.
      * @param string $path
-     * @return GoldPrice|null
+     * @return GoldPrice
+     * @throws UnexpectedValueException
      */
-    public function getSingle(string $path): ?GoldPrice
+    public function getSingle(string $path): GoldPrice
     {
         $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createGoldPrice($fetchedGoldPrices[0]);
@@ -34,7 +35,7 @@ class ApiCaller extends AbstractApiCaller
      * @return GoldPriceCollection
      * @throws UnexpectedValueException
      */
-    public function getCollection(string $path): ?GoldPriceCollection
+    public function getCollection(string $path): GoldPriceCollection
     {
         $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createGoldPriceCollection($fetchedGoldPrices);

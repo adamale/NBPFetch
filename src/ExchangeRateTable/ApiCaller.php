@@ -20,10 +20,10 @@ class ApiCaller extends AbstractApiCaller
     /**
      * Returns a single exchange rate table from given URL.
      * @param string $path
-     * @return ExchangeRateTable|null
+     * @return ExchangeRateTable
      * @throws UnexpectedValueException
      */
-    public function getSingle(string $path): ?ExchangeRateTable
+    public function getSingle(string $path): ExchangeRateTable
     {
         $fetchedExchangeRateTables = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createExchangeRateTable($fetchedExchangeRateTables[0]);
@@ -35,7 +35,7 @@ class ApiCaller extends AbstractApiCaller
      * @return ExchangeRateTableCollection
      * @throws UnexpectedValueException
      */
-    public function getCollection(string $path): ?ExchangeRateTableCollection
+    public function getCollection(string $path): ExchangeRateTableCollection
     {
         $fetchedExchangeRateTables = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
         return $this->createExchangeRateTableCollection($fetchedExchangeRateTables);

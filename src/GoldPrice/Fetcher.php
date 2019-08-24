@@ -39,10 +39,10 @@ class Fetcher
 
     /**
      * Returns current gold price.
-     * @return GoldPrice|null
+     * @return GoldPrice
      * @throws UnexpectedValueException
      */
-    public function current(): ?GoldPrice
+    public function current(): GoldPrice
     {
         return $this->apiCaller->getSingle("");
     }
@@ -50,10 +50,10 @@ class Fetcher
     /**
      * Returns a set of n last gold prices.
      * @param int $count Must be an positive integer.
-     * @return GoldPriceCollection|null
+     * @return GoldPriceCollection
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function last(int $count): ?GoldPriceCollection
+    public function last(int $count): GoldPriceCollection
     {
         try {
             $this->validator->getCountValidator()->validate($count);
@@ -68,10 +68,10 @@ class Fetcher
 
     /**
      * Returns today gold price.
-     * @return GoldPrice|null
+     * @return GoldPrice
      * @throws UnexpectedValueException
      */
-    public function today(): ?GoldPrice
+    public function today(): GoldPrice
     {
         return $this->apiCaller->getSingle("today/");
     }
@@ -79,10 +79,10 @@ class Fetcher
     /**
      * Returns a given date gold price.
      * @param string $date Date in Y-m-d format.
-     * @return GoldPrice|null
+     * @return GoldPrice
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function byDate(string $date): ?GoldPrice
+    public function byDate(string $date): GoldPrice
     {
         try {
             $this->validator->getDateValidator()->validate($date);
@@ -99,10 +99,10 @@ class Fetcher
      * Returns a set of gold prices between given dates.
      * @param string $from  Date in Y-m-d format.
      * @param string $to    Date in Y-m-d format.
-     * @return GoldPriceCollection|null
+     * @return GoldPriceCollection
      * @throws InvalidArgumentException|UnexpectedValueException
      */
-    public function byDateRange(string $from, string $to): ?GoldPriceCollection
+    public function byDateRange(string $from, string $to): GoldPriceCollection
     {
         try {
             $this->validator->getDateValidator()->validate($from);

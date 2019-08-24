@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\ApiCaller;
 
-use NBPFetch\NBPApi\NBPApi;
+use NBPFetch\NBPApi\NBPApiInterface;
 
 /**
  * Class AbstractApiCaller
@@ -12,22 +12,22 @@ use NBPFetch\NBPApi\NBPApi;
 abstract class AbstractApiCaller implements ApiCallerInterface
 {
     /**
-     * @var NBPApi
+     * @var NBPApiInterface
      */
     private $NBPApi;
 
     /**
-     * @param NBPApi $NBPApi
+     * @param NBPApiInterface $NBPApi
      */
-    public function __construct(NBPApi $NBPApi)
+    public function __construct(NBPApiInterface $NBPApi)
     {
         $this->NBPApi = $NBPApi;
     }
 
     /**
-     * @return NBPApi
+     * @return NBPApiInterface
      */
-    protected function getNBPApi(): NBPApi
+    protected function getNBPApi(): NBPApiInterface
     {
         return $this->NBPApi;
     }

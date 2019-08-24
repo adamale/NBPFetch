@@ -40,8 +40,7 @@ class ExchangeRateTable
         string $number,
         string $date,
         ExchangeRateCollection $exchangeRateCollection
-    )
-    {
+    ) {
         $this->table = $table;
         $this->number = $number;
         $this->date = $date;

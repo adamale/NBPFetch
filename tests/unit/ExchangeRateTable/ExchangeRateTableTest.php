@@ -1,10 +1,13 @@
 <?php
 declare(strict_types=1);
 
+namespace NBPFetch\Tests\Unit\ExchangeRateTable;
+
 use NBPFetch\ExchangeRateTable\ExchangeRate;
 use NBPFetch\ExchangeRateTable\ExchangeRateCollection;
 use NBPFetch\ExchangeRateTable\ExchangeRateTable;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * Class ExchangeRateTableTest
@@ -36,8 +39,6 @@ class ExchangeRateTableTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidTable()
     {
-        $error = null;
-
         $table = 1;
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
@@ -46,17 +47,10 @@ class ExchangeRateTableTest extends TestCase
         $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
         $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
     }
 
     /**
@@ -64,8 +58,6 @@ class ExchangeRateTableTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidNumber()
     {
-        $error = null;
-
         $table = "A";
         $number = true;
         $date = "2019-08-13";
@@ -74,17 +66,10 @@ class ExchangeRateTableTest extends TestCase
         $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
         $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
     }
 
     /**
@@ -92,8 +77,6 @@ class ExchangeRateTableTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidDate()
     {
-        $error = null;
-
         $table = "A";
         $number = "156/A/NBP/2019";
         $date = true;
@@ -102,17 +85,10 @@ class ExchangeRateTableTest extends TestCase
         $exchangeRateCollection[] = new ExchangeRate("EUR", "4.1234");
         $exchangeRateCollection[] = new ExchangeRate("GBP", "4.7");
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
     }
 
     /**
@@ -120,23 +96,15 @@ class ExchangeRateTableTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidDExchangeRateCollection()
     {
-        $error = null;
-
         $table = "A";
         $number = "156/A/NBP/2019";
         $date = "2019-08-13";
         $exchangeRateCollection = null;
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
-        } catch (Error $e) {
-            $error = $e;
-        }
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        $this->expectException(TypeError::class);
+
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRateTable($table, $number, $date, $exchangeRateCollection);
     }
 
     /**

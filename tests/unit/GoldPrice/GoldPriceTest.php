@@ -1,8 +1,12 @@
 <?php
 declare(strict_types=1);
 
+namespace NBPFetch\Tests\Unit\GoldPrice;
+
+use NBPFetch;
 use NBPFetch\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * Class GoldPriceTest
@@ -29,22 +33,13 @@ final class GoldPriceTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidDate()
     {
-        $error = null;
-
         $date = true;
         $price = "9.8765";
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new GoldPrice($date, $price);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+         /** @noinspection PhpStrictTypeCheckingInspection */
+         new GoldPrice($date, $price);
     }
 
     /**
@@ -52,22 +47,13 @@ final class GoldPriceTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidPrice()
     {
-        $error = null;
-
         $date = "2019-07-28";
         $price = 9.8765;
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new GoldPrice($date, $price);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+         /** @noinspection PhpStrictTypeCheckingInspection */
+         new GoldPrice($date, $price);
     }
 
     /**

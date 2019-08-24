@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
-        <testsuite name="NBPFetch Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="NBPFetch Unit Test Suite">
+            <directory>./tests/unit/</directory>
+        </testsuite>
+        <testsuite name="NBPFetch Functional Test Suite">
+            <directory>./tests/functional/</directory>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
+namespace NBPFetch\Tests\Unit\ExchangeRateTable;
+
 use NBPFetch\ExchangeRateTable\ExchangeRate;
 use NBPFetch\ExchangeRateTable\ExchangeRateCollection;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class ExchangeRateCollectionTest
@@ -88,7 +91,7 @@ final class ExchangeRateCollectionTest extends TestCase
         $collection[] = new ExchangeRate("GBP", "4.7");
         $collection[] = true;
         $collection[] = 100.01;
-        $collection[] = new StdClass();
+        $collection[] = new stdClass();
 
         $this->assertEquals(
             1,

@@ -1,9 +1,13 @@
 <?php
 declare(strict_types=1);
 
+namespace NBPFetch\Tests\Unit\GoldPrice;
+
+use NBPFetch;
 use NBPFetch\GoldPrice\GoldPrice;
 use NBPFetch\GoldPrice\GoldPriceCollection;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class GoldPriceCollectionTest
@@ -89,7 +93,7 @@ final class GoldPriceCollectionTest extends TestCase
         $collection[] = new GoldPrice("2019-07-30", "42");
         $collection[] = true;
         $collection[] = 100.01;
-        $collection[] = new StdClass();
+        $collection[] = new stdClass();
 
         $this->assertEquals(
             1,

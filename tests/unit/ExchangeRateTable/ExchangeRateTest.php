@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
 
+namespace NBPFetch\Tests\Unit\ExchangeRateTable;
+
 use NBPFetch\ExchangeRateTable\ExchangeRate;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * Class ExchangeRateTest
@@ -29,22 +32,13 @@ class ExchangeRateTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidCode()
     {
-        $error = null;
-
         $code = true;
         $rate = "3.9876";
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRate($code, $rate);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRate($code, $rate);
     }
 
     /**
@@ -52,22 +46,13 @@ class ExchangeRateTest extends TestCase
      */
     public function cannotBeCreatedWithInvalidRate()
     {
-        $error = null;
-
         $code = "USD";
         $rate = 3.9876;
 
-        try {
-            /** @noinspection PhpStrictTypeCheckingInspection */
-            new ExchangeRate($code, $rate);
-        } catch (Error $e) {
-            $error = $e;
-        }
+        $this->expectException(TypeError::class);
 
-        $this->assertInstanceOf(
-            "Error",
-            $error
-        );
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new ExchangeRate($code, $rate);
     }
 
     /**
@@ -101,5 +86,4 @@ class ExchangeRateTest extends TestCase
             $exchangeRate->getRate()
         );
     }
-
 }

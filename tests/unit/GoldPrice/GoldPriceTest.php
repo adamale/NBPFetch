@@ -38,8 +38,8 @@ final class GoldPriceTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-         /** @noinspection PhpStrictTypeCheckingInspection */
-         new GoldPrice($date, $price);
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new GoldPrice($date, $price);
     }
 
     /**
@@ -52,8 +52,8 @@ final class GoldPriceTest extends TestCase
 
         $this->expectException(TypeError::class);
 
-         /** @noinspection PhpStrictTypeCheckingInspection */
-         new GoldPrice($date, $price);
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        new GoldPrice($date, $price);
     }
 
     /**

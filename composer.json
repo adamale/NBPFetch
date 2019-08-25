@@ -32,6 +32,17 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.2",
-        "phpstan/phpstan": "^0.11.15"
+        "phpstan/phpstan": "^0.11.15",
+        "friendsofphp/php-cs-fixer": "^2.15"
+    },
+    "scripts" : {
+        "analyse": "vendor/bin/phpstan --ansi analyse -l max src tests",
+        "analyse-src": "vendor/bin/phpstan --ansi analyse -l max src",
+        "analyse-tests": "vendor/bin/phpstan --ansi analyse -l max tests",
+        "cs-fix-src": "vendor/bin/php-cs-fixer -v fix src",
+        "cs-fix-tests": "vendor/bin/php-cs-fixer -v fix tests",
+        "cs-view-src": "vendor/bin/php-cs-fixer -v fix src --dry-run --diff-format=udiff",
+        "cs-view-tests": "vendor/bin/php-cs-fixer -v fix tests --dry-run --diff-format=udiff",
+        "test": "vendor/bin/phpunit --colors=always"
     }
 }

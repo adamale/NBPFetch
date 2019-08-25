@@ -44,7 +44,7 @@ final class FetchingGoldPriceTest extends TestCase
         $currentPrice = $NBPFetch->goldPrice()->current();
 
         if ($currentPrice->getDate() === $currentDate->format("Y-m-d")) {
-            $this->assertInstanceOf( GoldPrice::class, $NBPFetch->goldPrice()->today());
+            $this->assertInstanceOf(GoldPrice::class, $NBPFetch->goldPrice()->today());
         } else {
             $this->expectExceptionMessage("Error while fetching data from NBP API");
             $NBPFetch->goldPrice()->today();
@@ -128,7 +128,7 @@ final class FetchingGoldPriceTest extends TestCase
         $this->expectExceptionMessage(
             sprintf(
                 "Date must not be before %s",
-               $minimalAcceptedDate->format("Y-m-d")
+                $minimalAcceptedDate->format("Y-m-d")
             )
         );
 

@@ -52,7 +52,7 @@ class Fetcher
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s/", $table);
+        $path = sprintf("%s", $table);
 
         return $this->apiCaller->getSingle($path);
     }
@@ -68,13 +68,8 @@ class Fetcher
     {
         try {
             $this->validator->getTableValidator()->validate($table);
-        } catch (InvalidTableException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        try {
             $this->validator->getCountValidator()->validate($count);
-        } catch (InvalidCountException $e) {
+        } catch (InvalidTableException|InvalidCountException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
@@ -84,7 +79,7 @@ class Fetcher
     }
 
     /**
-     * Returns today exchange rate table.
+     * Returns today's exchange rate table.
      * @param string $table Table type.
      * @return ExchangeRateTable
      * @throws InvalidArgumentException|UnexpectedValueException
@@ -97,7 +92,7 @@ class Fetcher
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s/today/", $table);
+        $path = sprintf("%s/today", $table);
 
         return $this->apiCaller->getSingle($path);
     }
@@ -113,17 +108,12 @@ class Fetcher
     {
         try {
             $this->validator->getTableValidator()->validate($table);
-        } catch (InvalidTableException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        try {
             $this->validator->getDateValidator()->validate($date);
-        } catch (InvalidDateException $e) {
+        } catch (InvalidTableException|InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s/%s/", $table, $date);
+        $path = sprintf("%s/%s", $table, $date);
 
         return $this->apiCaller->getSingle($path);
     }
@@ -140,14 +130,9 @@ class Fetcher
     {
         try {
             $this->validator->getTableValidator()->validate($table);
-        } catch (InvalidTableException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        try {
             $this->validator->getDateValidator()->validate($from);
             $this->validator->getDateValidator()->validate($to);
-        } catch (InvalidDateException $e) {
+        } catch (InvalidTableException|InvalidDateException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 

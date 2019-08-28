@@ -73,7 +73,7 @@ class Fetcher
      */
     public function today(): GoldPrice
     {
-        return $this->apiCaller->getSingle("today/");
+        return $this->apiCaller->getSingle("today");
     }
 
     /**
@@ -90,7 +90,7 @@ class Fetcher
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s/", $date);
+        $path = sprintf("%s", $date);
 
         return $this->apiCaller->getSingle($path);
     }

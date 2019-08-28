@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace NBPFetch\GoldPrice;
 
-use NBPFetch\ApiCaller\AbstractApiCaller;
-use NBPFetch\ApiCaller\ApiCallerSingleCollectionInterface;
+use NBPFetch\ApiCaller\AbstractApiCallerSingleOrCollection;
 use UnexpectedValueException;
 
 /**
  * Class ApiCaller
  * @package NBPFetch\GoldPrice
  */
-class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionInterface
+class ApiCaller extends AbstractApiCallerSingleOrCollection
 {
     /**
      * @var string API_SUBSET API Subset that returns gold price data.
@@ -26,7 +25,7 @@ class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionIn
      */
     public function getSingle(string $path): GoldPrice
     {
-        $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
+        $fetchedGoldPrices = $this->getFromNBPAPI(self::API_SUBSET . $path);
         return $this->createGoldPrice($fetchedGoldPrices[0]);
     }
 
@@ -38,7 +37,7 @@ class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionIn
      */
     public function getCollection(string $path): GoldPriceCollection
     {
-        $fetchedGoldPrices = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
+        $fetchedGoldPrices = $this->getFromNBPAPI(self::API_SUBSET . $path);
         return $this->createGoldPriceCollection($fetchedGoldPrices);
     }
 

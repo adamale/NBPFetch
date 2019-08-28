@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\GoldPrice;
 
 use InvalidArgumentException;
-use NBPFetch\ApiCaller\ApiCallerSingleCollectionInterface;
+use NBPFetch\ApiCaller\ApiCallerSingleOrCollectionInterface;
 use NBPFetch\Exception\InvalidCountException;
 use NBPFetch\Exception\InvalidDateException;
 use UnexpectedValueException;
@@ -16,7 +16,7 @@ use UnexpectedValueException;
 class Fetcher
 {
     /**
-     * @var ApiCallerSingleCollectionInterface
+     * @var ApiCallerSingleOrCollectionInterface
      */
     private $apiCaller;
 
@@ -26,11 +26,11 @@ class Fetcher
     private $validator;
 
     /**
-     * @param ApiCallerSingleCollectionInterface $apiCaller
+     * @param ApiCallerSingleOrCollectionInterface $apiCaller
      * @param ValidatorInterface $validator
      */
     public function __construct(
-        ApiCallerSingleCollectionInterface $apiCaller,
+        ApiCallerSingleOrCollectionInterface $apiCaller,
         ValidatorInterface $validator
     ) {
         $this->apiCaller = $apiCaller;

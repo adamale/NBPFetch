@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace NBPFetch\CurrencyRate;
 
-use NBPFetch\ApiCaller\AbstractApiCaller;
-use NBPFetch\ApiCaller\ApiCallerSingleInterface;
+use NBPFetch\ApiCaller\AbstractApiCallerSingle;
 use UnexpectedValueException;
 
 /**
  * Class ApiCaller
  * @package NBPFetch\CurrencyRate
  */
-class ApiCaller extends AbstractApiCaller implements ApiCallerSingleInterface
+class ApiCaller extends AbstractApiCallerSingle
 {
     /**
      * @var string API_SUBSET API Subset that returns currency exchange rate data.
@@ -26,7 +25,7 @@ class ApiCaller extends AbstractApiCaller implements ApiCallerSingleInterface
      */
     public function get(string $path): CurrencyRateSeries
     {
-        $fetchedCurrencyRateSeries = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
+        $fetchedCurrencyRateSeries = $this->getFromNBPAPI(self::API_SUBSET . $path);
         return $this->createCurrencyRateSeries($fetchedCurrencyRateSeries);
     }
 

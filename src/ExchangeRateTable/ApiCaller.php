@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace NBPFetch\ExchangeRateTable;
 
-use NBPFetch\ApiCaller\AbstractApiCaller;
-use NBPFetch\ApiCaller\ApiCallerSingleCollectionInterface;
+use NBPFetch\ApiCaller\AbstractApiCallerSingleOrCollection;
 use UnexpectedValueException;
 
 /**
  * Class ApiCaller
  * @package NBPFetch\NBPApi\ExchangeRateTable
  */
-class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionInterface
+class ApiCaller extends AbstractApiCallerSingleOrCollection
 {
     /**
      * @var string API_SUBSET API Subset that returns exchange rate table data.
@@ -26,7 +25,7 @@ class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionIn
      */
     public function getSingle(string $path): ExchangeRateTable
     {
-        $fetchedExchangeRateTables = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
+        $fetchedExchangeRateTables = $this->getFromNBPAPI(self::API_SUBSET . $path);
         return $this->createExchangeRateTable($fetchedExchangeRateTables[0]);
     }
 
@@ -38,7 +37,7 @@ class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionIn
      */
     public function getCollection(string $path): ExchangeRateTableCollection
     {
-        $fetchedExchangeRateTables = $this->getNBPApi()->fetch(self::API_SUBSET . $path);
+        $fetchedExchangeRateTables = $this->getFromNBPAPI(self::API_SUBSET . $path);
         return $this->createExchangeRateTableCollection($fetchedExchangeRateTables);
     }
 

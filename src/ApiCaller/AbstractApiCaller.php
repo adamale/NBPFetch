@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace NBPFetch\ApiCaller;
 
 use NBPFetch\NBPApi\NBPApiInterface;
+use TypeError;
+use UnexpectedValueException;
 
 /**
  * Class AbstractApiCaller
  * @package NBPFetch\ApiCaller
  */
-abstract class AbstractApiCaller
+abstract class AbstractApiCaller implements ApiCallerInterface
 {
     /**
      * @var NBPApiInterface
@@ -18,17 +20,26 @@ abstract class AbstractApiCaller
 
     /**
      * @param NBPApiInterface $NBPApi
+     * @return void
      */
-    public function __construct(NBPApiInterface $NBPApi)
+    public function setNBPApi(NBPApiInterface $NBPApi): void
     {
         $this->NBPApi = $NBPApi;
     }
 
     /**
-     * @return NBPApiInterface
+     * Gets a response from NBP API and parses it for further processing.
+     * @param string $path
+     * @return array
+     * @throws TypeError
+     * @throws UnexpectedValueException
      */
-    protected function getNBPApi(): NBPApiInterface
+    protected function getFromNBPAPI(string $path): array
     {
-        return $this->NBPApi;
+        if (!is_a($this->NBPApi, NBPApiInterface::class)) {
+            throw new TypeError("NBPApi is not properly defined");
+        }
+
+        return $this->NBPApi->fetch($path);
     }
 }

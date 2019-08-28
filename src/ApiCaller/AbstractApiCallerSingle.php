@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace NBPFetch\ApiCaller;
 
 /**
- * Interface ApiCallerSingleInterface
+ * Class AbstractApiCallerSingle
  * @package NBPFetch\ApiCaller
  */
-interface ApiCallerSingleInterface extends ApiCallerInterface
+abstract class AbstractApiCallerSingle extends AbstractApiCaller implements ApiCallerSingleInterface
 {
     /**
      * Returns full API response array.
      * @param string $path
      * @return mixed
      */
-    public function get(string $path);
+    abstract public function get(string $path);
 }

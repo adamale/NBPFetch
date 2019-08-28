@@ -7,7 +7,7 @@ use NBPFetch\Exception\InvalidTableException;
 
 /**
  * Class TableValidator
- * @package NBPFetch\NBPApi\Validation
+ * @package NBPFetch\Validation
  */
 class TableValidator implements TableValidatorInterface
 {

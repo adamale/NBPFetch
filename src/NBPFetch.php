@@ -33,7 +33,7 @@ use NBPFetch\Validation\TableValidator;
 class NBPFetch
 {
     /**
-     * @var NBPApi|NBPApiInterface
+     * @var NBPApiInterface
      */
     private $NBPApi;
 

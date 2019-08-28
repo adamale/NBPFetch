@@ -9,7 +9,7 @@ use NBPFetch\Exception\InvalidDateException;
 
 /**
  * Class DateValidator
- * @package NBPFetch\NBPApi\Validation
+ * @package NBPFetch\Validation
  */
 class DateValidator implements DateValidatorInterface
 {

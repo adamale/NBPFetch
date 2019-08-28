@@ -11,6 +11,9 @@ use ObjectCollection\Collection;
  */
 class GoldPriceCollection extends Collection
 {
+    /**
+     * GoldPriceCollection constructor.
+     */
     public function __construct()
     {
         $this->allowed_item = GoldPrice::class;

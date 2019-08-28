@@ -5,6 +5,10 @@ namespace NBPFetch\Validation;
 
 use NBPFetch\Exception\InvalidDateException;
 
+/**
+ * Interface DateValidatorInterface
+ * @package NBPFetch\Validation
+ */
 interface DateValidatorInterface
 {
     /**

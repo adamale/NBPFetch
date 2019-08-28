@@ -5,6 +5,10 @@ namespace NBPFetch\Validation;
 
 use NBPFetch\Exception\InvalidTableException;
 
+/**
+ * Interface TableValidatorInterface
+ * @package NBPFetch\Validation
+ */
 interface TableValidatorInterface
 {
     /**

@@ -11,6 +11,9 @@ use ObjectCollection\Collection;
  */
 class ExchangeRateCollection extends Collection
 {
+    /**
+     * ExchangeRateCollection constructor.
+     */
     public function __construct()
     {
         $this->allowed_item = ExchangeRate::class;

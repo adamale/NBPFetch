@@ -12,7 +12,7 @@ use UnexpectedValueException;
 
 /**
  * Class Fetcher
- * @package NBPFetch\NBPApi\ExchangeRateTable
+ * @package NBPFetch\ExchangeRateTable
  */
 class Fetcher
 {

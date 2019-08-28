@@ -8,7 +8,7 @@ use UnexpectedValueException;
 
 /**
  * Class ApiCaller
- * @package NBPFetch\NBPApi\ExchangeRateTable
+ * @package NBPFetch\ExchangeRateTable
  */
 class ApiCaller extends AbstractApiCallerSingleOrCollection
 {

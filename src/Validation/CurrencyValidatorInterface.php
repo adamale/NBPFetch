@@ -5,6 +5,10 @@ namespace NBPFetch\Validation;
 
 use NBPFetch\Exception\InvalidCurrencyException;
 
+/**
+ * Interface CurrencyValidatorInterface
+ * @package NBPFetch\Validation
+ */
 interface CurrencyValidatorInterface
 {
     /**

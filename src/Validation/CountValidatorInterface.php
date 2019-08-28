@@ -5,6 +5,10 @@ namespace NBPFetch\Validation;
 
 use NBPFetch\Exception\InvalidCountException;
 
+/**
+ * Interface CountValidatorInterface
+ * @package NBPFetch\Validation
+ */
 interface CountValidatorInterface
 {
     /**

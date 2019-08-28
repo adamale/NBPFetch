@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Functional;
 
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use NBPFetch;
 use NBPFetch\ExchangeRateTable\ExchangeRateTable;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 /**
  * Class FetchingExchangeRateTableTest
@@ -32,18 +34,22 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function canFetchTodayExchangeRateTable()
+    public function canFetchTodaysExchangeRateTable()
     {
         $currentDate = DateTimeImmutable::createFromFormat(
             "Y-m-d",
             date("Y-m-d"),
             new DateTimeZone("Europe/Warsaw")
         );
+        if ($currentDate === false) {
+            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
+        }
 
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentExchangeRateTable = $NBPFetch->exchangeRateTable()->current("A");
+        $currentExchangeRateTableDate = $currentExchangeRateTable->getDate();
 
-        if ($currentExchangeRateTable->getDate() === $currentDate->format("Y-m-d")) {
+        if ($currentExchangeRateTableDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
                 ExchangeRateTable::class,
                 $NBPFetch->exchangeRateTable()->today("A")
@@ -125,13 +131,11 @@ final class FetchingExchangeRateTableTest extends TestCase
             "2013-01-02",
             new DateTimeZone("Europe/Warsaw")
         );
-        $tooOldDate = date(
-            "Y-m-d",
-            strtotime(
-                "-1 day",
-                strtotime($minimalAcceptedDate->format("Y-m-d"))
-            )
-        );
+        if ($minimalAcceptedDate === false) {
+            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
+        }
+
+        $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
             sprintf(
@@ -141,7 +145,7 @@ final class FetchingExchangeRateTableTest extends TestCase
         );
 
         $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->byDate("A", $tooOldDate);
+        $NBPFetch->exchangeRateTable()->byDate("A", $tooOldDate->format("Y-m-d"));
     }
 
     /**
@@ -149,7 +153,7 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function cannotFetchWithInvalidDate()
     {
-        $invalidDate = "asd";
+        $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));

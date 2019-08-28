@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
-        <testsuite name="NBPFetch Unit Test Suite">
-            <directory>./tests/unit/</directory>
+        <testsuite name="Currency rate test suite">
+            <file>./tests/unit/CurrencyRate/CurrencyRateTest.php</file>
+            <file>./tests/unit/CurrencyRate/CurrencyRateCollectionTest.php</file>
+            <file>./tests/unit/CurrencyRate/CurrencyRateSeriesTest.php</file>
+            <file>./tests/functional/FetchingCurrencyRateTest.php</file>
         </testsuite>
-        <testsuite name="NBPFetch Functional Test Suite">
-            <directory>./tests/functional/</directory>
+        <testsuite name="Exchange rate table test suite">
+            <file>./tests/unit/ExchangeRateTable/ExchangeRateTest.php</file>
+            <file>./tests/unit/ExchangeRateTable/ExchangeRateCollectionTest.php</file>
+            <file>./tests/unit/ExchangeRateTable/ExchangeRateTableTest.php</file>
+            <file>./tests/unit/ExchangeRateTable/ExchangeRateTableCollectionTest.php</file>
+            <file>./tests/functional/FetchingExchangeRateTableTest.php</file>
+        </testsuite>
+        <testsuite name="Gold price test suite">
+            <file>./tests/unit/GoldPrice/GoldPriceTest.php</file>
+            <file>./tests/unit/GoldPrice/GoldPriceCollectionTest.php</file>
+            <file>./tests/functional/FetchingGoldPriceTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

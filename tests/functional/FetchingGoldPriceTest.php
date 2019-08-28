@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Functional;
 
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use NBPFetch;
 use NBPFetch\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 /**
  * Class FetchingGoldPriceTest
@@ -32,18 +34,22 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function canFetchTodayPrice()
+    public function canFetchTodaysPrice()
     {
         $currentDate = DateTimeImmutable::createFromFormat(
             "Y-m-d",
             date("Y-m-d"),
             new DateTimeZone("Europe/Warsaw")
         );
+        if ($currentDate === false) {
+            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
+        }
 
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentPrice = $NBPFetch->goldPrice()->current();
+        $currentPriceDate = $currentPrice->getDate();
 
-        if ($currentPrice->getDate() === $currentDate->format("Y-m-d")) {
+        if ($currentPriceDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(GoldPrice::class, $NBPFetch->goldPrice()->today());
         } else {
             $this->expectExceptionMessage("Error while fetching data from NBP API");
@@ -117,13 +123,11 @@ final class FetchingGoldPriceTest extends TestCase
             "2013-01-02",
             new DateTimeZone("Europe/Warsaw")
         );
-        $tooOldDate = date(
-            "Y-m-d",
-            strtotime(
-                "-1 day",
-                strtotime($minimalAcceptedDate->format("Y-m-d"))
-            )
-        );
+        if ($minimalAcceptedDate === false) {
+            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
+        }
+
+        $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
             sprintf(
@@ -133,7 +137,7 @@ final class FetchingGoldPriceTest extends TestCase
         );
 
         $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->byDate($tooOldDate);
+        $NBPFetch->goldPrice()->byDate($tooOldDate->format("Y-m-d"));
     }
 
     /**
@@ -141,7 +145,7 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function cannotFetchWithInvalidDate()
     {
-        $invalidDate = "asd";
+        $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));

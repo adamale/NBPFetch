@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Functional;
 
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use NBPFetch;
 use NBPFetch\CurrencyRate\CurrencyRateSeries;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 /**
  * Class FetchingCurrencyRateTest
@@ -39,11 +41,15 @@ final class FetchingCurrencyRateTest extends TestCase
             date("Y-m-d"),
             new DateTimeZone("Europe/Warsaw")
         );
+        if ($currentDate === false) {
+            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
+        }
 
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentCurrencyRate = $NBPFetch->currencyRate()->current("EUR");
+        $currentCurrencyRateDate = $currentCurrencyRate->getCurrencyRateCollection()[0]->getDate();
 
-        if ($currentCurrencyRate->getCurrencyRateCollection()[0]->getDate() === $currentDate->format("Y-m-d")) {
+        if ($currentCurrencyRateDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
                 CurrencyRateSeries::class,
                 $NBPFetch->currencyRate()->today("EUR")
@@ -125,13 +131,11 @@ final class FetchingCurrencyRateTest extends TestCase
             "2013-01-02",
             new DateTimeZone("Europe/Warsaw")
         );
-        $tooOldDate = date(
-            "Y-m-d",
-            strtotime(
-                "-1 day",
-                strtotime($minimalAcceptedDate->format("Y-m-d"))
-            )
-        );
+        if ($minimalAcceptedDate === false) {
+            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
+        }
+
+        $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
             sprintf(
@@ -141,7 +145,7 @@ final class FetchingCurrencyRateTest extends TestCase
         );
 
         $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->byDate("EUR", $tooOldDate);
+        $NBPFetch->currencyRate()->byDate("EUR", $tooOldDate->format("Y-m-d"));
     }
 
     /**
@@ -149,7 +153,7 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function cannotFetchWithInvalidDate()
     {
-        $invalidDate = "asd";
+        $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));

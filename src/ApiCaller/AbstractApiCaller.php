@@ -9,7 +9,7 @@ use NBPFetch\NBPApi\NBPApiInterface;
  * Class AbstractApiCaller
  * @package NBPFetch\ApiCaller
  */
-abstract class AbstractApiCaller implements ApiCallerInterface
+abstract class AbstractApiCaller
 {
     /**
      * @var NBPApiInterface

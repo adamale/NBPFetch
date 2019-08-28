@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace NBPFetch\ExchangeRateTable;
 
 use NBPFetch\ApiCaller\AbstractApiCaller;
+use NBPFetch\ApiCaller\ApiCallerSingleCollectionInterface;
 use UnexpectedValueException;
 
 /**
  * Class ApiCaller
  * @package NBPFetch\NBPApi\ExchangeRateTable
  */
-class ApiCaller extends AbstractApiCaller
+class ApiCaller extends AbstractApiCaller implements ApiCallerSingleCollectionInterface
 {
     /**
      * @var string API_SUBSET API Subset that returns exchange rate table data.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\ExchangeRateTable;
 
 /**
- * Class ExchangeRate
+ * Class CurrencyRate
  * @package NBPFetch\ExchangeRateTable
  */
 class ExchangeRate

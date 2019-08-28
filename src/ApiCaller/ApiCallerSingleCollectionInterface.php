@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace NBPFetch\ApiCaller;
 
 /**
- * Interface ApiCallerInterface
+ * Interface ApiCallerSingleCollectionInterface
  * @package NBPFetch\ApiCaller
  */
-interface ApiCallerInterface
+interface ApiCallerSingleCollectionInterface
 {
     /**
      * Returns single item from API response array.

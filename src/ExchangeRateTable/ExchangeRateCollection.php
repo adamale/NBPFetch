@@ -6,7 +6,7 @@ namespace NBPFetch\ExchangeRateTable;
 use ObjectCollection\Collection;
 
 /**
- * Class ExchangeRateCollection
+ * Class CurrencyRateCollection
  * @package NBPFetch\ExchangeRateTable
  */
 class ExchangeRateCollection extends Collection

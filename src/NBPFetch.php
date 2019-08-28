@@ -3,14 +3,19 @@ declare(strict_types=1);
 
 namespace NBPFetch;
 
-use NBPFetch\ExchangeRateTable\ApiCaller as ExchangeRateApiCaller;
-use NBPFetch\ExchangeRateTable\Fetcher as ExchangeRateFetcher;
-use NBPFetch\ExchangeRateTable\Validator as ExchangeRateValidator;
+use NBPFetch\CurrencyRate\ApiCaller as CurrencyRateApiCaller;
+use NBPFetch\CurrencyRate\Fetcher as CurrencyRateFetcher;
+use NBPFetch\CurrencyRate\TableResolver;
+use NBPFetch\CurrencyRate\Validator as CurrencyRateValidator;
+use NBPFetch\ExchangeRateTable\ApiCaller as ExchangeRateTableApiCaller;
+use NBPFetch\ExchangeRateTable\Fetcher as ExchangeRateTableFetcher;
+use NBPFetch\ExchangeRateTable\Validator as ExchangeRateTableValidator;
 use NBPFetch\GoldPrice\ApiCaller as GoldPriceApiCaller;
 use NBPFetch\GoldPrice\Fetcher as GoldPriceFetcher;
 use NBPFetch\GoldPrice\Validator as GoldPriceValidator;
 use NBPFetch\NBPApi\NBPApi;
 use NBPFetch\Validation\CountValidator;
+use NBPFetch\Validation\CurrencyValidator;
 use NBPFetch\Validation\DateValidator;
 use NBPFetch\Validation\TableValidator;
 
@@ -38,18 +43,37 @@ class NBPFetch
 
     /**
      * Returns exchange rate table fetcher that defines various fetching methods.
-     * @return ExchangeRateFetcher
+     * @return ExchangeRateTableFetcher
      */
-    public function exchangeRateTable(): ExchangeRateFetcher
+    public function exchangeRateTable(): ExchangeRateTableFetcher
     {
         $NBPApi = new NBPApi();
-        $apiCaller = new ExchangeRateApiCaller($NBPApi);
-        $validator = new ExchangeRateValidator(
+        $apiCaller = new ExchangeRateTableApiCaller($NBPApi);
+        $validator = new ExchangeRateTableValidator(
             new CountValidator(),
             new DateValidator(),
             new TableValidator()
         );
 
-        return new ExchangeRateFetcher($apiCaller, $validator);
+        return new ExchangeRateTableFetcher($apiCaller, $validator);
+    }
+
+    /**
+     * Returns currency rate fetcher that defines various fetching methods.
+     * @return CurrencyRateFetcher
+     */
+    public function currencyRate(): CurrencyRateFetcher
+    {
+        $NBPApi = new NBPApi();
+        $apiCaller = new CurrencyRateApiCaller($NBPApi);
+        $validator = new CurrencyRateValidator(
+            new CountValidator(),
+            new CurrencyValidator(),
+            new DateValidator(),
+            new TableValidator()
+        );
+        $tableResolver = new TableResolver();
+
+        return new CurrencyRateFetcher($apiCaller, $validator, $tableResolver);
     }
 }

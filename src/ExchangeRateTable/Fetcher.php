@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\ExchangeRateTable;
 
 use InvalidArgumentException;
-use NBPFetch\ApiCaller\ApiCallerInterface;
+use NBPFetch\ApiCaller\ApiCallerSingleCollectionInterface;
 use NBPFetch\Exception\InvalidCountException;
 use NBPFetch\Exception\InvalidDateException;
 use NBPFetch\Exception\InvalidTableException;
@@ -17,7 +17,7 @@ use UnexpectedValueException;
 class Fetcher
 {
     /**
-     * @var ApiCallerInterface
+     * @var ApiCallerSingleCollectionInterface
      */
     private $apiCaller;
 
@@ -27,11 +27,11 @@ class Fetcher
     private $validator;
 
     /**
-     * @param ApiCallerInterface $apiCaller
+     * @param ApiCallerSingleCollectionInterface $apiCaller
      * @param ValidatorInterface $validator
      */
     public function __construct(
-        ApiCallerInterface $apiCaller,
+        ApiCallerSingleCollectionInterface $apiCaller,
         ValidatorInterface $validator
     ) {
         $this->apiCaller = $apiCaller;

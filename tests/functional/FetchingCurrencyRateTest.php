@@ -6,10 +6,10 @@ namespace NBPFetch\Tests\Functional;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 use NBPFetch;
 use NBPFetch\CurrencyRate\CurrencyRateSeries;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 /**
  * Class FetchingCurrencyRateTest
@@ -20,7 +20,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function canFetchCurrent()
+    public function canFetchCurrentRate()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentCurrencyRate = $NBPFetch->currencyRate()->current("EUR");
@@ -33,21 +33,14 @@ final class FetchingCurrencyRateTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
-    public function canFetchTodays()
+    public function canFetchTodaysRate()
     {
-        $currentDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            date("Y-m-d"),
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($currentDate === false) {
-            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
-        }
-
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentCurrencyRate = $NBPFetch->currencyRate()->current("EUR");
         $currentCurrencyRateDate = $currentCurrencyRate->getCurrencyRateCollection()[0]->getDate();
+        $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentCurrencyRateDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
@@ -63,7 +56,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function canFetchLast10()
+    public function canFetchLast10Rates()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $currencyRateSeries = $NBPFetch->currencyRate()->last("EUR", 10);
@@ -77,7 +70,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByWeekdayDate()
+    public function canFetchRateByWeekdayDate()
     {
         $testDate = "2019-08-23";
 
@@ -93,7 +86,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByDateRange()
+    public function canFetchRatesByDateRange()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $givenDateCurrencyRateSeries = $NBPFetch->currencyRate()->byDateRange(
@@ -111,7 +104,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithFutureDate()
+    public function cannotFetchRateWithFutureDate()
     {
         $futureDate = date("Y-m-d", strtotime("+1 month"));
 
@@ -123,18 +116,11 @@ final class FetchingCurrencyRateTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
-    public function cannotFetchWithTooOldDate()
+    public function cannotFetchRateWithTooOldDate()
     {
-        $minimalAcceptedDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            "2013-01-02",
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($minimalAcceptedDate === false) {
-            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
-        }
-
+        $minimalAcceptedDate = new DateTimeImmutable("2013-01-02", new DateTimeZone("Europe/Warsaw"));
         $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
@@ -151,7 +137,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidDate()
+    public function cannotFetchRateWithInvalidDate()
     {
         $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
@@ -165,7 +151,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidCount()
+    public function cannotFetchRatesWithInvalidCount()
     {
         $invalidCount = 0;
         $minimalCount = 1;
@@ -179,7 +165,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithDateThatLacksExchangeRateTable()
+    public function cannotFetchRateWithDateThatLacksCurrencyRate()
     {
         $dateThatLacksCurrencyRate = "2019-08-11";
 
@@ -192,7 +178,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithCurrencyThatDoesntConsistsOfOnlyLetters()
+    public function cannotFetchRateWithCurrencyThatDoesntConsistsOfOnlyLetters()
     {
         $incorrectCurrency = "E2U";
 
@@ -205,7 +191,7 @@ final class FetchingCurrencyRateTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithCurrencyThatLengthIsInvalid()
+    public function cannotFetchRateWithCurrencyThatLengthIsInvalid()
     {
         $incorrectCurrency = "EU";
 

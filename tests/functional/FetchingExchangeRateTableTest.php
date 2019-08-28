@@ -6,10 +6,10 @@ namespace NBPFetch\Tests\Functional;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 use NBPFetch;
 use NBPFetch\ExchangeRateTable\ExchangeRateTable;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 /**
  * Class FetchingExchangeRateTableTest
@@ -20,7 +20,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function canFetchCurrentExchangeRateTable()
+    public function canFetchCurrentTable()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentExchangeRateTable = $NBPFetch->exchangeRateTable()->current("a");
@@ -33,21 +33,14 @@ final class FetchingExchangeRateTableTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
-    public function canFetchTodaysExchangeRateTable()
+    public function canFetchTodaysTable()
     {
-        $currentDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            date("Y-m-d"),
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($currentDate === false) {
-            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
-        }
-
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentExchangeRateTable = $NBPFetch->exchangeRateTable()->current("A");
         $currentExchangeRateTableDate = $currentExchangeRateTable->getDate();
+        $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentExchangeRateTableDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
@@ -63,7 +56,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function canFetchLast10ExchangeRateTables()
+    public function canFetchLast10Tables()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $last10ExchangeRateTables = $NBPFetch->exchangeRateTable()->last("A", 10);
@@ -77,7 +70,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByWeekdayDate()
+    public function canFetchTableByWeekdayDate()
     {
         $testDate = "2019-08-13";
 
@@ -93,7 +86,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByDateRange()
+    public function canFetchTablesByDateRange()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $givenDateRangeExchangeRateTables = $NBPFetch->exchangeRateTable()->byDateRange(
@@ -111,7 +104,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithFutureDate()
+    public function cannotFetchTableWithFutureDate()
     {
         $futureDate = date("Y-m-d", strtotime("+1 month"));
 
@@ -123,18 +116,11 @@ final class FetchingExchangeRateTableTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
-    public function cannotFetchWithTooOldDate()
+    public function cannotFetchTableWithTooOldDate()
     {
-        $minimalAcceptedDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            "2013-01-02",
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($minimalAcceptedDate === false) {
-            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
-        }
-
+        $minimalAcceptedDate = new DateTimeImmutable("2013-01-02", new DateTimeZone("Europe/Warsaw"));
         $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
@@ -151,7 +137,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidDate()
+    public function cannotFetchTableWithInvalidDate()
     {
         $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
@@ -165,7 +151,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidCount()
+    public function cannotFetchTablesWithInvalidCount()
     {
         $invalidCount = 0;
         $minimalCount = 1;
@@ -179,7 +165,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithDateThatLacksExchangeRateTable()
+    public function cannotFetchTableWithDateThatLacksExchangeRateTable()
     {
         $dateThatLacksGoldPrice = "2019-08-11";
 
@@ -192,7 +178,7 @@ final class FetchingExchangeRateTableTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithIncorrectTable()
+    public function cannotFetchTableWithIncorrectTable()
     {
         $incorrectTable = "D";
 

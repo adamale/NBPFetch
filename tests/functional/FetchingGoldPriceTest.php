@@ -6,10 +6,10 @@ namespace NBPFetch\Tests\Functional;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 use NBPFetch;
 use NBPFetch\GoldPrice\GoldPrice;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 /**
  * Class FetchingGoldPriceTest
@@ -33,21 +33,14 @@ final class FetchingGoldPriceTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
     public function canFetchTodaysPrice()
     {
-        $currentDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            date("Y-m-d"),
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($currentDate === false) {
-            throw new UnexpectedValueException("Current date is not a DateTimeImmutable");
-        }
-
         $NBPFetch = new NBPFetch\NBPFetch();
         $currentPrice = $NBPFetch->goldPrice()->current();
         $currentPriceDate = $currentPrice->getDate();
+        $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentPriceDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(GoldPrice::class, $NBPFetch->goldPrice()->today());
@@ -74,7 +67,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByWeekdayDate()
+    public function canFetchPriceByWeekdayDate()
     {
         $testDate = "2019-07-29";
 
@@ -89,7 +82,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function canFetchByDateRange()
+    public function canFetchPricesByDateRange()
     {
         $NBPFetch = new NBPFetch\NBPFetch();
         $givenDateRangePrice = $NBPFetch->goldPrice()->byDateRange("2019-06-01", "2019-06-30");
@@ -103,7 +96,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithFutureDate()
+    public function cannotFetchPriceWithFutureDate()
     {
         $futureDate = date("Y-m-d", strtotime("+1 month"));
 
@@ -115,18 +108,11 @@ final class FetchingGoldPriceTest extends TestCase
 
     /**
      * @test
+     * @throws Exception
      */
-    public function cannotFetchWithTooOldDate()
+    public function cannotFetchPriceWithTooOldDate()
     {
-        $minimalAcceptedDate = DateTimeImmutable::createFromFormat(
-            "Y-m-d",
-            "2013-01-02",
-            new DateTimeZone("Europe/Warsaw")
-        );
-        if ($minimalAcceptedDate === false) {
-            throw new UnexpectedValueException("Minimal accepted date is not a DateTimeImmutable");
-        }
-
+        $minimalAcceptedDate = new DateTimeImmutable("2013-01-02", new DateTimeZone("Europe/Warsaw"));
         $tooOldDate = $minimalAcceptedDate->sub(new DateInterval("P1D"));
 
         $this->expectExceptionMessage(
@@ -143,7 +129,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidDate()
+    public function cannotFetchPriceWithInvalidDate()
     {
         $invalidDate = "28-08-2019";
         $dateFormat = "Y-m-d";
@@ -157,7 +143,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithInvalidCount()
+    public function cannotFetchPricesWithInvalidCount()
     {
         $invalidCount = 0;
         $minimalCount = 1;
@@ -171,7 +157,7 @@ final class FetchingGoldPriceTest extends TestCase
     /**
      * @test
      */
-    public function cannotFetchWithDateThatLacksGoldPrice()
+    public function cannotFetchPriceWithDateThatLacksGoldPrice()
     {
         $dateThatLacksGoldPrice = "2019-07-06";
 

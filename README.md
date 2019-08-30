@@ -70,24 +70,23 @@ try {
 ```php
 <?php
 
-use NBPFetch\NBPFetch;
+use NBPFetch\GoldPrice\GoldPrice;
 
 require_once "vendor/autoload.php";
-
-$NBPFetch = new NBPFetch();
-$NBPFetchGoldPrice = $NBPFetch->goldPrice();
 
 /**
  * Gold price examples.
  * Available methods are: current(), today(), byDate(string $date),
- * byDateRange(string $from, string $to) and last(int count)
+ * byDateRange(string $from, string $to) and last(string $currency, int count).
  */
 try {
-    $currentGoldPrice = $NBPFetchGoldPrice->current();
-    $todayGoldPrice = $NBPFetchGoldPrice->today();
-    $givenDateGoldPrice = $NBPFetchGoldPrice->byDate("2019-08-28");
-    $givenDateRangeGoldPrices = $NBPFetchGoldPrice->byDateRange("2019-08-01", "2019-08-31");
-    $last10GoldPrices = $NBPFetchGoldPrice->last(10);
+    $goldPrice = new GoldPrice();
+
+    $currentGoldPrice = $goldPrice->current();
+    $todayGoldPrice = $goldPrice->today();
+    $givenDateGoldPrice = $goldPrice->byDate("2019-08-27");
+    $givenDateRangeGoldPrices = $goldPrice->byDateRange("2019-08-01", "2019-08-30");
+    $last10GoldPrices = $goldPrice->last(10);
 } catch (Exception $e) {
 }
 ```

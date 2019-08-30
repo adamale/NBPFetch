@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace NBPFetch\Tests\Unit\GoldPrice;
 
 use NBPFetch;
-use NBPFetch\GoldPrice\GoldPrice;
-use NBPFetch\GoldPrice\GoldPriceCollection;
+use NBPFetch\GoldPrice\Structure\GoldPrice;
+use NBPFetch\GoldPrice\Structure\GoldPriceCollection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 /**
  * Class GoldPriceCollectionTest
- * @covers NBPFetch\GoldPriceCollection
+ * @covers NBPFetch\GoldPrice\Structure\GoldPriceCollection
  */
 final class GoldPriceCollectionTest extends TestCase
 {

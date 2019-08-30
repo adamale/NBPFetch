@@ -9,11 +9,12 @@ use DateTimeZone;
 use Exception;
 use NBPFetch;
 use NBPFetch\GoldPrice\GoldPrice;
+use NBPFetch\GoldPrice\Structure;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingGoldPriceTest
- * @covers NBPFetch\GoldPrice\Fetcher
+ * @covers NBPFetch\GoldPrice\GoldPrice
  */
 final class FetchingGoldPriceTest extends TestCase
 {
@@ -22,12 +23,12 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchCurrentPrice()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentPrice = $NBPFetch->goldPrice()->current();
+        $goldPrice = new GoldPrice();
+        $currentGoldPrice = $goldPrice->current();
 
         $this->assertInstanceOf(
-            GoldPrice::class,
-            $currentPrice
+            Structure\GoldPrice::class,
+            $currentGoldPrice
         );
     }
 
@@ -37,16 +38,16 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchTodaysPrice()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentPrice = $NBPFetch->goldPrice()->current();
-        $currentPriceDate = $currentPrice->getDate();
+        $goldPrice = new GoldPrice();
+        $currentGoldPrice = $goldPrice->current();
+        $currentPriceDate = $currentGoldPrice->getDate();
         $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentPriceDate === $currentDate->format("Y-m-d")) {
-            $this->assertInstanceOf(GoldPrice::class, $NBPFetch->goldPrice()->today());
+            $this->assertInstanceOf(Structure\GoldPrice::class, $goldPrice->today());
         } else {
             $this->expectExceptionMessage("Error while fetching data from NBP API");
-            $NBPFetch->goldPrice()->today();
+            $goldPrice->today();
         }
     }
 
@@ -55,8 +56,8 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchLast10Prices()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $last10Prices = $NBPFetch->goldPrice()->last(10);
+        $goldPrice = new GoldPrice();
+        $last10Prices = $goldPrice->last(10);
 
         $this->assertEquals(
             10,
@@ -69,13 +70,13 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchPriceByWeekdayDate()
     {
-        $testDate = "2019-07-29";
+        $weekdayDate = "2019-07-29";
 
-        $NBPFetch = new NBPFetch\NBPFetch();
+        $goldPrice = new GoldPrice();
 
         $this->assertEquals(
-            $testDate,
-            $NBPFetch->goldPrice()->byDate($testDate)->getDate()
+            $weekdayDate,
+            $goldPrice->byDate($weekdayDate)->getDate()
         );
     }
 
@@ -84,8 +85,8 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function canFetchPricesByDateRange()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDateRangePrice = $NBPFetch->goldPrice()->byDateRange("2019-06-01", "2019-06-30");
+        $goldPrice = new GoldPrice();
+        $givenDateRangePrice = $goldPrice->byDateRange("2019-06-01", "2019-06-30");
 
         $this->assertEquals(
             19,
@@ -102,8 +103,8 @@ final class FetchingGoldPriceTest extends TestCase
 
         $this->expectExceptionMessage("Date must not be in the future");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->byDate($futureDate);
+        $goldPrice = new GoldPrice();
+        $goldPrice->byDate($futureDate);
     }
 
     /**
@@ -122,8 +123,8 @@ final class FetchingGoldPriceTest extends TestCase
             )
         );
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->byDate($tooOldDate->format("Y-m-d"));
+        $goldPrice = new GoldPrice();
+        $goldPrice->byDate($tooOldDate->format("Y-m-d"));
     }
 
     /**
@@ -131,13 +132,13 @@ final class FetchingGoldPriceTest extends TestCase
      */
     public function cannotFetchPriceWithInvalidDate()
     {
-        $invalidDate = "28-08-2019";
+        $weekendDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->byDate($invalidDate);
+        $goldPrice = new GoldPrice();
+        $goldPrice->byDate($weekendDate);
     }
 
     /**
@@ -150,8 +151,8 @@ final class FetchingGoldPriceTest extends TestCase
 
         $this->expectExceptionMessage(sprintf("Count must not be lower than %s", $minimalCount));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->last($invalidCount);
+        $goldPrice = new GoldPrice();
+        $goldPrice->last($invalidCount);
     }
 
     /**
@@ -163,7 +164,7 @@ final class FetchingGoldPriceTest extends TestCase
 
         $this->expectExceptionMessage("Error while fetching data from NBP API");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->goldPrice()->byDate($dateThatLacksGoldPrice);
+        $goldPrice = new GoldPrice();
+        $goldPrice->byDate($dateThatLacksGoldPrice);
     }
 }

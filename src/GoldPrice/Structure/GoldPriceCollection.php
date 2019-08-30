@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\GoldPrice;
+namespace NBPFetch\GoldPrice\Structure;
 
 use ObjectCollection\Collection;
 
 /**
  * Class GoldPriceCollection
- * @package NBPFetch\Structure\GoldPrice
+ * @package NBPFetch\Structure\GoldPrice\Structure
  */
 class GoldPriceCollection extends Collection
 {

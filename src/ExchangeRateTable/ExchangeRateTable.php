@@ -3,6 +3,19 @@ declare(strict_types=1);
 
 namespace NBPFetch\ExchangeRateTable;
 
+use InvalidArgumentException;
+use NBPFetch\Exception\InvalidCountException;
+use NBPFetch\Exception\InvalidDateException;
+use NBPFetch\Exception\InvalidTableException;
+use NBPFetch\ExchangeRateTable\Structure\ExchangeRate;
+use NBPFetch\ExchangeRateTable\Structure\ExchangeRateCollection;
+use NBPFetch\ExchangeRateTable\Structure\ExchangeRateTableCollection;
+use NBPFetch\NBPApi\NBPApi;
+use NBPFetch\Validation\CountValidator;
+use NBPFetch\Validation\DateValidator;
+use NBPFetch\Validation\TableValidator;
+use UnexpectedValueException;
+
 /**
  * Class ExchangeRateTable
  * @package NBPFetch\ExchangeRateTable
@@ -10,72 +23,200 @@ namespace NBPFetch\ExchangeRateTable;
 class ExchangeRateTable
 {
     /**
+     * @var string API_SUBSET API Subset that returns exchange rate table data.
+     */
+    private const API_SUBSET = "exchangerates/tables/";
+
+    /**
      * @var string
      */
     private $table;
 
     /**
-     * @var string
+     * @var NBPApi
      */
-    private $number;
+    private $NBPApi;
 
     /**
-     * @var string
+     * ExchangeRateTable constructor.
+     * @param string $table Table type.
+     * @throws InvalidArgumentException
      */
-    private $date;
+    public function __construct(string $table) {
+        try {
+            $tableValidator = new TableValidator();
+            $tableValidator->validate($table);
+        } catch (InvalidTableException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
 
-    /**
-     * @var ExchangeRateCollection
-     */
-    private $exchangeRateCollection;
-
-    /**
-     * @param string $table
-     * @param string $number
-     * @param string $date
-     * @param ExchangeRateCollection $exchangeRateCollection
-     */
-    public function __construct(
-        string $table,
-        string $number,
-        string $date,
-        ExchangeRateCollection $exchangeRateCollection
-    ) {
         $this->table = $table;
-        $this->number = $number;
-        $this->date = $date;
-        $this->exchangeRateCollection = $exchangeRateCollection;
+        $this->NBPApi = new NBPApi();
     }
 
     /**
+     * Returns a single exchange rate table from NBP API.
+     * @param string $methodPath
+     * @return Structure\ExchangeRateTable
+     * @throws UnexpectedValueException
+     */
+    public function getSingle(string $methodPath): Structure\ExchangeRateTable
+    {
+        $path = $this->createURLPath($methodPath);
+        $responseArray = $this->NBPApi->fetch($path);
+        return $this->parse($responseArray[0]);
+    }
+
+    /**
+     * Returns a set of exchange rate tables from NBP API.
+     * @param string $methodPath
+     * @return ExchangeRateTableCollection
+     * @throws UnexpectedValueException
+     */
+    public function getCollection(string $methodPath): ExchangeRateTableCollection
+    {
+        $path = $this->createURLPath($methodPath);
+        $responseArray = $this->NBPApi->fetch($path);
+        return $this->parseCollection($responseArray);
+    }
+
+    /**
+     * @param string $methodPath
      * @return string
      */
-    public function getTable(): string
+    private function createURLPath(string $methodPath): string
     {
-        return $this->table;
+        $currencyPath = sprintf("%s/%s", self::API_SUBSET, $this->table);
+        if (mb_strlen($methodPath) > 0) {
+            $path = sprintf("%s/%s", $currencyPath, $methodPath);
+        } else {
+            $path = $currencyPath;
+        }
+
+        return $path;
     }
 
     /**
-     * @return string
+     * Creates an ExchangeRateTable object from fetched array.
+     * @param array $fetchedExchangeRateTable
+     * @return Structure\ExchangeRateTable
      */
-    public function getNumber(): string
+    private function parse(array $fetchedExchangeRateTable): Structure\ExchangeRateTable
     {
-        return $this->number;
+        $exchangeRateCollection = new ExchangeRateCollection();
+        foreach ($fetchedExchangeRateTable["rates"] as $exchangeRate) {
+            $exchangeRateCollection[] = new ExchangeRate($exchangeRate["code"], (string) $exchangeRate["mid"]);
+        }
+
+        return new Structure\ExchangeRateTable(
+            $fetchedExchangeRateTable["table"],
+            $fetchedExchangeRateTable["no"],
+            $fetchedExchangeRateTable["effectiveDate"],
+            $exchangeRateCollection
+        );
     }
 
     /**
-     * @return string
+     * Creates an ExchangeRateTableCollection object from fetched array.
+     * @param array $fetchedExchangeRateTables
+     * @return ExchangeRateTableCollection
      */
-    public function getDate(): string
+    private function parseCollection(array $fetchedExchangeRateTables): ExchangeRateTableCollection
     {
-        return $this->date;
+        $exchangeRateTableCollection = new ExchangeRateTableCollection();
+        foreach ($fetchedExchangeRateTables as $fetchedExchangeRateTable) {
+            $exchangeRateTableCollection[] = $this->parse($fetchedExchangeRateTable);
+        }
+
+        return $exchangeRateTableCollection;
     }
 
     /**
-     * @return ExchangeRateCollection
+     * Returns current exchange rate table.
+     * @return Structure\ExchangeRateTable
+     * @throws UnexpectedValueException
      */
-    public function getExchangeRateCollection(): ExchangeRateCollection
+    public function current(): Structure\ExchangeRateTable
     {
-        return $this->exchangeRateCollection;
+        $path = sprintf("");
+
+        return $this->getSingle($path);
+    }
+
+    /**
+     * Returns a set of n last exchange rate tables.
+     * @param int $count Must be an positive integer.
+     * @return ExchangeRateTableCollection
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     */
+    public function last(int $count): ExchangeRateTableCollection
+    {
+        try {
+            $countValidator = new CountValidator();
+            $countValidator->validate($count);
+        } catch (InvalidCountException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        $path = sprintf("last/%s", $count);
+
+        return $this->getCollection($path);
+    }
+
+    /**
+     * Returns today's exchange rate table.
+     * @return Structure\ExchangeRateTable
+     * @throws UnexpectedValueException
+     */
+    public function today(): Structure\ExchangeRateTable
+    {
+        $path = sprintf("today");
+
+        return $this->getSingle($path);
+    }
+
+    /**
+     * Returns a given date exchange rate table.
+     * @param string $date Date in Y-m-d format.
+     * @return Structure\ExchangeRateTable
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     */
+    public function byDate(string $date): Structure\ExchangeRateTable
+    {
+        try {
+            $dateValidator = new DateValidator();
+            $dateValidator->validate($date);
+        } catch (InvalidDateException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        $path = sprintf("%s", $date);
+
+        return $this->getSingle($path);
+    }
+
+    /**
+     * Returns a set of exchange rate tables between given dates.
+     * @param string $from Date in Y-m-d format.
+     * @param string $to Date in Y-m-d format.
+     * @return ExchangeRateTableCollection
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     */
+    public function byDateRange(string $from, string $to): ExchangeRateTableCollection
+    {
+        try {
+            $dateValidator = new DateValidator();
+            $dateValidator->validate($from);
+            $dateValidator->validate($to);
+        } catch (InvalidDateException $e) {
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        $path = sprintf("%s/%s", $from, $to);
+
+        return $this->getCollection($path);
     }
 }

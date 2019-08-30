@@ -9,11 +9,12 @@ use DateTimeZone;
 use Exception;
 use NBPFetch;
 use NBPFetch\ExchangeRateTable\ExchangeRateTable;
+use NBPFetch\ExchangeRateTable\Structure;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingExchangeRateTableTest
- * @covers NBPFetch\ExchangeRateTable\Fetcher
+ * @covers NBPFetch\ExchangeRateTable\ExchangeRateTable
  */
 final class FetchingExchangeRateTableTest extends TestCase
 {
@@ -22,11 +23,11 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function canFetchCurrentTable()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentExchangeRateTable = $NBPFetch->exchangeRateTable()->current("a");
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $currentExchangeRateTable = $exchangeRateTable->current();
 
         $this->assertInstanceOf(
-            ExchangeRateTable::class,
+            Structure\ExchangeRateTable::class,
             $currentExchangeRateTable
         );
     }
@@ -37,19 +38,19 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function canFetchTodaysTable()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentExchangeRateTable = $NBPFetch->exchangeRateTable()->current("A");
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $currentExchangeRateTable = $exchangeRateTable->current();
         $currentExchangeRateTableDate = $currentExchangeRateTable->getDate();
         $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentExchangeRateTableDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
                 ExchangeRateTable::class,
-                $NBPFetch->exchangeRateTable()->today("A")
+                $currentExchangeRateTable = $exchangeRateTable->today()
             );
         } else {
             $this->expectExceptionMessage("Error while fetching data from NBP API");
-            $NBPFetch->exchangeRateTable()->today("A");
+            $exchangeRateTable->today();
         }
     }
 
@@ -58,8 +59,8 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function canFetchLast10Tables()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $last10ExchangeRateTables = $NBPFetch->exchangeRateTable()->last("A", 10);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $last10ExchangeRateTables = $exchangeRateTable->last(10);
 
         $this->assertEquals(
             10,
@@ -72,14 +73,14 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function canFetchTableByWeekdayDate()
     {
-        $testDate = "2019-08-13";
+        $weekdayDate = "2019-08-13";
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDatePrice = $NBPFetch->exchangeRateTable()->byDate("A", $testDate);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $givenDateExchangeRateTable = $exchangeRateTable->byDate($weekdayDate);
 
         $this->assertEquals(
-            $testDate,
-            $givenDatePrice->getDate()
+            $weekdayDate,
+            $givenDateExchangeRateTable->getDate()
         );
     }
 
@@ -88,12 +89,8 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function canFetchTablesByDateRange()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDateRangeExchangeRateTables = $NBPFetch->exchangeRateTable()->byDateRange(
-            "A",
-            "2019-06-01",
-            "2019-06-30"
-        );
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $givenDateRangeExchangeRateTables = $exchangeRateTable->byDateRange("2019-06-01", "2019-06-30");
 
         $this->assertEquals(
             19,
@@ -110,8 +107,8 @@ final class FetchingExchangeRateTableTest extends TestCase
 
         $this->expectExceptionMessage("Date must not be in the future");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->byDate("A", $futureDate);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $exchangeRateTable->byDate($futureDate);
     }
 
     /**
@@ -130,22 +127,22 @@ final class FetchingExchangeRateTableTest extends TestCase
             )
         );
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->byDate("A", $tooOldDate->format("Y-m-d"));
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $exchangeRateTable->byDate($tooOldDate->format("Y-m-d"));
     }
 
     /**
      * @test
      */
-    public function cannotFetchTableWithInvalidDate()
+    public function cannotFetchTableWithWeekendDate()
     {
-        $invalidDate = "28-08-2019";
+        $weekendDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->byDate("A", $invalidDate);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $exchangeRateTable->byDate($weekendDate);
     }
 
     /**
@@ -158,8 +155,8 @@ final class FetchingExchangeRateTableTest extends TestCase
 
         $this->expectExceptionMessage(sprintf("Count must not be lower than %s", $minimalCount));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->last("A", $invalidCount);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $exchangeRateTable->last($invalidCount);
     }
 
     /**
@@ -167,12 +164,12 @@ final class FetchingExchangeRateTableTest extends TestCase
      */
     public function cannotFetchTableWithDateThatLacksExchangeRateTable()
     {
-        $dateThatLacksGoldPrice = "2019-08-11";
+        $dateThatLacksExchangeRateTable = "2019-08-11";
 
         $this->expectExceptionMessage("Error while fetching data from NBP API");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->byDate("A", $dateThatLacksGoldPrice);
+        $exchangeRateTable = new ExchangeRateTable("A");
+        $exchangeRateTable->byDate($dateThatLacksExchangeRateTable);
     }
 
     /**
@@ -184,7 +181,7 @@ final class FetchingExchangeRateTableTest extends TestCase
 
         $this->expectExceptionMessage("Table must be one of the following: A, B");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->exchangeRateTable()->current($incorrectTable);
+        $exchangeRateTable = new ExchangeRateTable($incorrectTable);
+        $exchangeRateTable->current();
     }
 }

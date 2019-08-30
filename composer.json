@@ -2,7 +2,7 @@
     "name": "adamale/nbpfetch",
     "description": "PHP library that helps to fetch data from NBP API.",
     "type": "library",
-    "keywords": ["nbp", "exchange", "gold"],
+    "keywords": ["nbp", "currency", "exchange", "gold"],
     "homepage": "https://github.com/adamale/NBPFetch",
     "license": "MIT",
     "authors": [

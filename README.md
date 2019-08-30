@@ -19,25 +19,23 @@ include [Composer File Loader](https://github.com/Wilkins/composer-file-loader) 
 ```php
 <?php
 
-use NBPFetch\NBPFetch;
+use NBPFetch\CurrencyRate\CurrencyRate;
 
 require_once "vendor/autoload.php";
 
-$NBPFetch = new NBPFetch();
-$NBPFetchCurrencyRate = $NBPFetch->currencyRate();
-
 /**
  * Currency rate examples.
- * Available methods are: current(string $currency), today(string $currency)
- * byDate(string $currency, string $date), byDateRange(string $currency, string $from, string $to)
- * and last(string $currency, int count).
+ * Available methods are: current(), today(), byDate(string $date),
+ * byDateRange(string $from, string $to) and last(string $currency, int count).
  */
 try {
-    $currentCurrencyRate = $NBPFetchCurrencyRate->current("EUR");
-    $todayCurrencyRate = $NBPFetchCurrencyRate->current("EUR");
-    $givenDateCurrencyRate = $NBPFetchCurrencyRate->byDate("EUR", "2019-08-28");
-    $givenDateRangeCurrencyRates = $NBPFetchCurrencyRate->byDateRange("EUR", "2019-08-01", "2019-08-31");
-    $last10CurrencyRates = $NBPFetchCurrencyRate->last("EUR", 10);
+    $currencyRate = new CurrencyRate("EUR");
+
+    $currentCurrencyRate = $currencyRate->current();
+    $todayCurrencyRate = $currencyRate->today();
+    $givenDateCurrencyRate = $currencyRate->byDate("2019-08-27");
+    $givenDateRangeCurrencyRates = $currencyRate->byDateRange("2019-08-01", "2019-08-30");
+    $last10CurrencyRates = $currencyRate->last(10);
 } catch (Exception $e) {
 }
 ```

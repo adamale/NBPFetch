@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Unit\CurrencyRate;
 
-use NBPFetch\CurrencyRate\CurrencyRate;
+use NBPFetch\CurrencyRate\Structure\CurrencyRate;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 

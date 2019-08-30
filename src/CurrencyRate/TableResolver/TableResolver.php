@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\CurrencyRate;
+namespace NBPFetch\CurrencyRate\TableResolver;
 
 use NBPFetch\Exception\InvalidCurrencyException;
 
 /**
  * Class TableResolver
- * @package NBPFetch\CurrencyRate
+ * @package NBPFetch\CurrencyRate\TableResolver
  */
 class TableResolver implements TableResolverInterface
 {

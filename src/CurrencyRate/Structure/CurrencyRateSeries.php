@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\CurrencyRate;
+namespace NBPFetch\CurrencyRate\Structure;
 
 /**
  * Class CurrencyRateSeries
- * @package NBPFetch\CurrencyRate
+ * @package NBPFetch\CurrencyRate\Structure
  */
 class CurrencyRateSeries
 {

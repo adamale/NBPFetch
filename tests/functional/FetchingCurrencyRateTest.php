@@ -8,12 +8,13 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use NBPFetch;
-use NBPFetch\CurrencyRate\CurrencyRateSeries;
+use NBPFetch\CurrencyRate\CurrencyRate;
+use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingCurrencyRateTest
- * @covers NBPFetch\CurrencyRate\Fetcher
+ * @covers NBPFetch\CurrencyRate\CurrencyRate
  */
 final class FetchingCurrencyRateTest extends TestCase
 {
@@ -22,8 +23,8 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function canFetchCurrentRate()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentCurrencyRate = $NBPFetch->currencyRate()->current("EUR");
+        $currencyRate = new CurrencyRate("EUR");
+        $currentCurrencyRate = $currencyRate->current();
 
         $this->assertInstanceOf(
             CurrencyRateSeries::class,
@@ -37,19 +38,19 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function canFetchTodaysRate()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currentCurrencyRate = $NBPFetch->currencyRate()->current("EUR");
+        $currencyRate = new CurrencyRate("EUR");
+        $currentCurrencyRate = $currencyRate->current();
         $currentCurrencyRateDate = $currentCurrencyRate->getCurrencyRateCollection()[0]->getDate();
         $currentDate = new DateTimeImmutable("now", new DateTimeZone("Europe/Warsaw"));
 
         if ($currentCurrencyRateDate === $currentDate->format("Y-m-d")) {
             $this->assertInstanceOf(
                 CurrencyRateSeries::class,
-                $NBPFetch->currencyRate()->today("EUR")
+                $currencyRate->today()
             );
         } else {
             $this->expectExceptionMessage("Error while fetching data from NBP API");
-            $NBPFetch->currencyRate()->today("EUR");
+            $currencyRate->today();
         }
     }
 
@@ -58,12 +59,12 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function canFetchLast10Rates()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $currencyRateSeries = $NBPFetch->currencyRate()->last("EUR", 10);
+        $currencyRate = new CurrencyRate("EUR");
+        $last10CurrencyRates = $currencyRate->last(10);
 
         $this->assertEquals(
             10,
-            count($currencyRateSeries->getCurrencyRateCollection())
+            count($last10CurrencyRates->getCurrencyRateCollection())
         );
     }
 
@@ -72,14 +73,14 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function canFetchRateByWeekdayDate()
     {
-        $testDate = "2019-08-23";
+        $weekdayDate = "2019-08-23";
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDateCurrencyRateSeries = $NBPFetch->currencyRate()->byDate("EUR", $testDate);
+        $currencyRate = new CurrencyRate("EUR");
+        $givenDateCurrencyRate = $currencyRate->byDate($weekdayDate);
 
         $this->assertEquals(
-            $testDate,
-            $givenDateCurrencyRateSeries->getCurrencyRateCollection()[0]->getDate()
+            $weekdayDate,
+            $givenDateCurrencyRate->getCurrencyRateCollection()[0]->getDate()
         );
     }
 
@@ -88,16 +89,12 @@ final class FetchingCurrencyRateTest extends TestCase
      */
     public function canFetchRatesByDateRange()
     {
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $givenDateCurrencyRateSeries = $NBPFetch->currencyRate()->byDateRange(
-            "EUR",
-            "2019-07-01",
-            "2019-07-31"
-        );
+        $currencyRate = new CurrencyRate("EUR");
+        $givenDatesCurrencyRates = $currencyRate->byDateRange("2019-07-01", "2019-07-31");
 
         $this->assertEquals(
             23,
-            count($givenDateCurrencyRateSeries->getCurrencyRateCollection())
+            count($givenDatesCurrencyRates->getCurrencyRateCollection())
         );
     }
 
@@ -110,8 +107,8 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Date must not be in the future");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->byDate("EUR", $futureDate);
+        $currencyRate = new CurrencyRate("EUR");
+        $currencyRate->byDate($futureDate);
     }
 
     /**
@@ -130,22 +127,22 @@ final class FetchingCurrencyRateTest extends TestCase
             )
         );
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->byDate("EUR", $tooOldDate->format("Y-m-d"));
+        $currencyRate = new CurrencyRate("EUR");
+        $currencyRate->byDate($tooOldDate->format("Y-m-d"));
     }
 
     /**
      * @test
      */
-    public function cannotFetchRateWithInvalidDate()
+    public function cannotFetchRateByWeekendDate()
     {
-        $invalidDate = "28-08-2019";
+        $weekendDate = "28-08-2019";
         $dateFormat = "Y-m-d";
 
         $this->expectExceptionMessage(sprintf("Date must be in %s format", $dateFormat));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->byDate("EUR", $invalidDate);
+        $currencyRate = new CurrencyRate("EUR");
+        $currencyRate->byDate($weekendDate);
     }
 
     /**
@@ -158,8 +155,8 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage(sprintf("Count must not be lower than %s", $minimalCount));
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->last("EUR", $invalidCount);
+        $currencyRate = new CurrencyRate("EUR");
+        $currencyRate->last($invalidCount);
     }
 
     /**
@@ -171,8 +168,8 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Error while fetching data from NBP API");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->byDate("EUR", $dateThatLacksCurrencyRate);
+        $currencyRate = new CurrencyRate("EUR");
+        $currencyRate->byDate($dateThatLacksCurrencyRate);
     }
 
     /**
@@ -184,8 +181,8 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Currency must consists only of letters");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->current($incorrectCurrency);
+        $currencyRate = new CurrencyRate($incorrectCurrency);
+        $currencyRate->current();
     }
 
     /**
@@ -197,7 +194,7 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Currency must be 3 characters long");
 
-        $NBPFetch = new NBPFetch\NBPFetch();
-        $NBPFetch->currencyRate()->current($incorrectCurrency);
+        $currencyRate = new CurrencyRate($incorrectCurrency);
+        $currencyRate->current();
     }
 }

@@ -42,7 +42,7 @@ try {
 }
 ```
 
-###Exchange rate table
+### Exchange rate table
 ```php
 <?php
 
@@ -69,7 +69,7 @@ try {
 }
 ```
 
-###Gold price
+### Gold price
 ```php
 <?php
 

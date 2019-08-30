@@ -7,7 +7,7 @@ use ObjectCollection\Collection;
 
 /**
  * Class GoldPriceCollection
- * @package NBPFetch\Structure\GoldPrice\Structure
+ * @package NBPFetch\GoldPrice\Structure
  */
 class GoldPriceCollection extends Collection
 {

@@ -97,7 +97,7 @@ class ExchangeRateTable
     }
 
     /**
-     * Creates an ExchangeRateTable object from fetched array.
+     * Creates an exchange rate table from fetched array.
      * @param array $fetchedExchangeRateTable
      * @return Structure\ExchangeRateTable
      */
@@ -117,7 +117,7 @@ class ExchangeRateTable
     }
 
     /**
-     * Creates an ExchangeRateTableCollection object from fetched array.
+     * Creates an exchange rate table collection from fetched array.
      * @param array $fetchedExchangeRateTables
      * @return ExchangeRateTableCollection
      */

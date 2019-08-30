@@ -30,17 +30,17 @@ class GoldPrice
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getDate(): ?string
+    public function getDate(): string
     {
         return $this->date;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getPrice(): ?string
+    public function getPrice(): string
     {
         return $this->price;
     }

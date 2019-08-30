@@ -44,27 +44,26 @@ try {
 ```php
 <?php
 
-use NBPFetch\NBPFetch;
+use NBPFetch\ExchangeRateTable\ExchangeRateTable;
 
 require_once "vendor/autoload.php";
 
-$NBPFetch = new NBPFetch();
-$NBPFetchExchangeRateTable = $NBPFetch->exchangeRateTable();
-
 /**
  * Exchange rate table examples.
- * Available methods are: current(string $table), today(string $table),
- * byDate(string $table, string $date), byDateRange(string $table, string $from, string $to)
- * and last(string $table, int count)
+ * Available methods are: current(), today(), byDate(string $date),
+ * byDateRange(string $from, string $to) and last(string $currency, int count).
  */
 try {
-    $currentExchangeRateTable = $NBPFetchExchangeRateTable->current("A");
-    $todayExchangeRateTable = $NBPFetchExchangeRateTable->today("A");
-    $givenDateExchangeRateTable = $NBPFetchExchangeRateTable->byDate("A", "2019-08-28");
-    $givenDateRangeExchangeRateTables = $NBPFetchExchangeRateTable->byDateRange("A", "2019-08-01", "2019-08-31");
-    $last10ExchangeRateTables = $NBPFetchExchangeRateTable->last("A", 10);
+    $exchangeRateTable = new ExchangeRateTable("A");
+
+    $currentExchangeRateTable = $exchangeRateTable->current();
+    $todayExchangeRateTable = $exchangeRateTable->today();
+    $givenDateExchangeRateTable = $exchangeRateTable->byDate("2019-08-27");
+    $givenDateRangeExchangeRateTables = $exchangeRateTable->byDateRange("2019-08-01", "2019-08-30");
+    $last10ExchangeRateTables = $exchangeRateTable->last(10);
 } catch (Exception $e) {
 }
+
 ```
 
 ### Gold price

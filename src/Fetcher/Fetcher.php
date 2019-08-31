@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi;
+namespace NBPFetch\Fetcher;
 
 use UnexpectedValueException;
 
 /**
- * Class NBPApi
- * @package NBPFetch\NBPApi
+ * Class Fetcher
+ * @package NBPFetch\Fetcher
  */
-class NBPApi implements NBPApiInterface
+class Fetcher implements FetcherInterface
 {
     /**
      * @var string

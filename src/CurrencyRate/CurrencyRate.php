@@ -4,14 +4,15 @@ declare(strict_types=1);
 namespace NBPFetch\CurrencyRate;
 
 use InvalidArgumentException;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateCollection;
+use NBPFetch\CurrencyRate\PathBuilder\PathBuilder;
+use NBPFetch\CurrencyRate\Parser\Parser;
 use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
 use NBPFetch\CurrencyRate\TableResolver\TableResolver;
 use NBPFetch\Exception\InvalidCountException;
 use NBPFetch\Exception\InvalidCurrencyException;
 use NBPFetch\Exception\InvalidDateException;
 use NBPFetch\Exception\InvalidTableException;
-use NBPFetch\NBPApi\NBPApi;
+use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\Validation\CountValidator;
 use NBPFetch\Validation\CurrencyValidator;
 use NBPFetch\Validation\DateValidator;
@@ -25,24 +26,19 @@ use UnexpectedValueException;
 class CurrencyRate
 {
     /**
-     * @var string API_SUBSET API Subset that returns currency rate data.
+     * @var PathBuilder
      */
-    private const API_SUBSET = "exchangerates/rates/";
+    private $pathBuilder;
 
     /**
-     * @var string
+     * @var Fetcher
      */
-    private $currency;
+    private $fetcher;
 
     /**
-     * @var string|null
+     * @var Parser
      */
-    private $table;
-
-    /**
-     * @var NBPApi
-     */
-    private $NBPApi;
+    private $parser;
 
     /**
      * CurrencyRate constructor.
@@ -63,62 +59,22 @@ class CurrencyRate
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $this->currency = $currency;
-        $this->table = $table;
-        $this->NBPApi = new NBPApi();
+        $this->pathBuilder = new PathBuilder($table, $currency);
+        $this->fetcher = new Fetcher();
+        $this->parser = new Parser();
     }
 
     /**
      * Returns parsed data from NBP API.
-     * @param string $methodPath
+     * @param string ...$methodPathElements
      * @return CurrencyRateSeries
      * @throws UnexpectedValueException
      */
-    private function get(string $methodPath): CurrencyRateSeries
+    private function get(string ...$methodPathElements): CurrencyRateSeries
     {
-        $path = $this->createURLPath($methodPath);
-        $responseArray = $this->NBPApi->fetch($path);
-        return $this->parse($responseArray);
-    }
-
-    /**
-     * @param string $methodPath
-     * @return string
-     */
-    private function createURLPath(string $methodPath): string
-    {
-        $currencyPath = sprintf("%s/%s/%s", self::API_SUBSET, $this->table, $this->currency);
-        if (mb_strlen($methodPath) > 0) {
-            $path = sprintf("%s/%s", $currencyPath, $methodPath);
-        } else {
-            $path = $currencyPath;
-        }
-
-        return $path;
-    }
-
-    /**
-     * Creates a currency rate series from fetched array.
-     * @param array $fetchedCurrencyRateSeries
-     * @return CurrencyRateSeries
-     */
-    private function parse(array $fetchedCurrencyRateSeries): CurrencyRateSeries
-    {
-        $rateCollection = new CurrencyRateCollection();
-        foreach ($fetchedCurrencyRateSeries["rates"] as $rate) {
-            $rateCollection[] = new Structure\CurrencyRate(
-                $rate["no"],
-                $rate["effectiveDate"],
-                (string) $rate["mid"]
-            );
-        }
-
-        return new CurrencyRateSeries(
-            $fetchedCurrencyRateSeries["table"],
-            $fetchedCurrencyRateSeries["currency"],
-            $fetchedCurrencyRateSeries["code"],
-            $rateCollection
-        );
+        $path = $this->pathBuilder->build(...$methodPathElements);
+        $responseArray = $this->fetcher->fetch($path);
+        return $this->parser->parse($responseArray);
     }
 
     /**
@@ -128,9 +84,7 @@ class CurrencyRate
      */
     public function current(): CurrencyRateSeries
     {
-        $path = sprintf("");
-
-        return $this->get($path);
+        return $this->get();
     }
 
     /**
@@ -149,21 +103,17 @@ class CurrencyRate
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("last/%s", $count);
-
-        return $this->get($path);
+        return $this->get("last", (string) $count);
     }
 
     /**
-     * Returns today's exchange rate table.
+     * Returns today's currency rate.
      * @return CurrencyRateSeries
      * @throws UnexpectedValueException
      */
     public function today(): CurrencyRateSeries
     {
-        $path = sprintf("today");
-
-        return $this->get($path);
+        return $this->get("today");
     }
 
     /**
@@ -182,9 +132,7 @@ class CurrencyRate
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s", $date);
-
-        return $this->get($path);
+        return $this->get($date);
     }
 
     /**
@@ -205,8 +153,6 @@ class CurrencyRate
             throw new InvalidArgumentException($e->getMessage());
         }
 
-        $path = sprintf("%s/%s", $from, $to);
-
-        return $this->get($path);
+        return $this->get($from, $to);
     }
 }

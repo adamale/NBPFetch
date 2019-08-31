@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\NBPApi;
+namespace NBPFetch\Fetcher;
 
 use UnexpectedValueException;
 
 /**
- * Interface NBPApiInterface
- * @package NBPFetch\NBPApi
+ * Interface FetcherInterface
+ * @package NBPFetch\Fetcher
  */
-interface NBPApiInterface
+interface FetcherInterface
 {
     /**
      * @param string $url

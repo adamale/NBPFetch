@@ -28,12 +28,14 @@
         "php": ">=7.2.0",
         "ext-mbstring": "*",
         "ext-json": "*",
-        "adamale/object-collection": "^1.0"
+        "adamale/object-collection": "^1.0",
+        "psr/cache": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.2",
         "phpstan/phpstan": "^0.11.15",
-        "friendsofphp/php-cs-fixer": "^2.15"
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "symfony/cache": "^4.3.4"
     },
     "scripts" : {
         "analyse": "vendor/bin/phpstan --ansi analyse -l max src tests",

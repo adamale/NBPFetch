@@ -13,6 +13,7 @@ use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
 use NBPFetch\PathBuilder\ValidatablePathElements\Currency\Currency;
 use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
 use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
+use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
 /**
@@ -24,7 +25,7 @@ class CurrencyRate
     /**
      * @var string API_SUBSET API Subset that returns currency rate data.
      */
-    private const API_SUBSET = "exchangerates/rates/";
+    private const API_SUBSET = "exchangerates/rates";
 
     /**
      * @var PathBuilder
@@ -45,12 +46,12 @@ class CurrencyRate
      * CurrencyRate constructor.
      * @param string $currency ISO 4217 currency code.
      * @param string|null $table Table type.
-     * @throws InvalidArgumentException
+     * @param CacheItemPoolInterface|null $cache
      */
-    public function __construct(string $currency, ?string $table = null)
+    public function __construct(string $currency, ?string $table = null, CacheItemPoolInterface $cache = null)
     {
         $this->pathBuilder = new PathBuilder();
-        $this->fetcher = new Fetcher();
+        $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
         if ($table === null) {
@@ -65,11 +66,11 @@ class CurrencyRate
 
     /**
      * Returns parsed data from NBP API.
+     * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return CurrencyRateSeries
-     * @throws UnexpectedValueException
      */
-    private function get(PathElement ...$pathElements): CurrencyRateSeries
+    private function get(bool $inconstantResponse, PathElement ...$pathElements): CurrencyRateSeries
     {
         if (!empty($pathElements)) {
             foreach ($pathElements as $pathElement) {
@@ -78,7 +79,7 @@ class CurrencyRate
         }
 
         $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path);
+        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parse($responseArray);
     }
 
@@ -89,7 +90,7 @@ class CurrencyRate
      */
     public function current(): CurrencyRateSeries
     {
-        return $this->get();
+        return $this->get(true);
     }
 
     /**
@@ -101,7 +102,7 @@ class CurrencyRate
      */
     public function last(int $count): CurrencyRateSeries
     {
-        return $this->get(new PathElement("last"), new Count($count));
+        return $this->get(true, new PathElement("last"), new Count($count));
     }
 
     /**
@@ -111,7 +112,7 @@ class CurrencyRate
      */
     public function today(): CurrencyRateSeries
     {
-        return $this->get(new PathElement("today"));
+        return $this->get(true, new PathElement("today"));
     }
 
     /**
@@ -123,7 +124,7 @@ class CurrencyRate
      */
     public function byDate(string $date): CurrencyRateSeries
     {
-        return $this->get(new Date($date));
+        return $this->get(false, new Date($date));
     }
 
     /**
@@ -136,6 +137,6 @@ class CurrencyRate
      */
     public function byDateRange(string $date_from, string $date_to): CurrencyRateSeries
     {
-        return $this->get(new Date($date_from), new Date($date_to));
+        return $this->get(false, new Date($date_from), new Date($date_to));
     }
 }

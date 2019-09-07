@@ -12,6 +12,7 @@ use NBPFetch\PathBuilder\PathElement;
 use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
 use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
 use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
+use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
 /**
@@ -23,7 +24,7 @@ class ExchangeRateTable
     /**
      * @var string API_SUBSET API Subset that returns exchange rate table data.
      */
-    private const API_SUBSET = "exchangerates/tables/";
+    private const API_SUBSET = "exchangerates/tables";
 
     /**
      * @var PathBuilder
@@ -43,12 +44,12 @@ class ExchangeRateTable
     /**
      * ExchangeRateTable constructor.
      * @param string $table Table type.
-     * @throws InvalidArgumentException
+     * @param CacheItemPoolInterface|null $cache
      */
-    public function __construct(string $table)
+    public function __construct(string $table, CacheItemPoolInterface $cache = null)
     {
         $this->pathBuilder = new PathBuilder();
-        $this->fetcher = new Fetcher();
+        $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
         $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
@@ -57,12 +58,11 @@ class ExchangeRateTable
 
     /**
      * Returns a single exchange rate table from NBP API.
+     * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return Structure\ExchangeRateTable
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      */
-    private function getSingle(PathElement ...$pathElements): Structure\ExchangeRateTable
+    private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\ExchangeRateTable
     {
         if (!empty($pathElements)) {
             foreach ($pathElements as $pathElement) {
@@ -71,18 +71,17 @@ class ExchangeRateTable
         }
 
         $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path);
+        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parse($responseArray[0]);
     }
 
     /**
      * Returns a set of exchange rate tables from NBP API.
+     * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return ExchangeRateTableCollection
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      */
-    private function getCollection(PathElement ...$pathElements): ExchangeRateTableCollection
+    private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): ExchangeRateTableCollection
     {
         if (!empty($pathElements)) {
             foreach ($pathElements as $pathElement) {
@@ -91,7 +90,7 @@ class ExchangeRateTable
         }
 
         $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path);
+        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parseCollection($responseArray);
     }
 
@@ -102,7 +101,7 @@ class ExchangeRateTable
      */
     public function current(): Structure\ExchangeRateTable
     {
-        return $this->getSingle();
+        return $this->getSingle(true);
     }
 
     /**
@@ -114,7 +113,7 @@ class ExchangeRateTable
      */
     public function last(int $count): ExchangeRateTableCollection
     {
-        return $this->getCollection(new PathElement("last"), new Count($count));
+        return $this->getCollection(true, new PathElement("last"), new Count($count));
     }
 
     /**
@@ -124,7 +123,7 @@ class ExchangeRateTable
      */
     public function today(): Structure\ExchangeRateTable
     {
-        return $this->getSingle(new PathElement("today"));
+        return $this->getSingle(true, new PathElement("today"));
     }
 
     /**
@@ -136,7 +135,7 @@ class ExchangeRateTable
      */
     public function byDate(string $date): Structure\ExchangeRateTable
     {
-        return $this->getSingle(new Date($date));
+        return $this->getSingle(false, new Date($date));
     }
 
     /**
@@ -149,6 +148,6 @@ class ExchangeRateTable
      */
     public function byDateRange(string $date_from, string $date_to): ExchangeRateTableCollection
     {
-        return $this->getCollection(new Date($date_from), new Date($date_to));
+        return $this->getCollection(false, new Date($date_from), new Date($date_to));
     }
 }

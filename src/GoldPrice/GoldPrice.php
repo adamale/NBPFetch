@@ -12,6 +12,7 @@ use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathElement;
 use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
 use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
+use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
 /**
@@ -23,7 +24,7 @@ class GoldPrice
     /**
      * @var string API_SUBSET API Subset that returns gold price data.
      */
-    private const API_SUBSET = "cenyzlota/";
+    private const API_SUBSET = "cenyzlota";
 
     /**
      * @var PathBuilder
@@ -42,11 +43,12 @@ class GoldPrice
 
     /**
      * GoldPrice constructor.
+     * @param CacheItemPoolInterface|null $cache
      */
-    public function __construct()
+    public function __construct(CacheItemPoolInterface $cache = null)
     {
         $this->pathBuilder = new PathBuilder();
-        $this->fetcher = new Fetcher();
+        $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
         $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
@@ -54,12 +56,11 @@ class GoldPrice
 
     /**
      * Returns a single gold price from NBP API.
+     * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return Structure\GoldPrice
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      */
-    private function getSingle(PathElement ...$pathElements): Structure\GoldPrice
+    private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\GoldPrice
     {
         if (!empty($pathElements)) {
             foreach ($pathElements as $pathElement) {
@@ -68,18 +69,17 @@ class GoldPrice
         }
 
         $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path);
+        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parse($responseArray[0]);
     }
 
     /**
      * Returns a set of gold prices from NBP API.
+     * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return GoldPriceCollection
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      */
-    private function getCollection(PathElement ...$pathElements): GoldPriceCollection
+    private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): GoldPriceCollection
     {
         if (!empty($pathElements)) {
             foreach ($pathElements as $pathElement) {
@@ -88,7 +88,7 @@ class GoldPrice
         }
 
         $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path);
+        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parseCollection($responseArray);
     }
 
@@ -99,7 +99,7 @@ class GoldPrice
      */
     public function current(): Structure\GoldPrice
     {
-        return $this->getSingle();
+        return $this->getSingle(true);
     }
 
     /**
@@ -111,7 +111,7 @@ class GoldPrice
      */
     public function last(int $count): GoldPriceCollection
     {
-        return $this->getCollection(new PathElement("last"), new Count($count));
+        return $this->getCollection(true, new PathElement("last"), new Count($count));
     }
 
     /**
@@ -121,7 +121,7 @@ class GoldPrice
      */
     public function today(): Structure\GoldPrice
     {
-        return $this->getSingle(new PathElement("today"));
+        return $this->getSingle(true, new PathElement("today"));
     }
 
     /**
@@ -133,7 +133,7 @@ class GoldPrice
      */
     public function byDate(string $date): Structure\GoldPrice
     {
-        return $this->getSingle(new Date($date));
+        return $this->getSingle(false, new Date($date));
     }
 
     /**
@@ -146,6 +146,6 @@ class GoldPrice
      */
     public function byDateRange(string $date_from, string $date_to): GoldPriceCollection
     {
-        return $this->getCollection(new Date($date_from), new Date($date_to));
+        return $this->getCollection(false, new Date($date_from), new Date($date_to));
     }
 }

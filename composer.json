@@ -25,7 +25,7 @@
         }
     },
     "require": {
-        "php": ">=7.2.0",
+        "php": "^7.2",
         "ext-mbstring": "*",
         "ext-json": "*",
         "adamale/object-collection": "^1.0",

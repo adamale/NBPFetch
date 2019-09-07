@@ -31,7 +31,7 @@ class TableResolver implements TableResolverInterface
         "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MZN", "NAD",
         "NGN", "NIO", "NPR", "OMR", "PAB", "PEN", "PGK", "PKR", "PYG", "QAR", "RSD", "RWF", "SAR", "SBD",
         "SCR", "SDG", "SLL", "SOS", "SRD", "SSP", "STN", "SVC", "SYP", "SZL", "TJS", "TMT", "TND", "TOP",
-        "TTD",  "TWD", "TZS", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF",
+        "TTD", "TWD", "TZS", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF",
         "YER", "ZMW"
     ];
 
@@ -49,7 +49,9 @@ class TableResolver implements TableResolverInterface
         } elseif (in_array($currency, self::TABLE_B)) {
             $table = "B";
         } else {
-            throw new InvalidArgumentException("Currency is not defined in the tables");
+            throw new InvalidArgumentException(
+                "Given currency is not defined in the currency tables"
+            );
         }
 
         return $table;

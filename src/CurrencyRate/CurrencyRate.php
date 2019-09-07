@@ -6,6 +6,7 @@ namespace NBPFetch\CurrencyRate;
 use InvalidArgumentException;
 use NBPFetch\CurrencyRate\Parser\Parser;
 use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
+use NBPFetch\CurrencyRate\TableResolver\TableResolver;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathElement;
@@ -45,19 +46,16 @@ class CurrencyRate
     /**
      * CurrencyRate constructor.
      * @param string $currency ISO 4217 currency code.
-     * @param string|null $table Table type.
      * @param CacheItemPoolInterface|null $cache
      */
-    public function __construct(string $currency, ?string $table = null, CacheItemPoolInterface $cache = null)
+    public function __construct(string $currency, CacheItemPoolInterface $cache = null)
     {
         $this->pathBuilder = new PathBuilder();
         $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
-        if ($table === null) {
-            $tableResolver = new TableResolver\TableResolver();
-            $table = $tableResolver->resolve($currency);
-        }
+        $tableResolver = new TableResolver();
+        $table = $tableResolver->resolve($currency);
 
         $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
         $this->pathBuilder->addElement(new Table($table));

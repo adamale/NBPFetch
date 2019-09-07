@@ -8,13 +8,13 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use NBPFetch;
-use NBPFetch\GoldPrice\GoldPrice;
-use NBPFetch\GoldPrice\Structure;
+use NBPFetch\Module\GoldPrice\GoldPrice;
+use NBPFetch\Module\GoldPrice\Structure;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingGoldPriceTest
- * @covers NBPFetch\GoldPrice\GoldPrice
+ * @covers NBPFetch\Module\GoldPrice\GoldPrice
  */
 final class FetchingGoldPriceTest extends TestCase
 {

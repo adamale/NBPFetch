@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\GoldPrice\Parser;
+namespace NBPFetch\Module\GoldPrice\Parser;
 
-use NBPFetch\GoldPrice\Structure\GoldPrice;
-use NBPFetch\GoldPrice\Structure\GoldPriceCollection;
+use NBPFetch\Module\GoldPrice\Structure\GoldPrice;
+use NBPFetch\Module\GoldPrice\Structure\GoldPriceCollection;
 
 /**
  * Class Parser
- * @package NBPFetch\GoldPrice\Parser
+ * @package NBPFetch\Module\GoldPrice\Parser
  */
 class Parser
 {

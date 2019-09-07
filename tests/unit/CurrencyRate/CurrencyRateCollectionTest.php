@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Unit\CurrencyRate;
 
-use NBPFetch\CurrencyRate\Structure\CurrencyRate;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateCollection;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRate;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateCollection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -70,7 +70,7 @@ class CurrencyRateCollectionTest extends TestCase
     {
         $collection = new CurrencyRateCollection();
         $collection[] = new CurrencyRate("161/A/NBP/2019", "2019-08-21", "4.1");
-        $collection[] = new CurrencyRate("162/A/NBP/2019", "2019-08-22", "4");
+        $collection[] = new        CurrencyRate("162/A/NBP/2019", "2019-08-22", "4");
         $collection[] = new CurrencyRate("163/A/NBP/2019", "2019-08-23", "3.9876");
 
         $this->assertEquals(

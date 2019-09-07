@@ -19,7 +19,7 @@ include [Composer File Loader](https://github.com/Wilkins/composer-file-loader) 
 ```php
 <?php
 
-use NBPFetch\CurrencyRate\CurrencyRate;
+use NBPFetch\Module\CurrencyRate\CurrencyRate;
 
 require_once "vendor/autoload.php";
 
@@ -44,7 +44,7 @@ try {
 ```php
 <?php
 
-use NBPFetch\ExchangeRateTable\ExchangeRateTable;
+use NBPFetch\Module\ExchangeRateTable\ExchangeRateTable;
 
 require_once "vendor/autoload.php";
 
@@ -70,7 +70,7 @@ try {
 ```php
 <?php
 
-use NBPFetch\GoldPrice\GoldPrice;
+use NBPFetch\Module\GoldPrice\GoldPrice;
 
 require_once "vendor/autoload.php";
 

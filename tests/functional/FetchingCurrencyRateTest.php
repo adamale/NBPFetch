@@ -8,13 +8,13 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use NBPFetch;
-use NBPFetch\CurrencyRate\CurrencyRate;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
+use NBPFetch\Module\CurrencyRate\CurrencyRate;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingCurrencyRateTest
- * @covers NBPFetch\CurrencyRate\CurrencyRate
+ * @covers NBPFetch\Module\CurrencyRate\CurrencyRate
  */
 final class FetchingCurrencyRateTest extends TestCase
 {

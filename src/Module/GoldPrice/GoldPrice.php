@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\GoldPrice;
+namespace NBPFetch\Module\GoldPrice;
 
 use InvalidArgumentException;
-use NBPFetch\GoldPrice\Parser\Parser;
-use NBPFetch\GoldPrice\Structure\GoldPriceCollection;
+use NBPFetch\Module\GoldPrice\Parser\Parser;
+use NBPFetch\Module\GoldPrice\Structure;
+use NBPFetch\Module\GoldPrice\Structure\GoldPriceCollection;
 use NBPFetch\Fetcher\Fetcher;
-use NBPFetch\GoldPrice\Structure;
 use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathElement;
 use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;

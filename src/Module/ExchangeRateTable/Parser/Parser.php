@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\ExchangeRateTable\Parser;
+namespace NBPFetch\Module\ExchangeRateTable\Parser;
 
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRate;
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRateCollection;
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRateTable;
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRateTableCollection;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRate;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateCollection;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTable;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTableCollection;
 
 /**
  * Class Parser
- * @package NBPFetch\ExchangeRateTable\Parser
+ * @package NBPFetch\Module\ExchangeRateTable\Parser
  */
 class Parser
 {

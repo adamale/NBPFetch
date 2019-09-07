@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace NBPFetch\Tests\Unit\ExchangeRateTable;
 
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRate;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRate;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
 /**
  * Class ExchangeRateTest
- * @covers \NBPFetch\ExchangeRateTable\Structure\ExchangeRate
+ * @covers \NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRate
  */
 class ExchangeRateTest extends TestCase
 {

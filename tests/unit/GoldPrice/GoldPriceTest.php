@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace NBPFetch\Tests\Unit\GoldPrice;
 
 use NBPFetch;
-use NBPFetch\GoldPrice\Structure\GoldPrice;
+use NBPFetch\Module\GoldPrice\Structure\GoldPrice;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
 /**
  * Class GoldPriceTest
- * @covers NBPFetch\GoldPrice\Structure\GoldPrice
+ * @covers NBPFetch\Module\GoldPrice\Structure\GoldPrice
  */
 final class GoldPriceTest extends TestCase
 {

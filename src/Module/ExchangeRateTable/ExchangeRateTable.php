@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\ExchangeRateTable;
+namespace NBPFetch\Module\ExchangeRateTable;
 
 use InvalidArgumentException;
-use NBPFetch\ExchangeRateTable\Parser\Parser;
-use NBPFetch\ExchangeRateTable\Structure\ExchangeRateTableCollection;
+use NBPFetch\Module\ExchangeRateTable\Parser\Parser;
+use NBPFetch\Module\ExchangeRateTable\Structure;
+use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTableCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathElement;

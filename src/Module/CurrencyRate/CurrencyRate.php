@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\CurrencyRate;
+namespace NBPFetch\Module\CurrencyRate;
 
 use InvalidArgumentException;
-use NBPFetch\CurrencyRate\Parser\Parser;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
-use NBPFetch\CurrencyRate\TableResolver\TableResolver;
+use NBPFetch\Module\CurrencyRate\Parser\Parser;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
+use NBPFetch\Module\CurrencyRate\TableResolver\TableResolver;
 use NBPFetch\CurrencyTable\CurrencyTableA;
 use NBPFetch\CurrencyTable\CurrencyTableB;
 use NBPFetch\CurrencyTable\CurrencyTableCollection;

@@ -8,13 +8,13 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use NBPFetch;
-use NBPFetch\ExchangeRateTable\ExchangeRateTable;
-use NBPFetch\ExchangeRateTable\Structure;
+use NBPFetch\Module\ExchangeRateTable\ExchangeRateTable;
+use NBPFetch\Module\ExchangeRateTable\Structure;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FetchingExchangeRateTableTest
- * @covers NBPFetch\ExchangeRateTable\ExchangeRateTable
+ * @covers NBPFetch\Module\ExchangeRateTable\ExchangeRateTable
  */
 final class FetchingExchangeRateTableTest extends TestCase
 {

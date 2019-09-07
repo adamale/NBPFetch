@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\CurrencyRate\Parser;
+namespace NBPFetch\Module\CurrencyRate\Parser;
 
-use NBPFetch\CurrencyRate\Structure\CurrencyRate;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateCollection;
-use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRate;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateCollection;
+use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
 
 /**
  * Class Parser
- * @package NBPFetch\CurrencyRate\Parser
+ * @package NBPFetch\Module\CurrencyRate\Parser
  */
 class Parser
 {

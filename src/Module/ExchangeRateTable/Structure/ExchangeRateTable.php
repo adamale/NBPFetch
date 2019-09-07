@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\ExchangeRateTable\Structure;
+namespace NBPFetch\Module\ExchangeRateTable\Structure;
 
 /**
  * Class ExchangeRateTable\Structure
- * @package NBPFetch\ExchangeRateTable
+ * @package NBPFetch\Module\ExchangeRateTable
  */
 class ExchangeRateTable
 {

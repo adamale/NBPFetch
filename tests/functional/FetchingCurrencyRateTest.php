@@ -181,7 +181,7 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Currency must consists only of letters");
 
-        $currencyRate = new CurrencyRate($incorrectCurrency);
+        $currencyRate = new CurrencyRate($incorrectCurrency, "A");
         $currencyRate->current();
     }
 
@@ -194,7 +194,7 @@ final class FetchingCurrencyRateTest extends TestCase
 
         $this->expectExceptionMessage("Currency must be 3 characters long");
 
-        $currencyRate = new CurrencyRate($incorrectCurrency);
+        $currencyRate = new CurrencyRate($incorrectCurrency, "A");
         $currencyRate->current();
     }
 }

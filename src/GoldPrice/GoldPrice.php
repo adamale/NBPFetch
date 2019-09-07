@@ -4,15 +4,14 @@ declare(strict_types=1);
 namespace NBPFetch\GoldPrice;
 
 use InvalidArgumentException;
-use NBPFetch\Exception\InvalidCountException;
-use NBPFetch\Exception\InvalidDateException;
 use NBPFetch\GoldPrice\Parser\Parser;
-use NBPFetch\GoldPrice\PathBuilder\PathBuilder;
 use NBPFetch\GoldPrice\Structure\GoldPriceCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\GoldPrice\Structure;
-use NBPFetch\Validation\CountValidator;
-use NBPFetch\Validation\DateValidator;
+use NBPFetch\PathBuilder\PathBuilder;
+use NBPFetch\PathBuilder\PathElement;
+use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
 use UnexpectedValueException;
 
 /**
@@ -21,6 +20,11 @@ use UnexpectedValueException;
  */
 class GoldPrice
 {
+    /**
+     * @var string API_SUBSET API Subset that returns gold price data.
+     */
+    private const API_SUBSET = "cenyzlota/";
+
     /**
      * @var PathBuilder
      */
@@ -44,30 +48,46 @@ class GoldPrice
         $this->pathBuilder = new PathBuilder();
         $this->fetcher = new Fetcher();
         $this->parser = new Parser();
+
+        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
     }
 
     /**
      * Returns a single gold price from NBP API.
-     * @param string ...$methodPathElements
+     * @param PathElement ...$pathElements
      * @return Structure\GoldPrice
+     * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function getSingle(string ...$methodPathElements): Structure\GoldPrice
+    private function getSingle(PathElement ...$pathElements): Structure\GoldPrice
     {
-        $path = $this->pathBuilder->build(...$methodPathElements);
+        if (!empty($pathElements)) {
+            foreach ($pathElements as $pathElement) {
+                $this->pathBuilder->addElement($pathElement);
+            }
+        }
+
+        $path = $this->pathBuilder->build();
         $responseArray = $this->fetcher->fetch($path);
         return $this->parser->parse($responseArray[0]);
     }
 
     /**
      * Returns a set of gold prices from NBP API.
-     * @param string ...$methodPathElements
+     * @param PathElement ...$pathElements
      * @return GoldPriceCollection
+     * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function getCollection(string ...$methodPathElements): GoldPriceCollection
+    private function getCollection(PathElement ...$pathElements): GoldPriceCollection
     {
-        $path = $this->pathBuilder->build(...$methodPathElements);
+        if (!empty($pathElements)) {
+            foreach ($pathElements as $pathElement) {
+                $this->pathBuilder->addElement($pathElement);
+            }
+        }
+
+        $path = $this->pathBuilder->build();
         $responseArray = $this->fetcher->fetch($path);
         return $this->parser->parseCollection($responseArray);
     }
@@ -91,14 +111,7 @@ class GoldPrice
      */
     public function last(int $count): GoldPriceCollection
     {
-        try {
-            $countValidator = new CountValidator();
-            $countValidator->validate($count);
-        } catch (InvalidCountException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getCollection("last", (string) $count);
+        return $this->getCollection(new PathElement("last"), new Count($count));
     }
 
     /**
@@ -108,7 +121,7 @@ class GoldPrice
      */
     public function today(): Structure\GoldPrice
     {
-        return $this->getSingle("today");
+        return $this->getSingle(new PathElement("today"));
     }
 
     /**
@@ -120,34 +133,19 @@ class GoldPrice
      */
     public function byDate(string $date): Structure\GoldPrice
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($date);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getSingle($date);
+        return $this->getSingle(new Date($date));
     }
 
     /**
      * Returns a set of gold prices between given dates.
-     * @param string $from Date in Y-m-d format.
-     * @param string $to Date in Y-m-d format.
+     * @param string $date_from Date in Y-m-d format.
+     * @param string $date_to Date in Y-m-d format.
      * @return GoldPriceCollection
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function byDateRange(string $from, string $to): GoldPriceCollection
+    public function byDateRange(string $date_from, string $date_to): GoldPriceCollection
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($from);
-            $dateValidator->validate($to);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getCollection($from, $to);
+        return $this->getCollection(new Date($date_from), new Date($date_to));
     }
 }

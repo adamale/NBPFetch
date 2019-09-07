@@ -5,15 +5,13 @@ namespace NBPFetch\ExchangeRateTable;
 
 use InvalidArgumentException;
 use NBPFetch\ExchangeRateTable\Parser\Parser;
-use NBPFetch\ExchangeRateTable\PathBuilder\PathBuilder;
-use NBPFetch\Exception\InvalidCountException;
-use NBPFetch\Exception\InvalidDateException;
-use NBPFetch\Exception\InvalidTableException;
 use NBPFetch\ExchangeRateTable\Structure\ExchangeRateTableCollection;
 use NBPFetch\Fetcher\Fetcher;
-use NBPFetch\Validation\CountValidator;
-use NBPFetch\Validation\DateValidator;
-use NBPFetch\Validation\TableValidator;
+use NBPFetch\PathBuilder\PathBuilder;
+use NBPFetch\PathBuilder\PathElement;
+use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
+use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
 use UnexpectedValueException;
 
 /**
@@ -22,6 +20,11 @@ use UnexpectedValueException;
  */
 class ExchangeRateTable
 {
+    /**
+     * @var string API_SUBSET API Subset that returns exchange rate table data.
+     */
+    private const API_SUBSET = "exchangerates/tables/";
+
     /**
      * @var PathBuilder
      */
@@ -44,40 +47,50 @@ class ExchangeRateTable
      */
     public function __construct(string $table)
     {
-        try {
-            $tableValidator = new TableValidator();
-            $tableValidator->validate($table);
-        } catch (InvalidTableException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        $this->pathBuilder = new PathBuilder($table);
+        $this->pathBuilder = new PathBuilder();
         $this->fetcher = new Fetcher();
         $this->parser = new Parser();
+
+        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
+        $this->pathBuilder->addElement(new Table($table));
     }
 
     /**
      * Returns a single exchange rate table from NBP API.
-     * @param string ...$methodPathElements
+     * @param PathElement ...$pathElements
      * @return Structure\ExchangeRateTable
+     * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function getSingle(string ...$methodPathElements): Structure\ExchangeRateTable
+    private function getSingle(PathElement ...$pathElements): Structure\ExchangeRateTable
     {
-        $path = $this->pathBuilder->build(...$methodPathElements);
+        if (!empty($pathElements)) {
+            foreach ($pathElements as $pathElement) {
+                $this->pathBuilder->addElement($pathElement);
+            }
+        }
+
+        $path = $this->pathBuilder->build();
         $responseArray = $this->fetcher->fetch($path);
         return $this->parser->parse($responseArray[0]);
     }
 
     /**
      * Returns a set of exchange rate tables from NBP API.
-     * @param string ...$methodPathElements
+     * @param PathElement ...$pathElements
      * @return ExchangeRateTableCollection
+     * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function getCollection(string ...$methodPathElements): ExchangeRateTableCollection
+    private function getCollection(PathElement ...$pathElements): ExchangeRateTableCollection
     {
-        $path = $this->pathBuilder->build(...$methodPathElements);
+        if (!empty($pathElements)) {
+            foreach ($pathElements as $pathElement) {
+                $this->pathBuilder->addElement($pathElement);
+            }
+        }
+
+        $path = $this->pathBuilder->build();
         $responseArray = $this->fetcher->fetch($path);
         return $this->parser->parseCollection($responseArray);
     }
@@ -101,14 +114,7 @@ class ExchangeRateTable
      */
     public function last(int $count): ExchangeRateTableCollection
     {
-        try {
-            $countValidator = new CountValidator();
-            $countValidator->validate($count);
-        } catch (InvalidCountException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getCollection("last", (string) $count);
+        return $this->getCollection(new PathElement("last"), new Count($count));
     }
 
     /**
@@ -118,7 +124,7 @@ class ExchangeRateTable
      */
     public function today(): Structure\ExchangeRateTable
     {
-        return $this->getSingle("today");
+        return $this->getSingle(new PathElement("today"));
     }
 
     /**
@@ -130,34 +136,19 @@ class ExchangeRateTable
      */
     public function byDate(string $date): Structure\ExchangeRateTable
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($date);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getSingle($date);
+        return $this->getSingle(new Date($date));
     }
 
     /**
      * Returns a set of exchange rate tables between given dates.
-     * @param string $from Date in Y-m-d format.
-     * @param string $to Date in Y-m-d format.
+     * @param string $date_from Date in Y-m-d format.
+     * @param string $date_to Date in Y-m-d format.
      * @return ExchangeRateTableCollection
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function byDateRange(string $from, string $to): ExchangeRateTableCollection
+    public function byDateRange(string $date_from, string $date_to): ExchangeRateTableCollection
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($from);
-            $dateValidator->validate($to);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->getCollection($from, $to);
+        return $this->getCollection(new Date($date_from), new Date($date_to));
     }
 }

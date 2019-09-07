@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\Validation;
+namespace NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation;
 
 use NBPFetch\Exception\InvalidTableException;
 

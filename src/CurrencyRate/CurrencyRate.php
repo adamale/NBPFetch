@@ -4,19 +4,15 @@ declare(strict_types=1);
 namespace NBPFetch\CurrencyRate;
 
 use InvalidArgumentException;
-use NBPFetch\CurrencyRate\PathBuilder\PathBuilder;
 use NBPFetch\CurrencyRate\Parser\Parser;
 use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
-use NBPFetch\CurrencyRate\TableResolver\TableResolver;
-use NBPFetch\Exception\InvalidCountException;
-use NBPFetch\Exception\InvalidCurrencyException;
-use NBPFetch\Exception\InvalidDateException;
-use NBPFetch\Exception\InvalidTableException;
 use NBPFetch\Fetcher\Fetcher;
-use NBPFetch\Validation\CountValidator;
-use NBPFetch\Validation\CurrencyValidator;
-use NBPFetch\Validation\DateValidator;
-use NBPFetch\Validation\TableValidator;
+use NBPFetch\PathBuilder\PathBuilder;
+use NBPFetch\PathBuilder\PathElement;
+use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathElements\Currency\Currency;
+use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
+use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
 use UnexpectedValueException;
 
 /**
@@ -25,6 +21,11 @@ use UnexpectedValueException;
  */
 class CurrencyRate
 {
+    /**
+     * @var string API_SUBSET API Subset that returns currency rate data.
+     */
+    private const API_SUBSET = "exchangerates/rates/";
+
     /**
      * @var PathBuilder
      */
@@ -48,31 +49,35 @@ class CurrencyRate
      */
     public function __construct(string $currency, ?string $table = null)
     {
-        try {
-            $currencyValidator = new CurrencyValidator();
-            $tableValidator = new TableValidator();
-            $tableResolver = new TableResolver();
-            $currencyValidator->validate($currency);
-            $table = $table ?? $tableResolver->resolve($currency);
-            $tableValidator->validate($table);
-        } catch (InvalidCurrencyException|InvalidTableException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        $this->pathBuilder = new PathBuilder($table, $currency);
+        $this->pathBuilder = new PathBuilder();
         $this->fetcher = new Fetcher();
         $this->parser = new Parser();
+
+        if ($table === null) {
+            $tableResolver = new TableResolver\TableResolver();
+            $table = $tableResolver->resolve($currency);
+        }
+
+        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
+        $this->pathBuilder->addElement(new Table($table));
+        $this->pathBuilder->addElement(new Currency($currency));
     }
 
     /**
      * Returns parsed data from NBP API.
-     * @param string ...$methodPathElements
+     * @param PathElement ...$pathElements
      * @return CurrencyRateSeries
      * @throws UnexpectedValueException
      */
-    private function get(string ...$methodPathElements): CurrencyRateSeries
+    private function get(PathElement ...$pathElements): CurrencyRateSeries
     {
-        $path = $this->pathBuilder->build(...$methodPathElements);
+        if (!empty($pathElements)) {
+            foreach ($pathElements as $pathElement) {
+                $this->pathBuilder->addElement($pathElement);
+            }
+        }
+
+        $path = $this->pathBuilder->build();
         $responseArray = $this->fetcher->fetch($path);
         return $this->parser->parse($responseArray);
     }
@@ -96,14 +101,7 @@ class CurrencyRate
      */
     public function last(int $count): CurrencyRateSeries
     {
-        try {
-            $countValidator = new CountValidator();
-            $countValidator->validate($count);
-        } catch (InvalidCountException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->get("last", (string) $count);
+        return $this->get(new PathElement("last"), new Count($count));
     }
 
     /**
@@ -113,7 +111,7 @@ class CurrencyRate
      */
     public function today(): CurrencyRateSeries
     {
-        return $this->get("today");
+        return $this->get(new PathElement("today"));
     }
 
     /**
@@ -125,34 +123,19 @@ class CurrencyRate
      */
     public function byDate(string $date): CurrencyRateSeries
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($date);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->get($date);
+        return $this->get(new Date($date));
     }
 
     /**
      * Returns a set of currency rates between given dates.
-     * @param string $from Date in Y-m-d format.
-     * @param string $to Date in Y-m-d format.
+     * @param string $date_from Date in Y-m-d format.
+     * @param string $date_to Date in Y-m-d format.
      * @return CurrencyRateSeries
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      */
-    public function byDateRange(string $from, string $to): CurrencyRateSeries
+    public function byDateRange(string $date_from, string $date_to): CurrencyRateSeries
     {
-        try {
-            $dateValidator = new DateValidator();
-            $dateValidator->validate($from);
-            $dateValidator->validate($to);
-        } catch (InvalidDateException $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-
-        return $this->get($from, $to);
+        return $this->get(new Date($date_from), new Date($date_to));
     }
 }

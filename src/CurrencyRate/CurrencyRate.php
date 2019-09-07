@@ -50,6 +50,7 @@ class CurrencyRate
      * CurrencyRate constructor.
      * @param string $currency ISO 4217 currency code.
      * @param CacheItemPoolInterface|null $cache
+     * @throws InvalidArgumentException
      */
     public function __construct(string $currency, CacheItemPoolInterface $cache = null)
     {
@@ -73,6 +74,7 @@ class CurrencyRate
      * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return CurrencyRateSeries
+     * @throws InvalidArgumentException
      */
     private function get(bool $inconstantResponse, PathElement ...$pathElements): CurrencyRateSeries
     {

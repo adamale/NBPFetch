@@ -59,6 +59,7 @@ class GoldPrice
      * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return Structure\GoldPrice
+     * @throws InvalidArgumentException
      */
     private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\GoldPrice
     {
@@ -78,6 +79,7 @@ class GoldPrice
      * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return GoldPriceCollection
+     * @throws InvalidArgumentException
      */
     private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): GoldPriceCollection
     {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder;
 
-use Exception;
 use InvalidArgumentException;
 use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
 
@@ -20,15 +19,12 @@ class PathBuilder
 
     /**
      * @param PathElement $element
+     * @throws InvalidArgumentException
      */
     public function addElement(PathElement $element): void
     {
         if ($element instanceof AbstractValidatablePathElement) {
-            try {
-                $element->validate();
-            } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage());
-            }
+            $element->validate();
         }
 
         $this->pathElements[] = $element;

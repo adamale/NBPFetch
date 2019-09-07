@@ -45,6 +45,7 @@ class ExchangeRateTable
      * ExchangeRateTable constructor.
      * @param string $table Table type.
      * @param CacheItemPoolInterface|null $cache
+     * @throws InvalidArgumentException
      */
     public function __construct(string $table, CacheItemPoolInterface $cache = null)
     {
@@ -61,6 +62,7 @@ class ExchangeRateTable
      * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return Structure\ExchangeRateTable
+     * @throws InvalidArgumentException
      */
     private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\ExchangeRateTable
     {
@@ -80,6 +82,7 @@ class ExchangeRateTable
      * @param bool $inconstantResponse
      * @param PathElement ...$pathElements
      * @return ExchangeRateTableCollection
+     * @throws InvalidArgumentException
      */
     private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): ExchangeRateTableCollection
     {

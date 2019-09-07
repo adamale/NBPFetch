@@ -15,7 +15,7 @@ class CurrencyTableB extends AbstractCurrencyTable
     public const TABLE_TYPE = "B";
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getCurrencies(): array
     {

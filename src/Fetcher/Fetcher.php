@@ -166,7 +166,7 @@ class Fetcher implements FetcherInterface
      * @param string $response
      * @return array|null
      */
-    protected function parseResponse(string $response): ?array
+    private function parseResponse(string $response): ?array
     {
         return json_decode($response, true);
     }

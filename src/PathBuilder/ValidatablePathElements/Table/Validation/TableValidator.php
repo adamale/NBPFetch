@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation;
 
-use NBPFetch\Exception\InvalidTableException;
+use InvalidArgumentException;
 
 /**
  * Class TableValidator
@@ -25,7 +25,7 @@ class TableValidator implements TableValidatorInterface
         $table = mb_strtoupper($table);
 
         if (!in_array($table, self::ALLOWED_TABLES)) {
-            throw new InvalidTableException(
+            throw new InvalidArgumentException(
                 sprintf(
                     "Table must be one of the following: %s",
                     implode(", ", self::ALLOWED_TABLES)

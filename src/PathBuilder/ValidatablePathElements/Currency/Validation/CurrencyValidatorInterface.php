@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Currency\Validation;
 
-use NBPFetch\Exception\InvalidCurrencyException;
+use InvalidArgumentException;
 
 /**
  * Interface CurrencyValidatorInterface
@@ -14,7 +14,7 @@ interface CurrencyValidatorInterface
     /**
      * @param string $currency
      * @return bool
-     * @throws InvalidCurrencyException
+     * @throws InvalidArgumentException
      */
     public function validate(string $currency): bool;
 }

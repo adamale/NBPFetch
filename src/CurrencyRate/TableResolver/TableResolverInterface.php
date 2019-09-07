@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\CurrencyRate\TableResolver;
 
-use NBPFetch\Exception\InvalidCurrencyException;
+use InvalidArgumentException;
 
 /**
  * Interface TableResolverInterface
@@ -14,7 +14,7 @@ interface TableResolverInterface
     /**
      * @param string $currency
      * @return string
-     * @throws InvalidCurrencyException
+     * @throws InvalidArgumentException
      */
     public function resolve(string $currency): string;
 }

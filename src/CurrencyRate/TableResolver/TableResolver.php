@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\CurrencyRate\TableResolver;
 
-use NBPFetch\Exception\InvalidCurrencyException;
+use InvalidArgumentException;
 
 /**
  * Class TableResolver
@@ -38,7 +38,7 @@ class TableResolver implements TableResolverInterface
     /**
      * @param string $currency
      * @return string
-     * @throws InvalidCurrencyException
+     * @throws InvalidArgumentException
      */
     public function resolve(string $currency): string
     {
@@ -49,7 +49,7 @@ class TableResolver implements TableResolverInterface
         } elseif (in_array($currency, self::TABLE_B)) {
             $table = "B";
         } else {
-            throw new InvalidCurrencyException("Currency is not defined in the tables");
+            throw new InvalidArgumentException("Currency is not defined in the tables");
         }
 
         return $table;

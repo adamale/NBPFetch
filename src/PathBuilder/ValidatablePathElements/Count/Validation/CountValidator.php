@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Count\Validation;
 
-use NBPFetch\Exception\InvalidCountException;
+use InvalidArgumentException;
 
 /**
  * Class CountValidator
@@ -20,12 +20,12 @@ class CountValidator implements CountValidatorInterface
      * Validates that provided count is equal or greater than minimal count.
      * @param int $count
      * @return bool
-     * @throws InvalidCountException
+     * @throws InvalidArgumentException
      */
     public function validate(int $count): bool
     {
         if ($count < self::MINIMAL_COUNT) {
-            throw new InvalidCountException(
+            throw new InvalidArgumentException(
                 sprintf("Count must not be lower than %s", self::MINIMAL_COUNT)
             );
         }

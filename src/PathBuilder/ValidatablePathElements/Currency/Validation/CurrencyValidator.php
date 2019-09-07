@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Currency\Validation;
 
-use NBPFetch\Exception\InvalidCurrencyException;
+use InvalidArgumentException;
 
 /**
  * Class CurrencyValidator
@@ -20,14 +20,14 @@ class CurrencyValidator implements CurrencyValidatorInterface
      * Validates that provided currency is allowed.
      * @param string $currency
      * @return bool
-     * @throws InvalidCurrencyException
+     * @throws InvalidArgumentException
      */
     public function validate(string $currency): bool
     {
         if (!$this->validateCurrencyIsAllLetters($currency)) {
-            throw new InvalidCurrencyException("Currency must consists only of letters");
+            throw new InvalidArgumentException("Currency must consists only of letters");
         } elseif (!$this->validateCurrencyHasProperLength($currency)) {
-            throw new InvalidCurrencyException(
+            throw new InvalidArgumentException(
                 sprintf(
                     "Currency must be %s characters long",
                     self::CURRENCY_CODE_LENGTH

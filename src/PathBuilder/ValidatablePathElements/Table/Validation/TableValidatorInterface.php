@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation;
 
-use NBPFetch\Exception\InvalidTableException;
+use InvalidArgumentException;
 
 /**
  * Interface TableValidatorInterface
@@ -14,7 +14,7 @@ interface TableValidatorInterface
     /**
      * @param string $table
      * @return bool
-     * @throws InvalidTableException
+     * @throws InvalidArgumentException
      */
     public function validate(string $table): bool;
 }

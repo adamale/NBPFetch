@@ -5,7 +5,7 @@ namespace NBPFetch\PathBuilder\ValidatablePathElements\Date\Validation;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use NBPFetch\Exception\InvalidDateException;
+use InvalidArgumentException;
 
 /**
  * Class DateValidator
@@ -45,12 +45,12 @@ class DateValidator implements DateValidatorInterface
      * Validates provided date.
      * @param string $date
      * @return bool
-     * @throws InvalidDateException
+     * @throws InvalidArgumentException
      */
     public function validate(string $date): bool
     {
         if (!$this->validateFormat($date)) {
-            throw new InvalidDateException(
+            throw new InvalidArgumentException(
                 sprintf("Date must be in %s format", self::DATE_FORMAT)
             );
         }
@@ -61,17 +61,17 @@ class DateValidator implements DateValidatorInterface
             $this->timezone
         );
         if ($providedDate === false) {
-            throw new InvalidDateException(
+            throw new InvalidArgumentException(
                 sprintf("Date could not be created")
             );
         }
 
         if (!$this->validateDateIsNotFromFuture($providedDate)) {
-            throw new InvalidDateException(
+            throw new InvalidArgumentException(
                 sprintf("Date must not be in the future")
             );
         } elseif (!$this->validateDateIsNotTooOld($providedDate)) {
-            throw new InvalidDateException(
+            throw new InvalidArgumentException(
                 sprintf("Date must not be before %s", self::MINIMAL_SUPPORTED_DATE)
             );
         }

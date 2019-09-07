@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Date\Validation;
 
-use NBPFetch\Exception\InvalidDateException;
+use InvalidArgumentException;
 
 /**
  * Interface DateValidatorInterface
@@ -14,7 +14,7 @@ interface DateValidatorInterface
     /**
      * @param string $date
      * @return bool
-     * @throws InvalidDateException
+     * @throws InvalidArgumentException
      */
     public function validate(string $date): bool;
 }

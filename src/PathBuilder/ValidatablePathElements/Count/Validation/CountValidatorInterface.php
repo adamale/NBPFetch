@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace NBPFetch\PathBuilder\ValidatablePathElements\Count\Validation;
 
-use NBPFetch\Exception\InvalidCountException;
+use InvalidArgumentException;
 
 /**
  * Interface CountValidatorInterface
@@ -14,7 +14,7 @@ interface CountValidatorInterface
     /**
      * @param int $count
      * @return bool
-     * @throws invalidCountException
+     * @throws InvalidArgumentException
      */
     public function validate(int $count): bool;
 }

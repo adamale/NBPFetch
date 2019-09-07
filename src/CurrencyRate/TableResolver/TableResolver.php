@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\CurrencyRate\TableResolver;
 
 use InvalidArgumentException;
+use NBPFetch\CurrencyTable\CurrencyTableCollection;
 
 /**
  * Class TableResolver
@@ -12,28 +13,18 @@ use InvalidArgumentException;
 class TableResolver implements TableResolverInterface
 {
     /**
-     * @var string[] ISO 4217 currency codes that are defined in table A.
+     * @var CurrencyTableCollection
      */
-    private const TABLE_A = [
-        "AUD", "BGN", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HRK", "HUF",
-        "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "RON", "RUB", "SEK",
-        "SGD", "THB", "TRY", "UAH", "USD", "XDR", "ZAR"
-    ];
+    private $currencyTableCollection;
 
     /**
-     * @var string[] ISO 4217 currency codes that are defined in table B.
+     * TableResolver constructor.
+     * @param CurrencyTableCollection $currencyTableCollection
      */
-    private const TABLE_B = [
-        "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AWG", "AZN", "BAM", "BBD", "BDT", "BHD", "BIF",
-        "BND", "BOB", "BSD", "BWP", "BYN", "BZD", "CDF", "COP", "CRC", "CUP", "CVE", "DJF", "DOP", "DZD",
-        "EGP", "ERN", "ETB", "FJD", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HNL", "HTG", "IQD",
-        "IRR", "JMD", "JOD", "KES", "KGS", "KHR", "KMF", "KWD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL",
-        "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MZN", "NAD",
-        "NGN", "NIO", "NPR", "OMR", "PAB", "PEN", "PGK", "PKR", "PYG", "QAR", "RSD", "RWF", "SAR", "SBD",
-        "SCR", "SDG", "SLL", "SOS", "SRD", "SSP", "STN", "SVC", "SYP", "SZL", "TJS", "TMT", "TND", "TOP",
-        "TTD", "TWD", "TZS", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF",
-        "YER", "ZMW"
-    ];
+    public function __construct(CurrencyTableCollection $currencyTableCollection)
+    {
+        $this->currencyTableCollection = $currencyTableCollection;
+    }
 
     /**
      * @param string $currency
@@ -44,16 +35,14 @@ class TableResolver implements TableResolverInterface
     {
         $currency = mb_strtoupper($currency);
 
-        if (in_array($currency, self::TABLE_A)) {
-            $table = "A";
-        } elseif (in_array($currency, self::TABLE_B)) {
-            $table = "B";
-        } else {
-            throw new InvalidArgumentException(
-                "Given currency is not defined in the currency tables"
-            );
+        foreach ($this->currencyTableCollection as $currencyTable) {
+            if (in_array($currency, $currencyTable->getCurrencies())) {
+                return (string) $currencyTable;
+            }
         }
 
-        return $table;
+        throw new InvalidArgumentException(
+            "Given currency is not defined in the currency tables"
+        );
     }
 }

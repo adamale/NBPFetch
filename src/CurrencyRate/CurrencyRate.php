@@ -7,6 +7,9 @@ use InvalidArgumentException;
 use NBPFetch\CurrencyRate\Parser\Parser;
 use NBPFetch\CurrencyRate\Structure\CurrencyRateSeries;
 use NBPFetch\CurrencyRate\TableResolver\TableResolver;
+use NBPFetch\CurrencyTable\CurrencyTableA;
+use NBPFetch\CurrencyTable\CurrencyTableB;
+use NBPFetch\CurrencyTable\CurrencyTableCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathElement;
@@ -54,7 +57,10 @@ class CurrencyRate
         $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
-        $tableResolver = new TableResolver();
+        $currencyTableCollection = new CurrencyTableCollection();
+        $currencyTableCollection[] = new CurrencyTableA();
+        $currencyTableCollection[] = new CurrencyTableB();
+        $tableResolver = new TableResolver($currencyTableCollection);
         $table = $tableResolver->resolve($currency);
 
         $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));

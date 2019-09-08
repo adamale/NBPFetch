@@ -10,7 +10,6 @@ use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
 use NBPFetch\Module\CurrencyRate\TableResolver\TableResolver;
 use NBPFetch\CurrencyTable\CurrencyTableA;
 use NBPFetch\CurrencyTable\CurrencyTableB;
-use NBPFetch\CurrencyTable\CurrencyTableCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
 use NBPFetch\PathBuilder\PathSegment;
@@ -46,10 +45,7 @@ class CurrencyRate extends AbstractModule
 
         $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
         $this->pathBuilder->addSegment(new Currency($currency), 2);
-        $currencyTableCollection = new CurrencyTableCollection();
-        $currencyTableCollection[] = new CurrencyTableA();
-        $currencyTableCollection[] = new CurrencyTableB();
-        $tableResolver = new TableResolver($currencyTableCollection);
+        $tableResolver = new TableResolver(new CurrencyTableA(), new CurrencyTableB());
         $table = $tableResolver->resolve($currency);
         $this->pathBuilder->addSegment(new Table($table));
     }

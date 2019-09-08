@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\Module\CurrencyRate\TableResolver;
 
 use InvalidArgumentException;
-use NBPFetch\CurrencyTable\CurrencyTableCollection;
+use NBPFetch\CurrencyTable\AbstractCurrencyTable;
 
 /**
  * Class TableResolver
@@ -13,17 +13,17 @@ use NBPFetch\CurrencyTable\CurrencyTableCollection;
 class TableResolver implements TableResolverInterface
 {
     /**
-     * @var CurrencyTableCollection
+     * @var AbstractCurrencyTable[]
      */
-    private $currencyTableCollection;
+    private $currencyTables;
 
     /**
      * TableResolver constructor.
-     * @param CurrencyTableCollection $currencyTableCollection
+     * @param AbstractCurrencyTable ...$currencyTables
      */
-    public function __construct(CurrencyTableCollection $currencyTableCollection)
+    public function __construct(AbstractCurrencyTable ...$currencyTables)
     {
-        $this->currencyTableCollection = $currencyTableCollection;
+        $this->currencyTables = $currencyTables;
     }
 
     /**
@@ -35,7 +35,7 @@ class TableResolver implements TableResolverInterface
     {
         $currency = mb_strtoupper($currency);
 
-        foreach ($this->currencyTableCollection as $currencyTable) {
+        foreach ($this->currencyTables as $currencyTable) {
             if (in_array($currency, $currencyTable->getCurrencies())) {
                 return (string) $currencyTable;
             }

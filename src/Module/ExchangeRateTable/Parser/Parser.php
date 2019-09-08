@@ -7,25 +7,40 @@ use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRate;
 use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateCollection;
 use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTable;
 use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTableCollection;
+use NBPFetch\Parser\ParserInterface;
 
 /**
  * Class Parser
  * @package NBPFetch\Module\ExchangeRateTable\Parser
  */
-class Parser
+class Parser implements ParserInterface
 {
     /**
-     * Creates an exchange rate table from fetched array.
+     * Creates an exchange rate table collection from fetched array.
+     * @param array $fetchedExchangeRateTables
+     * @return ExchangeRateTableCollection
+     */
+    public function parse(array $fetchedExchangeRateTables): ExchangeRateTableCollection
+    {
+        $exchangeRateTableCollection = new ExchangeRateTableCollection();
+        foreach ($fetchedExchangeRateTables as $fetchedExchangeRateTable) {
+            $exchangeRateTableCollection[] = $this->parseExchangeRateTable($fetchedExchangeRateTable);
+        }
+
+        return $exchangeRateTableCollection;
+    }
+
+    /**
      * @param array $fetchedExchangeRateTable
      * @return ExchangeRateTable
      */
-    public function parse(array $fetchedExchangeRateTable): ExchangeRateTable
+    private function parseExchangeRateTable(array $fetchedExchangeRateTable): ExchangeRateTable
     {
         return new ExchangeRateTable(
             $fetchedExchangeRateTable["table"],
             $fetchedExchangeRateTable["no"],
             $fetchedExchangeRateTable["effectiveDate"],
-            $this->parseFetchedExchangeRates($fetchedExchangeRateTable["rates"])
+            $this->parseExchangeRates($fetchedExchangeRateTable["rates"])
         );
     }
 
@@ -33,31 +48,25 @@ class Parser
      * @param array $fetchedExchangeRates
      * @return ExchangeRateCollection
      */
-    private function parseFetchedExchangeRates(array $fetchedExchangeRates): ExchangeRateCollection
+    private function parseExchangeRates(array $fetchedExchangeRates): ExchangeRateCollection
     {
         $exchangeRateCollection = new ExchangeRateCollection();
         foreach ($fetchedExchangeRates as $exchangeRate) {
-            $exchangeRateCollection[] = new ExchangeRate(
-                (string) $exchangeRate["code"],
-                (string) $exchangeRate["mid"]
-            );
+            $exchangeRateCollection[] = $this->parseExchangeRate($exchangeRate);
         }
 
         return $exchangeRateCollection;
     }
 
     /**
-     * Creates an exchange rate table collection from fetched array.
-     * @param array $fetchedExchangeRateTables
-     * @return ExchangeRateTableCollection
+     * @param array $exchangeRate
+     * @return ExchangeRate
      */
-    public function parseCollection(array $fetchedExchangeRateTables): ExchangeRateTableCollection
+    private function parseExchangeRate(array $exchangeRate): ExchangeRate
     {
-        $exchangeRateTableCollection = new ExchangeRateTableCollection();
-        foreach ($fetchedExchangeRateTables as $fetchedExchangeRateTable) {
-            $exchangeRateTableCollection[] = $this->parse($fetchedExchangeRateTable);
-        }
-
-        return $exchangeRateTableCollection;
+        return new ExchangeRate(
+            (string) $exchangeRate["code"],
+            (string) $exchangeRate["mid"]
+        );
     }
 }

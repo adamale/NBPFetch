@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\Module\GoldPrice;
 
 use InvalidArgumentException;
+use NBPFetch\Module\AbstractModule;
 use NBPFetch\Module\GoldPrice\Parser\Parser;
 use NBPFetch\Module\GoldPrice\Structure;
 use NBPFetch\Module\GoldPrice\Structure\GoldPriceCollection;
@@ -19,27 +20,12 @@ use UnexpectedValueException;
  * Class GoldPrice
  * @package NBPFetch\GoldPrice
  */
-class GoldPrice
+class GoldPrice extends AbstractModule
 {
     /**
      * @var string API_SUBSET API Subset that returns gold price data.
      */
     private const API_SUBSET = "cenyzlota";
-
-    /**
-     * @var PathBuilder
-     */
-    private $pathBuilder;
-
-    /**
-     * @var Fetcher
-     */
-    private $fetcher;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     /**
      * GoldPrice constructor.
@@ -55,53 +41,16 @@ class GoldPrice
     }
 
     /**
-     * Returns a single gold price from NBP API.
-     * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
-     * @return Structure\GoldPrice
-     * @throws InvalidArgumentException
-     */
-    private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\GoldPrice
-    {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
-
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
-        return $this->parser->parse($responseArray[0]);
-    }
-
-    /**
-     * Returns a set of gold prices from NBP API.
-     * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
-     * @return GoldPriceCollection
-     * @throws InvalidArgumentException
-     */
-    private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): GoldPriceCollection
-    {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
-
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
-        return $this->parser->parseCollection($responseArray);
-    }
-
-    /**
      * Returns current gold price.
      * @return Structure\GoldPrice
      * @throws UnexpectedValueException
      */
     public function current(): Structure\GoldPrice
     {
-        return $this->getSingle(true);
+        $parsedResponse = $this->get(true);
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -113,7 +62,7 @@ class GoldPrice
      */
     public function last(int $count): GoldPriceCollection
     {
-        return $this->getCollection(true, new PathElement("last"), new Count($count));
+        return $this->get(true, new PathElement("last"), new Count($count));
     }
 
     /**
@@ -123,7 +72,10 @@ class GoldPrice
      */
     public function today(): Structure\GoldPrice
     {
-        return $this->getSingle(true, new PathElement("today"));
+        $parsedResponse = $this->get(true, new PathElement("today"));
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -135,7 +87,10 @@ class GoldPrice
      */
     public function byDate(string $date): Structure\GoldPrice
     {
-        return $this->getSingle(false, new Date($date));
+        $parsedResponse = $this->get(false, new Date($date));
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -148,6 +103,6 @@ class GoldPrice
      */
     public function byDateRange(string $date_from, string $date_to): GoldPriceCollection
     {
-        return $this->getCollection(false, new Date($date_from), new Date($date_to));
+        return $this->get(false, new Date($date_from), new Date($date_to));
     }
 }

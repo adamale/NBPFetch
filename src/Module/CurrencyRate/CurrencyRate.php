@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\Module\CurrencyRate;
 
 use InvalidArgumentException;
+use NBPFetch\Module\AbstractModule;
 use NBPFetch\Module\CurrencyRate\Parser\Parser;
 use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
 use NBPFetch\Module\CurrencyRate\TableResolver\TableResolver;
@@ -24,27 +25,12 @@ use UnexpectedValueException;
  * Class CurrencyRate
  * @package NBPFetch\CurrencyRate
  */
-class CurrencyRate
+class CurrencyRate extends AbstractModule
 {
     /**
      * @var string API_SUBSET API Subset that returns currency rate data.
      */
     private const API_SUBSET = "exchangerates/rates";
-
-    /**
-     * @var PathBuilder
-     */
-    private $pathBuilder;
-
-    /**
-     * @var Fetcher
-     */
-    private $fetcher;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     /**
      * CurrencyRate constructor.
@@ -67,26 +53,6 @@ class CurrencyRate
         $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
         $this->pathBuilder->addElement(new Table($table));
         $this->pathBuilder->addElement(new Currency($currency));
-    }
-
-    /**
-     * Returns parsed data from NBP API.
-     * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
-     * @return CurrencyRateSeries
-     * @throws InvalidArgumentException
-     */
-    private function get(bool $inconstantResponse, PathElement ...$pathElements): CurrencyRateSeries
-    {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
-
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
-        return $this->parser->parse($responseArray);
     }
 
     /**

@@ -6,12 +6,13 @@ namespace NBPFetch\Module\CurrencyRate\Parser;
 use NBPFetch\Module\CurrencyRate\Structure\CurrencyRate;
 use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateCollection;
 use NBPFetch\Module\CurrencyRate\Structure\CurrencyRateSeries;
+use NBPFetch\Parser\ParserInterface;
 
 /**
  * Class Parser
  * @package NBPFetch\Module\CurrencyRate\Parser
  */
-class Parser
+class Parser implements ParserInterface
 {
     /**
      * Creates a currency rate series from fetched array.
@@ -24,26 +25,34 @@ class Parser
             $fetchedCurrencyRateSeries["table"],
             $fetchedCurrencyRateSeries["currency"],
             $fetchedCurrencyRateSeries["code"],
-            $this->parseFetchedCurrencyRates($fetchedCurrencyRateSeries["rates"])
+            $this->parseCurrencyRates($fetchedCurrencyRateSeries["rates"])
         );
     }
 
     /**
-     * Creates a currency rate collection from rates array.
      * @param array $fetchedCurrencyRates
      * @return CurrencyRateCollection
      */
-    private function parseFetchedCurrencyRates(array $fetchedCurrencyRates): CurrencyRateCollection
+    private function parseCurrencyRates(array $fetchedCurrencyRates): CurrencyRateCollection
     {
         $currencyRateCollection = new CurrencyRateCollection();
         foreach ($fetchedCurrencyRates as $rate) {
-            $currencyRateCollection[] = new CurrencyRate(
-                (string) $rate["no"],
-                (string) $rate["effectiveDate"],
-                (string) $rate["mid"]
-            );
+            $currencyRateCollection[] = $this->parseCurrencyRate($rate);
         }
 
         return $currencyRateCollection;
+    }
+
+    /**
+     * @param array $rate
+     * @return CurrencyRate
+     */
+    private function parseCurrencyRate(array $rate): CurrencyRate
+    {
+        return new CurrencyRate(
+            (string) $rate["no"],
+            (string) $rate["effectiveDate"],
+            (string) $rate["mid"]
+        );
     }
 }

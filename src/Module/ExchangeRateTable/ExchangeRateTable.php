@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\Module\ExchangeRateTable;
 
 use InvalidArgumentException;
+use NBPFetch\Module\AbstractModule;
 use NBPFetch\Module\ExchangeRateTable\Parser\Parser;
 use NBPFetch\Module\ExchangeRateTable\Structure;
 use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTableCollection;
@@ -20,27 +21,12 @@ use UnexpectedValueException;
  * Class ExchangeRateTable
  * @package NBPFetch\ExchangeRateTable
  */
-class ExchangeRateTable
+class ExchangeRateTable extends AbstractModule
 {
     /**
      * @var string API_SUBSET API Subset that returns exchange rate table data.
      */
     private const API_SUBSET = "exchangerates/tables";
-
-    /**
-     * @var PathBuilder
-     */
-    private $pathBuilder;
-
-    /**
-     * @var Fetcher
-     */
-    private $fetcher;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     /**
      * ExchangeRateTable constructor.
@@ -59,53 +45,16 @@ class ExchangeRateTable
     }
 
     /**
-     * Returns a single exchange rate table from NBP API.
-     * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
-     * @return Structure\ExchangeRateTable
-     * @throws InvalidArgumentException
-     */
-    private function getSingle(bool $inconstantResponse, PathElement ...$pathElements): Structure\ExchangeRateTable
-    {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
-
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
-        return $this->parser->parse($responseArray[0]);
-    }
-
-    /**
-     * Returns a set of exchange rate tables from NBP API.
-     * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
-     * @return ExchangeRateTableCollection
-     * @throws InvalidArgumentException
-     */
-    private function getCollection(bool $inconstantResponse, PathElement ...$pathElements): ExchangeRateTableCollection
-    {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
-
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
-        return $this->parser->parseCollection($responseArray);
-    }
-
-    /**
      * Returns current exchange rate table.
      * @return Structure\ExchangeRateTable
      * @throws UnexpectedValueException
      */
     public function current(): Structure\ExchangeRateTable
     {
-        return $this->getSingle(true);
+        $parsedResponse = $this->get(true);
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -117,7 +66,7 @@ class ExchangeRateTable
      */
     public function last(int $count): ExchangeRateTableCollection
     {
-        return $this->getCollection(true, new PathElement("last"), new Count($count));
+        return $this->get(true, new PathElement("last"), new Count($count));
     }
 
     /**
@@ -127,7 +76,10 @@ class ExchangeRateTable
      */
     public function today(): Structure\ExchangeRateTable
     {
-        return $this->getSingle(true, new PathElement("today"));
+        $parsedResponse = $this->get(true, new PathElement("today"));
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -139,7 +91,10 @@ class ExchangeRateTable
      */
     public function byDate(string $date): Structure\ExchangeRateTable
     {
-        return $this->getSingle(false, new Date($date));
+        $parsedResponse = $this->get(false, new Date($date));
+        $parsedResponse = $parsedResponse[0];
+
+        return $parsedResponse;
     }
 
     /**
@@ -152,6 +107,6 @@ class ExchangeRateTable
      */
     public function byDateRange(string $date_from, string $date_to): ExchangeRateTableCollection
     {
-        return $this->getCollection(false, new Date($date_from), new Date($date_to));
+        return $this->get(false, new Date($date_from), new Date($date_to));
     }
 }

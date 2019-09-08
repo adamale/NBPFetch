@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Count;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Count;
 
-use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Count\Validation\CountValidator;
-use NBPFetch\PathBuilder\ValidatablePathElements\Count\Validation\CountValidatorInterface;
+use NBPFetch\PathBuilder\ValidatablePathSegments\AbstractValidatablePathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Count\Validation\CountValidator;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Count\Validation\CountValidatorInterface;
 
 /**
  * Class Count
  * @package NBPFetch\PathBuilder\Structure
  */
-class Count extends AbstractValidatablePathElement
+class Count extends AbstractValidatablePathSegment
 {
     /**
      * Count constructor.

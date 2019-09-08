@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Date;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Date;
 
-use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Date\Validation\DateValidator;
-use NBPFetch\PathBuilder\ValidatablePathElements\Date\Validation\DateValidatorInterface;
+use NBPFetch\PathBuilder\ValidatablePathSegments\AbstractValidatablePathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Date\Validation\DateValidator;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Date\Validation\DateValidatorInterface;
 
 /**
  * Class Date
  * @package NBPFetch\PathBuilder\Structure
  */
-class Date extends AbstractValidatablePathElement
+class Date extends AbstractValidatablePathSegment
 {
     /**
      * Date constructor.

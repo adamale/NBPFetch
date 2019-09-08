@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Count\Validation;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Count\Validation;
 
 use InvalidArgumentException;
 

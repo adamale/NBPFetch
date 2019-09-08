@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace NBPFetch\PathBuilder;
 
 use InvalidArgumentException;
-use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
+use NBPFetch\PathBuilder\ValidatablePathSegments\AbstractValidatablePathSegment;
 
 /**
  * Class PathBuilder
@@ -13,40 +13,46 @@ use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
 class PathBuilder
 {
     /**
-     * @var PathElement[]
+     * @var PathSegment[]
      */
-    private $pathElements;
+    private $pathSegments;
 
     /**
-     * @param PathElement $element
+     * Adds multiple segments to the path.
+     * @param PathSegment ...$pathSegments
+     * @return void
      * @throws InvalidArgumentException
      */
-    public function addElement(PathElement $element): void
+    public function addSegments(PathSegment ...$pathSegments): void
     {
-        if ($element instanceof AbstractValidatablePathElement) {
-            $element->validate();
+        if (!empty($pathSegments)) {
+            foreach ($pathSegments as $pathSegment) {
+                $this->addSegment($pathSegment);
+            }
         }
-
-        $this->pathElements[] = $element;
     }
 
     /**
+     * Adds a segment to the path.
+     * @param PathSegment $pathSegment
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function addSegment(PathSegment $pathSegment): void
+    {
+        if ($pathSegment instanceof AbstractValidatablePathSegment) {
+            $pathSegment->validate();
+        }
+
+        $this->pathSegments[] = $pathSegment;
+    }
+
+    /**
+     * Builds a request path.
      * @return string
      */
     public function build(): string
     {
-        return sprintf(
-            "%s",
-            $this->buildSubPath()
-        );
-    }
-
-    /**
-     * Returns parsed data from NBP API.
-     * @return string
-     */
-    private function buildSubPath(): string
-    {
-        return implode("/", $this->pathElements);
+        return implode("/", $this->pathSegments);
     }
 }

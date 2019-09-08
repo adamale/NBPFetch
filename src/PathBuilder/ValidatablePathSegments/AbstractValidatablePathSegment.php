@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments;
 
-use NBPFetch\PathBuilder\PathElement;
+use NBPFetch\PathBuilder\PathSegment;
 
 /**
- * Class AbstractValidatablePathElement
+ * Class AbstractValidatablePathSegment
  * @package NBPFetch\PathBuilder
  */
-abstract class AbstractValidatablePathElement extends PathElement
+abstract class AbstractValidatablePathSegment extends PathSegment
 {
     /**
      * @var mixed

@@ -13,11 +13,11 @@ use NBPFetch\CurrencyTable\CurrencyTableB;
 use NBPFetch\CurrencyTable\CurrencyTableCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
-use NBPFetch\PathBuilder\PathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
-use NBPFetch\PathBuilder\ValidatablePathElements\Currency\Currency;
-use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
-use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
+use NBPFetch\PathBuilder\PathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Currency\Currency;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Date\Date;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Table\Table;
 use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
@@ -50,9 +50,9 @@ class CurrencyRate extends AbstractModule
         $tableResolver = new TableResolver($currencyTableCollection);
         $table = $tableResolver->resolve($currency);
 
-        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
-        $this->pathBuilder->addElement(new Table($table));
-        $this->pathBuilder->addElement(new Currency($currency));
+        $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
+        $this->pathBuilder->addSegment(new Table($table));
+        $this->pathBuilder->addSegment(new Currency($currency));
     }
 
     /**
@@ -74,7 +74,7 @@ class CurrencyRate extends AbstractModule
      */
     public function last(int $count): CurrencyRateSeries
     {
-        return $this->get(true, new PathElement("last"), new Count($count));
+        return $this->get(true, new PathSegment("last"), new Count($count));
     }
 
     /**
@@ -84,7 +84,7 @@ class CurrencyRate extends AbstractModule
      */
     public function today(): CurrencyRateSeries
     {
-        return $this->get(true, new PathElement("today"));
+        return $this->get(true, new PathSegment("today"));
     }
 
     /**

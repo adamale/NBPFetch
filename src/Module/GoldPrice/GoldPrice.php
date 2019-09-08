@@ -10,9 +10,9 @@ use NBPFetch\Module\GoldPrice\Structure;
 use NBPFetch\Module\GoldPrice\Structure\GoldPriceCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
-use NBPFetch\PathBuilder\PathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
-use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
+use NBPFetch\PathBuilder\PathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Date\Date;
 use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
@@ -37,7 +37,7 @@ class GoldPrice extends AbstractModule
         $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
-        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
+        $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
     }
 
     /**
@@ -62,7 +62,7 @@ class GoldPrice extends AbstractModule
      */
     public function last(int $count): GoldPriceCollection
     {
-        return $this->get(true, new PathElement("last"), new Count($count));
+        return $this->get(true, new PathSegment("last"), new Count($count));
     }
 
     /**
@@ -72,7 +72,7 @@ class GoldPrice extends AbstractModule
      */
     public function today(): Structure\GoldPrice
     {
-        $parsedResponse = $this->get(true, new PathElement("today"));
+        $parsedResponse = $this->get(true, new PathSegment("today"));
         $parsedResponse = $parsedResponse[0];
 
         return $parsedResponse;

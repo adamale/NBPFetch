@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Table;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Table;
 
-use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation\TableValidator;
-use NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation\TableValidatorInterface;
+use NBPFetch\PathBuilder\ValidatablePathSegments\AbstractValidatablePathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Table\Validation\TableValidator;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Table\Validation\TableValidatorInterface;
 
 /**
  * Class Table
  * @package NBPFetch\PathBuilder\Structure
  */
-class Table extends AbstractValidatablePathElement
+class Table extends AbstractValidatablePathSegment
 {
     /**
      * Table constructor.

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Currency\Validation;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Currency\Validation;
 
 use InvalidArgumentException;
 

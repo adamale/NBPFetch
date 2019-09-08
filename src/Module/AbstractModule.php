@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\Parser\ParserInterface;
 use NBPFetch\PathBuilder\PathBuilder;
-use NBPFetch\PathBuilder\PathElement;
+use NBPFetch\PathBuilder\PathSegment;
 
 /**
  * Class AbstractModule
@@ -33,20 +33,15 @@ abstract class AbstractModule
     /**
      * Returns parsed data from NBP API.
      * @param bool $inconstantResponse
-     * @param PathElement ...$pathElements
+     * @param PathSegment ...$pathSegments
      * @return mixed
      * @throws InvalidArgumentException
      */
-    protected function get(bool $inconstantResponse, PathElement ...$pathElements)
+    protected function get(bool $inconstantResponse, PathSegment ...$pathSegments)
     {
-        if (!empty($pathElements)) {
-            foreach ($pathElements as $pathElement) {
-                $this->pathBuilder->addElement($pathElement);
-            }
-        }
+        $this->pathBuilder->addSegments(...$pathSegments);
+        $responseArray = $this->fetcher->fetch($this->pathBuilder->build(), $inconstantResponse);
 
-        $path = $this->pathBuilder->build();
-        $responseArray = $this->fetcher->fetch($path, $inconstantResponse);
         return $this->parser->parse($responseArray);
     }
 }

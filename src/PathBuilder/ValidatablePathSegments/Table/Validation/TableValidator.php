@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Table\Validation;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Table\Validation;
 
 use InvalidArgumentException;
 

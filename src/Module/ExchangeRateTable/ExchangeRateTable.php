@@ -10,10 +10,10 @@ use NBPFetch\Module\ExchangeRateTable\Structure;
 use NBPFetch\Module\ExchangeRateTable\Structure\ExchangeRateTableCollection;
 use NBPFetch\Fetcher\Fetcher;
 use NBPFetch\PathBuilder\PathBuilder;
-use NBPFetch\PathBuilder\PathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Count\Count;
-use NBPFetch\PathBuilder\ValidatablePathElements\Date\Date;
-use NBPFetch\PathBuilder\ValidatablePathElements\Table\Table;
+use NBPFetch\PathBuilder\PathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Count\Count;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Date\Date;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Table\Table;
 use Psr\Cache\CacheItemPoolInterface;
 use UnexpectedValueException;
 
@@ -40,8 +40,8 @@ class ExchangeRateTable extends AbstractModule
         $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
-        $this->pathBuilder->addElement(new PathElement(self::API_SUBSET));
-        $this->pathBuilder->addElement(new Table($table));
+        $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
+        $this->pathBuilder->addSegment(new Table($table));
     }
 
     /**
@@ -66,7 +66,7 @@ class ExchangeRateTable extends AbstractModule
      */
     public function last(int $count): ExchangeRateTableCollection
     {
-        return $this->get(true, new PathElement("last"), new Count($count));
+        return $this->get(true, new PathSegment("last"), new Count($count));
     }
 
     /**
@@ -76,7 +76,7 @@ class ExchangeRateTable extends AbstractModule
      */
     public function today(): Structure\ExchangeRateTable
     {
-        $parsedResponse = $this->get(true, new PathElement("today"));
+        $parsedResponse = $this->get(true, new PathSegment("today"));
         $parsedResponse = $parsedResponse[0];
 
         return $parsedResponse;

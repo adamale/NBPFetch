@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace NBPFetch\PathBuilder\ValidatablePathElements\Currency;
+namespace NBPFetch\PathBuilder\ValidatablePathSegments\Currency;
 
-use NBPFetch\PathBuilder\ValidatablePathElements\AbstractValidatablePathElement;
-use NBPFetch\PathBuilder\ValidatablePathElements\Currency\Validation\CurrencyValidator;
-use NBPFetch\PathBuilder\ValidatablePathElements\Currency\Validation\CurrencyValidatorInterface;
+use NBPFetch\PathBuilder\ValidatablePathSegments\AbstractValidatablePathSegment;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Currency\Validation\CurrencyValidator;
+use NBPFetch\PathBuilder\ValidatablePathSegments\Currency\Validation\CurrencyValidatorInterface;
 
 /**
  * Class Currency
  * @package NBPFetch\PathBuilder\Structure
  */
-class Currency extends AbstractValidatablePathElement
+class Currency extends AbstractValidatablePathSegment
 {
     /**
      * Currency constructor.

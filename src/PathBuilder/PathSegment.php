@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace NBPFetch\PathBuilder;
 
 /**
- * Class PathElement
+ * Class PathSegment
  * @package NBPFetch\PathBuilder
  */
-class PathElement
+class PathSegment
 {
     /**
      * @var mixed
@@ -15,7 +15,7 @@ class PathElement
     protected $value;
 
     /**
-     * PathElement constructor.
+     * PathSegment constructor.
      * @param mixed $value
      */
     public function __construct($value)

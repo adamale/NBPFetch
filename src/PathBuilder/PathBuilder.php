@@ -18,6 +18,14 @@ class PathBuilder
     private $pathSegments;
 
     /**
+     * PathBuilder constructor.
+     */
+    public function __construct()
+    {
+        $this->pathSegments = [];
+    }
+
+    /**
      * Adds multiple segments to the path.
      * @param PathSegment ...$pathSegments
      * @return void
@@ -35,16 +43,20 @@ class PathBuilder
     /**
      * Adds a segment to the path.
      * @param PathSegment $pathSegment
+     * @param int|null $position
      * @return void
-     * @throws InvalidArgumentException
      */
-    public function addSegment(PathSegment $pathSegment): void
+    public function addSegment(PathSegment $pathSegment, ?int $position = null): void
     {
         if ($pathSegment instanceof AbstractValidatablePathSegment) {
             $pathSegment->validate();
         }
 
-        $this->pathSegments[] = $pathSegment;
+        if (!is_int($position)) {
+            $position = $this->computePathSegmentPosition();
+        }
+
+        $this->pathSegments[$position] = $pathSegment;
     }
 
     /**
@@ -53,6 +65,30 @@ class PathBuilder
      */
     public function build(): string
     {
+        ksort($this->pathSegments);
         return implode("/", $this->pathSegments);
+    }
+
+    /**
+     * @return int
+     */
+    private function computePathSegmentPosition(): int
+    {
+        $occupiedPositions = array_keys($this->pathSegments);
+
+        if (empty($occupiedPositions)) {
+            $position = 0;
+        } else {
+            $lastPosition = (int) max($occupiedPositions);
+            $freePositions = array_diff(range(0, $lastPosition), $occupiedPositions);
+
+            $position = array_shift($freePositions);
+
+            if ($position === null) {
+                $position = $lastPosition + 1;
+            }
+        }
+
+        return $position;
     }
 }

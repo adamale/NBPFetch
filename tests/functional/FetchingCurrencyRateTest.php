@@ -179,8 +179,7 @@ final class FetchingCurrencyRateTest extends TestCase
     {
         $incorrectCurrency = "E2U";
 
-//        $this->expectExceptionMessage("Currency must consists only of letters");
-        $this->expectExceptionMessage("Given currency is not defined in the currency tables");
+        $this->expectExceptionMessage("Currency must consists only of letters");
 
         $currencyRate = new CurrencyRate($incorrectCurrency);
         $currencyRate->current();
@@ -193,8 +192,7 @@ final class FetchingCurrencyRateTest extends TestCase
     {
         $incorrectCurrency = "EU";
 
-//        $this->expectExceptionMessage("Currency must be 3 characters long");
-        $this->expectExceptionMessage("Given currency is not defined in the currency tables");
+        $this->expectExceptionMessage("Currency must be 3 characters long");
 
         $currencyRate = new CurrencyRate($incorrectCurrency);
         $currencyRate->current();

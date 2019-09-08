@@ -44,15 +44,14 @@ class CurrencyRate extends AbstractModule
         $this->fetcher = new Fetcher($cache);
         $this->parser = new Parser();
 
+        $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
+        $this->pathBuilder->addSegment(new Currency($currency), 2);
         $currencyTableCollection = new CurrencyTableCollection();
         $currencyTableCollection[] = new CurrencyTableA();
         $currencyTableCollection[] = new CurrencyTableB();
         $tableResolver = new TableResolver($currencyTableCollection);
         $table = $tableResolver->resolve($currency);
-
-        $this->pathBuilder->addSegment(new PathSegment(self::API_SUBSET));
         $this->pathBuilder->addSegment(new Table($table));
-        $this->pathBuilder->addSegment(new Currency($currency));
     }
 
     /**
